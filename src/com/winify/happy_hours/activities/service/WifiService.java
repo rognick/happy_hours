@@ -17,6 +17,7 @@ import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.service.LogInActivity;
 import com.winify.happy_hours.activities.constants.Extra;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -24,9 +25,9 @@ import java.util.List;
  */
 public class WifiService extends Service {
 
-    WifiManager mainWifiObj;
-    WifiScanReceiver wifiReciever;
-    String wifis[];
+    public WifiManager mainWifiObj;
+    public WifiScanReceiver wifiReciever;
+    public Boolean isRegistered = false;
 
 
     @Override
@@ -38,23 +39,27 @@ public class WifiService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is
 
-        mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        wifiReciever = new WifiScanReceiver();
-        mainWifiObj.startScan();
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-        registerReceiver(wifiReciever, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        if ((dayOfWeek != Calendar.SATURDAY) || (dayOfWeek != Calendar.SUNDAY) ) {
 
-//TODO Delete
-        System.out.println("Service Started OK");
+            mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            wifiReciever = new WifiScanReceiver();
+            mainWifiObj.startScan();
+            registerReceiver(wifiReciever, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+            isRegistered = true;
+        }
+
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(wifiReciever);
-//        TODO Delete
-        System.out.println("Service Destroyed ");
+
+        if (isRegistered) { unregisterReceiver(wifiReciever);}
     }
 
 
@@ -85,9 +90,8 @@ public class WifiService extends Service {
             if (wifiInfo.getSSID().toUpperCase().toString().equals("\"" + Extra.MyNetwork + "\"") ||
                     wifiInfo.getSSID().toUpperCase().toString().equals(Extra.MyNetwork)) {
 
-//TODO delete
                 System.out.println("====>  Wifi action  ");
-//          if login
+
                 if (settings.getString("timer", "").equals("true")) {
                     notification("Status", "Timer ON", true);
 
@@ -108,17 +112,12 @@ public class WifiService extends Service {
 
         public void notification(String contentTitle, String contentText, Boolean onGoing) {
 
-            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-            // Prepare intent which is triggered if the
-            // notification is selected
             Intent intent2 = new Intent(WifiService.this, LogInActivity.class);
             if (!onGoing) {
                 intent2 = new Intent(Settings.ACTION_WIFI_SETTINGS);
             }
             PendingIntent pIntent = PendingIntent.getActivity(WifiService.this, 0, intent2, 0);
-            // Build notification
-            // Actions are just fake
+
             Notification noti = new Notification.Builder(WifiService.this)
                     .setContentTitle(contentTitle)
                     .setContentText(contentText)
