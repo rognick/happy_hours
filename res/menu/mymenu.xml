@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+
+    <item android:id="@+id/date_statistic"
+          android:title="Statistic"
+          android:showAsAction="always"
+            android:icon="@drawable/calendar"
+            />
+
+    <item android:id="@+id/show" android:title="See User Info"
+          android:icon="@drawable/user_info"
+          android:showAsAction="always"
+            />
+
+    <item android:id="@+id/logout" android:title="Sign Out"
+          android:icon="@drawable/logout"
+          android:showAsAction="always"/>
+
+</menu>

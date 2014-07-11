@@ -1,0 +1,9 @@
+.idea/
+gen
+ant.properties
+build.xml
+Happy Hours.iml
+local.properties
+proguard-project.txt
+project.properties
+README.md
