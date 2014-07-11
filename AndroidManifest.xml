@@ -19,7 +19,6 @@
 
         <activity android:name=".activities.MainActivity"/>
         <activity android:name=".activities.service.ShowUserInfoActivity"/>
-        <activity android:name=".activities.service.DateStatistic"/>
         <activity android:name=".activities.service.CalendarActivity"/>
 
         <service android:name=".activities.service.WifiService"></service>
