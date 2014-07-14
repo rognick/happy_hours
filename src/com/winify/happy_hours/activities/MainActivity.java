@@ -128,43 +128,21 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
         switch (item.getItemId()) {
 
-            case R.id.logout: {
-
-                removePref("key1");
-
-                removePref("key2");
 
 
-                Intent intent = new Intent(this, com.winify.happy_hours.activities.service.LogInActivity.class);
+
+            case R.id.settings:{
 
 
-                startActivity(intent);
-
-            }
-            break;
-
-            case R.id.show: {
-
-                Intent intent = new Intent(MainActivity.this, ShowUserInfoActivity.class);
-
-
-                startActivity(intent);
-
-            }
-            break;
-
-
-            case R.id.date_statistic: {
-
-                Intent intent = new Intent(MainActivity.this, com.winify.happy_hours.activities.service.CalendarActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 
 
                 startActivity(intent);
 
 
 
+
             }
-            break;
 
 
         }

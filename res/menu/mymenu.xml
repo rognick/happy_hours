@@ -4,19 +4,13 @@
 
 
 
-    <item android:id="@+id/date_statistic"
-          android:title="Statistic"
-          android:showAsAction="always"
-            android:icon="@drawable/calendar"
-            />
 
-    <item android:id="@+id/show" android:title="See User Info"
-          android:icon="@drawable/user_info"
-          android:showAsAction="always"
-            />
 
-    <item android:id="@+id/logout" android:title="Sign Out"
-          android:icon="@drawable/logout"
-          android:showAsAction="always"/>
+
+    <item android:id="@+id/settings" android:title="Settings"
+          android:showAsAction="collapseActionView"
+
+
+      />
 
 </menu>
