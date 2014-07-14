@@ -3,6 +3,7 @@ package com.winify.happy_hours.activities.controller;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 /**
@@ -51,6 +52,12 @@ public class Prefs extends Activity{
 
         removePref(key);
         savePrefs(key,value);
+    }
+    public void editPermision(TextView name, Boolean enable, Boolean focus) {
+        name.setFocusableInTouchMode(enable);
+        name.setFocusable(focus);
+
+
     }
 
 }

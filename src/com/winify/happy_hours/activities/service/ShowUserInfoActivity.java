@@ -32,7 +32,7 @@ public class ShowUserInfoActivity extends Prefs implements ServiceListener, View
     private EditText position;
     private EditText team;
 
-    String firstNameTxt, lastNameTxt, emailTxt, birthDayTxt, mobileTxt, positionTxt, teamTxt;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,19 +81,7 @@ public class ShowUserInfoActivity extends Prefs implements ServiceListener, View
 
 
 
-/*
-        value1 = settings.getString("key1", "");
-        value2 = settings.getString("key2", "");
-        button = (Button) findViewById(R.id.logingBtn);
-        button.setText("Edit");
 
-        login = (TextView) findViewById(R.id.login);
-        login.setText(value1);
-        login.setEnabled(false);
-
-        password = (TextView) findViewById(R.id.password);
-        password.setText(value2);
-        password.setEnabled(false);*/
     }
 
 
@@ -170,12 +158,7 @@ public class ShowUserInfoActivity extends Prefs implements ServiceListener, View
     }
 
 
-    public void editPermision(TextView name, Boolean enable, Boolean focus) {
-        name.setFocusableInTouchMode(enable);
-        name.setFocusable(focus);
 
-
-    }
 
 
 }

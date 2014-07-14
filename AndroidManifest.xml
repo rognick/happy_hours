@@ -21,6 +21,7 @@
         <activity android:name=".activities.service.ShowUserInfoActivity"/>
         <activity android:name=".activities.service.CalendarActivity"/>
         <activity android:name=".activities.service.SettingsActivity"/>
+        <activity android:name=".activities.service.ServiceSettings"/>
 
         <service android:name=".activities.service.WifiService"></service>
     </application>

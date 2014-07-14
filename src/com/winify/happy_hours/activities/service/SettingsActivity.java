@@ -23,6 +23,7 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
     private Button userInfo;
 
     private Button  statistic;
+    private Button serviceEndPoint;
 
 
     @Override
@@ -32,11 +33,14 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
         logout = (Button)findViewById(R.id.logoutBtn);
         userInfo= (Button) findViewById(R.id.userSettingsBtn);
         statistic = (Button)findViewById(R.id.statisticBtn);
+        serviceEndPoint=(Button)findViewById(R.id.serviceBtn);
 
 
         logout.setOnClickListener(this);
         userInfo.setOnClickListener(this);
         statistic.setOnClickListener(this);
+        serviceEndPoint.setOnClickListener(this);
+
 
 
 
@@ -102,6 +106,16 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
 
             }
 
+            case  R.id.serviceBtn:{
+
+
+                Intent intent = new Intent(SettingsActivity.this, ServiceSettings.class);
+
+
+                startActivityForResult(intent,1);
+
+
+            }
 
             default:break;
 
