@@ -1,16 +1,11 @@
 package com.winify.happy_hours.activities.service;
 
 
-
-import com.winify.happy_hours.activities.controller.Prefs;
 import com.winify.happy_hours.activities.models.User;
 import retrofit.Callback;
 import retrofit.client.Response;
 
-import retrofit.http.Body;
-import retrofit.http.POST;
-import retrofit.http.PUT;
-import retrofit.http.Path;
+import retrofit.http.*;
 
 /**
  * Created by Mindshifter on 7/2/2014.
@@ -23,13 +18,26 @@ public interface TrackerService  {
 
 
 //todo de modificat path dupa ce termina serverul cu serviciile
-    @POST("/users/{login+password}")
-    void getUser(@Path("login+password") String email,String password, Callback<User> callback);
+
+
+
+
+
+    @GET("/users/login/{login}/{password}")
+    void  loginUser(@Path("login") String login,@Path("password") String password, Callback<Response> callback);
+
+
+    @GET("/users/logout/{login}/{password}")
+    void  logoutUser(@Path("login") String login,@Path("password") String password, Callback<Response> callback);
+
+
+
+
+
+
 
     @PUT("/update")
     void  updateUser(@Body User user, Callback<Response> callback);
-
-
 
 
 

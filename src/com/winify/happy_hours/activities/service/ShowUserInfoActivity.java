@@ -20,8 +20,7 @@ import java.util.List;
  */
 public class ShowUserInfoActivity extends Prefs implements ServiceListener, View.OnClickListener {
 
-    //   String value1;
-    // String value2;
+
     SharedPreferences settings;
     private Button button;
     private EditText firstName;

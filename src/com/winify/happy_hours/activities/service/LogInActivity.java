@@ -35,8 +35,8 @@ public class LogInActivity extends Prefs {
          * If we did, redirect to home page
          */
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if (settings.getString("key1", "").toString().equals("test") &&
-                settings.getString("key2", "").toString().equals("test")) {
+        if (settings.getString("login", "").toString().equals("test") &&
+                settings.getString("password", "").toString().equals("test")) {
             Intent intent = new Intent(LogInActivity.this, MainActivity.class);
             startActivity(intent);
             LogInActivity.this.finish();
@@ -58,8 +58,8 @@ public class LogInActivity extends Prefs {
 						 * we will save the Preference data
 						 * and redirect to next class / home
 						 */
-                        savePrefs("key1",login);
-                        savePrefs("key2",password);
+                        savePrefs("login",login);
+                        savePrefs("password",password);
 
                         Intent intent = new Intent(LogInActivity.this, MainActivity.class);
 

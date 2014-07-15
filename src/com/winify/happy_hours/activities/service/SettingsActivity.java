@@ -22,7 +22,7 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
     private Button logout;
     private Button userInfo;
 
-    private Button  statistic;
+
     private Button serviceEndPoint;
 
 
@@ -32,13 +32,13 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
         super.onCreate(savedInstanceState);
         logout = (Button)findViewById(R.id.logoutBtn);
         userInfo= (Button) findViewById(R.id.userSettingsBtn);
-        statistic = (Button)findViewById(R.id.statisticBtn);
+
         serviceEndPoint=(Button)findViewById(R.id.serviceBtn);
 
 
         logout.setOnClickListener(this);
         userInfo.setOnClickListener(this);
-        statistic.setOnClickListener(this);
+
         serviceEndPoint.setOnClickListener(this);
 
 
@@ -69,9 +69,9 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
 
             case R.id.logoutBtn: {
 
-                removePref("key1");
+                removePref("login");
 
-                removePref("key2");
+                removePref("password");
 
 
                 Intent intent = new Intent(SettingsActivity.this, LogInActivity.class);
@@ -95,16 +95,6 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
             break;
 
 
-            case  R.id.statisticBtn:{
-
-
-                Intent intent = new Intent(SettingsActivity.this, CalendarActivity.class);
-
-
-                startActivityForResult(intent,1);
-
-
-            }
 
             case  R.id.serviceBtn:{
 
@@ -116,6 +106,8 @@ public class SettingsActivity extends Prefs implements ServiceListener, View.OnC
 
 
             }
+
+
 
             default:break;
 

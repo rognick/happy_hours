@@ -8,6 +8,8 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.List;
+
 /**
  * Created by Mindshifter on 7/2/2014.
  */
@@ -27,23 +29,7 @@ public class TrackerController {
         return new TrackerController(context, service, serviceListener);
     }
 
-    public void getUser(String login, String password) {
-        service.getUser(login, password, new Callback<User>() {
 
-
-            @Override
-            public void success(User user, Response response) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                serviceListener.onServerFail(retrofitError);
-            }
-        });
-
-
-    }
 
 
     public void updateUser(User user) {
@@ -60,6 +46,41 @@ public class TrackerController {
         });
     }
 
+
+
+
+    public void loginUser(String login, String password){
+        service.loginUser(login, password, new Callback<Response>() {
+
+
+            @Override
+            public void success(Response loginresponse, Response response) {
+                serviceListener.onSuccess(loginresponse);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                serviceListener.onServerFail(retrofitError);
+            }
+        });
+    }
+
+
+    public void logoutUser(String login, String password){
+        service.loginUser(login, password, new Callback<Response>() {
+
+
+            @Override
+            public void success(Response logoutresponse, Response response) {
+                serviceListener.onSuccess(logoutresponse);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                serviceListener.onServerFail(retrofitError);
+            }
+        });
+    }
 
 
 

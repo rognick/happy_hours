@@ -1,10 +1,13 @@
 package com.winify.happy_hours.activities.service;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.controller.Prefs;
 import com.winify.happy_hours.activities.listeners.ServiceListener;
@@ -12,6 +15,8 @@ import com.winify.happy_hours.activities.models.User;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,7 +27,11 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
     private EditText port;
     SharedPreferences settings;
     private Button edit;
+    private Button wifiBtn;
+    String array;
 
+
+    private ListView list;
     public static String ipAdress;
 
     @Override
@@ -30,6 +39,32 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
         setContentView(R.layout.service_settings);
 
         super.onCreate(savedInstanceState);
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        array =settings.getString("wifi_list_prefered", "").toString();
+
+
+        List<String> wifiList = Arrays.asList(array.split("\\s*,\\s*"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+        list= (ListView) findViewById(R.id.preferencedWifiList);
+
+        //todo complete listview
+       list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_list_item_1, wifiList));
 
         ip= (EditText) findViewById(R.id.ipAdress);
         port= (EditText) findViewById(R.id.port);
@@ -39,6 +74,10 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
         edit= (Button) findViewById(R.id.editServiceBtn);
 
         edit.setOnClickListener(this);
+
+        wifiBtn= (Button) findViewById(R.id.addWifi);
+        wifiBtn.setOnClickListener(this);
+
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -53,6 +92,11 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
 
         editPermision(ip, false, false);
         editPermision(port, false, false);
+
+
+
+
+
 
 
     }
@@ -105,6 +149,21 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
 
                 }
                 break;
+
+
+
+
+            case R.id.addWifi :{
+
+
+
+                Intent intent = new Intent(ServiceSettings.this, WifiPreferences.class);
+
+
+                startActivityForResult(intent,1);
+
+            }break;
+
 
             default:
                 break;
