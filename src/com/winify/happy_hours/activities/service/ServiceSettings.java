@@ -4,10 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.*;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.controller.Prefs;
 import com.winify.happy_hours.activities.listeners.ServiceListener;
@@ -89,6 +86,9 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
 
         ipAdress="htttp://"+ settings.getString("ip", "").toString()+ ":"+settings.getString("port", "").toString();
 
+
+        Toast.makeText(getApplicationContext(), ipAdress,
+                Toast.LENGTH_LONG).show();
 
         editPermision(ip, false, false);
         editPermision(port, false, false);

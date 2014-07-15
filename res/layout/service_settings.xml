@@ -85,7 +85,9 @@
 
             <ListView android:layout_width="fill_parent"
                      android:layout_height="275dp"
-                   android:id="@+id/preferencedWifiList" android:layout_weight="0.12"/>
+                   android:id="@+id/preferencedWifiList" android:layout_weight="0.12"
+                    style="@style/CodeFont"
+                    android:background="#000000"/>
             <Button  android:id="@+id/addWifi"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"

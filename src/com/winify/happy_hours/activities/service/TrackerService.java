@@ -21,13 +21,15 @@ public interface TrackerService  {
 
 
 
+    @GET("/start/1")
+    void  start( Callback<Response> callback);
 
 
-    @GET("/users/login/{login}/{password}")
+    @GET("/start/1")
     void  loginUser(@Path("login") String login,@Path("password") String password, Callback<Response> callback);
 
 
-    @GET("/users/logout/{login}/{password}")
+    @GET("/stop/1")
     void  logoutUser(@Path("login") String login,@Path("password") String password, Callback<Response> callback);
 
 

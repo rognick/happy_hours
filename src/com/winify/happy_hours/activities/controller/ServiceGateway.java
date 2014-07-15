@@ -34,6 +34,9 @@ public class ServiceGateway {
     public ServiceGateway(Context context) {
         this.context = context;
         Endpoint endpoint = Endpoints.newFixedEndpoint(ServiceSettings.ipAdress);
+
+
+
         RestAdapter.Builder builder = new RestAdapter.Builder();
         builder.setEndpoint(endpoint);
         builder.setConverter(converter);

@@ -126,8 +126,7 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
                     thread = new Thread(timerStartStop);
                     thread.start();
                     savePrefs("timer", "true");
-                    trackerController.loginUser(settings.getString("login", "").toString(), settings.getString("password", "").toString());
-
+                   trackerController.start();
                     mCountDownTimer.start();
 
                 } else if (button.getText().equals("Happy Stop")) {

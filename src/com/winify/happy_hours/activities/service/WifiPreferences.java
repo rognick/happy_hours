@@ -32,6 +32,7 @@ public class WifiPreferences extends Prefs {
     ListView list;
     String wifis[];
     String array;
+    String newarray;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     @Override
@@ -48,14 +49,15 @@ public class WifiPreferences extends Prefs {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                 String selectedFromList = (String) (list.getItemAtPosition(myItemInt));
-                Toast.makeText(getApplicationContext(),  selectedFromList  +" has been added to wifi list",
+               Toast.makeText(getApplicationContext(),  selectedFromList  +" has been added to wifi list",
                         Toast.LENGTH_LONG).show();
 
 
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
 
-                array =settings.getString("wifi_list", "").toString();
+                array =settings.getString("wifi_list_prefered", "").toString();
+
 
 
 
@@ -63,8 +65,16 @@ public class WifiPreferences extends Prefs {
 
 
 
-                editor.putString("wifi_list_prefered", array+selectedFromList+",");
+                editor.putString("wifi_list_prefered",array+selectedFromList+",");
                 editor.commit();
+
+
+
+                Intent intent = new Intent(WifiPreferences.this,ServiceSettings.class);
+                startActivity(intent);
+                WifiPreferences.this.finish();
+
+
 
 
 

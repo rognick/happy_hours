@@ -66,6 +66,25 @@ public class TrackerController {
     }
 
 
+    public void start(){
+        service.start(new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                serviceListener.onServerFail(retrofitError);
+            }
+        });
+
+
+
+
+    }
+
+
     public void logoutUser(String login, String password){
         service.loginUser(login, password, new Callback<Response>() {
 
