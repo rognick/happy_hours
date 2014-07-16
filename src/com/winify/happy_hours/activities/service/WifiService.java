@@ -87,8 +87,8 @@ public class WifiService extends Service {
             WifiInfo wifiInfo = mainWifiObj.getConnectionInfo();
 
 
-            if (wifiInfo.getSSID().toUpperCase().toString().equals("\"" + Extra.MyNetwork + "\"") ||
-                    wifiInfo.getSSID().toUpperCase().toString().equals(Extra.MyNetwork)) {
+            if (wifiInfo.getSSID().toUpperCase().equals("\"" + Extra.MyNetwork + "\"") ||
+                    wifiInfo.getSSID().toUpperCase().equals(Extra.MyNetwork)) {
 
                 System.out.println("====>  Wifi action  ");
 
