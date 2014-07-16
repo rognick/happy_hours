@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+
 import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.controller.Prefs;
@@ -40,9 +40,7 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
     public TimerStartStop timerStartStop = null;
     public Boolean connectet = true;
     public EditText editText;
-    ProgressBar mProgressBar;
-    CountDownTimer mCountDownTimer;
-    int i=0;
+
 
 
 
@@ -109,7 +107,6 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
                     savePrefs("timer", "true");
                     trackerController.loginUser(settings.getString("login", "").toString(), settings.getString("password", "").toString());
 
-                    mCountDownTimer.start();
 
                 } else if (button.getText().equals("Happy Stop")) {
                     button.setBackgroundResource(R.drawable.button_start_bg);
@@ -214,12 +211,20 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
     // Method to start the service
     public void startService() {
+
+System.out.print("FALSE");
+        if (settings.getBoolean("notification_status",false))
+
         startService(new Intent(getBaseContext(), WifiService.class));
     }
 
     // Method to stop the service
     public void stopService() {
-        stopService(new Intent(getBaseContext(), WifiService.class));
+
+        System.out.print("FALSE");
+
+        if (settings.getBoolean("notification_status",false))
+            stopService(new Intent(getBaseContext(), WifiService.class));
     }
 
 

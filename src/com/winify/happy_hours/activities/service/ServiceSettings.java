@@ -40,7 +40,7 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
 
         checkBox= (CheckBox) findViewById(R.id.checkNotification);
 
-//        checkBox.setEnabled(false);
+
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -192,11 +192,43 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
         switch(view.getId()) {
             case R.id.checkNotification:
                 if (checked){
-                    
+
+
+
+                    settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor = settings.edit();
+
+
+
+
+                    removePref("notification_status");
+
+                    editor.putBoolean("notification_status",true);
+                    editor.commit();
+
+
+
                     System.out.println("sdfasdfsadf");
+
+
+
+
                 }
 
                 else{
+                    settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor = settings.edit();
+
+
+                    removePref("notification_status");
+
+                    editor.putBoolean("notification_status",false);
+                    editor.commit();
+
+
+
                     System.out.println("un");
 
                 }
