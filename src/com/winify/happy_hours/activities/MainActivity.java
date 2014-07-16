@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
+import com.winify.happy_hours.activities.constants.Extra;
 import com.winify.happy_hours.activities.controller.Prefs;
 import com.winify.happy_hours.activities.controller.ServiceGateway;
 import com.winify.happy_hours.activities.controller.TrackerController;
@@ -195,14 +196,14 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
     // Method to start the service
     public void startService() {
-        if (settings.getBoolean("notification_status", false)) {
+        if (settings.getBoolean(Extra.Notification_Status, false)) {
             startService(new Intent(getBaseContext(), WifiService.class));
         }
     }
 
     // Method to stop the service
     public void stopService() {
-        if (settings.getBoolean("notification_status", false)) {
+        if (settings.getBoolean(Extra.Notification_Status, false)) {
             stopService(new Intent(getBaseContext(), WifiService.class));
         }
     }
