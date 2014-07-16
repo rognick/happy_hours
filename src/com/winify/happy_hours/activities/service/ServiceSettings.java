@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Cornel on 7/14/2014.
  */
-public class ServiceSettings extends Prefs implements ServiceListener, View.OnClickListener {
+public class ServiceSettings extends Prefs implements ServiceListener, View.OnClickListener{
     private EditText ip;
     private EditText port;
     SharedPreferences settings;
@@ -37,12 +37,13 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
         setContentView(R.layout.service_settings);
 
         super.onCreate(savedInstanceState);
-  
+    checkBox= (CheckBox) findViewById(R.id.checkNotification);
+        checkBox.setEnabled(false);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-
         array = settings.getString("wifi_list_prefered", "").toString();
+
 
 
 
@@ -179,6 +180,27 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
 
         }
 
+    }
+
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.checkNotification:
+                if (checked){
+                    Toast.makeText(getApplicationContext(),"Checked",Toast.LENGTH_SHORT);
+                }
+
+                else{
+                    Toast.makeText(getApplicationContext(),"UnChecked",Toast.LENGTH_SHORT);
+
+                }
+
+                               break;
+
+        }
     }
 
 
