@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import com.winify.happy_hours.R;
+import com.winify.happy_hours.activities.constants.Extra;
 import com.winify.happy_hours.activities.controller.Prefs;
 import com.winify.happy_hours.activities.listeners.ServiceListener;
 import com.winify.happy_hours.activities.models.User;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by Cornel on 7/14/2014.
  */
-public class ServiceSettings extends Prefs implements ServiceListener, View.OnClickListener{
+public class ServiceSettings extends Prefs implements ServiceListener, View.OnClickListener {
     private EditText ip;
     private EditText port;
     SharedPreferences settings;
@@ -28,7 +29,7 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
     String array;
 
 
-    CheckBox checkBox;
+    public CheckBox checkBox;
     private ListView list;
     public static String ipAdress;
 
@@ -38,15 +39,9 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
 
         super.onCreate(savedInstanceState);
 
-        checkBox= (CheckBox) findViewById(R.id.checkNotification);
-
-
-
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         array = settings.getString("wifi_list_prefered", "").toString();
-
-
 
 
         final List<String> wifiList = new ArrayList<String>();
@@ -61,6 +56,16 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
 
         View header = View.inflate(this, R.layout.settings_list_header, null);
         list.addHeaderView(header);
+
+
+        checkBox = (CheckBox) findViewById(R.id.checkNotification);
+
+        if (settings.getBoolean(Extra.Notification_Status, false)) {
+            checkBox.setChecked(true);
+        } else {
+            checkBox.setChecked(false);
+        }
+
 
         //todo complete listview
         list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
@@ -124,13 +129,11 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
         ipAdress = "htttp://" + settings.getString("ip", "").toString() + ":" + settings.getString("port", "").toString();
 
 
-
         editPermision(ip, false, false);
         editPermision(port, false, false);
 
 
     }
-
 
 
     @Override
@@ -189,47 +192,27 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
         boolean checked = ((CheckBox) view).isChecked();
 
         // Check which checkbox was clicked
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.checkNotification:
-                if (checked){
 
-
-
-                    settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                if (checked) {
 
                     SharedPreferences.Editor editor = settings.edit();
 
+                    removePref(Extra.Notification_Status);
 
-
-
-                    removePref("notification_status");
-
-                    editor.putBoolean("notification_status",true);
+                    editor.putBoolean(Extra.Notification_Status, true);
                     editor.commit();
 
 
-
-                    System.out.println("sdfasdfsadf");
-
-
-
-
-                }
-
-                else{
-                    settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                } else {
 
                     SharedPreferences.Editor editor = settings.edit();
 
+                    removePref(Extra.Notification_Status);
 
-                    removePref("notification_status");
-
-                    editor.putBoolean("notification_status",false);
+                    editor.putBoolean(Extra.Notification_Status, false);
                     editor.commit();
-
-
-
-                    System.out.println("un");
 
                 }
 
@@ -237,8 +220,6 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
 
         }
     }
-
-
 
 
     @Override

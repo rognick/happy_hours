@@ -4,15 +4,12 @@ package com.winify.happy_hours.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.controller.Prefs;
@@ -42,14 +39,14 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
     public EditText editText;
 
 
-
-
     SharedPreferences settings;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         stopService();
 
@@ -60,7 +57,7 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
         editText = (EditText) findViewById(R.id.timerView);
         timerStartStop = new TimerStartStop(editText, this, true);
 
-        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
 //        If login to server
         if (settings.getString("timer", "").equals("true")) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
@@ -73,10 +70,6 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
         ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
         trackerController = serviceGateway.getTrackerController(this);
-
-
-
-
 
 
     }
@@ -157,36 +150,27 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
             case R.id.settings: {
 
-               Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 
 
                 startActivity(intent);
 
 
-
-            }break;
-
-
-
-            case  R.id.statistic:{
+            }
+            break;
 
 
+            case R.id.statistic: {
 
 
-
-
-
-
-               Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-
+                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
 
 
                 startActivity(intent);
 
 
-            }break;
-
-
+            }
+            break;
 
 
         }
@@ -211,20 +195,16 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
     // Method to start the service
     public void startService() {
-
-System.out.print("FALSE");
-        if (settings.getBoolean("notification_status",false))
-
-        startService(new Intent(getBaseContext(), WifiService.class));
+        if (settings.getBoolean("notification_status", false)) {
+            startService(new Intent(getBaseContext(), WifiService.class));
+        }
     }
 
     // Method to stop the service
     public void stopService() {
-
-        System.out.print("FALSE");
-
-        if (settings.getBoolean("notification_status",false))
+        if (settings.getBoolean("notification_status", false)) {
             stopService(new Intent(getBaseContext(), WifiService.class));
+        }
     }
 
 

@@ -5,4 +5,5 @@ package com.winify.happy_hours.activities.constants;
  */
 public class Extra {
     public static String MyNetwork = "ZONE2";
+    public  static String Notification_Status = "notification_status";
 }
