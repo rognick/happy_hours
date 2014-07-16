@@ -37,8 +37,10 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
         setContentView(R.layout.service_settings);
 
         super.onCreate(savedInstanceState);
-    checkBox= (CheckBox) findViewById(R.id.checkNotification);
-        checkBox.setEnabled(false);
+
+        checkBox= (CheckBox) findViewById(R.id.checkNotification);
+
+//        checkBox.setEnabled(false);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -182,7 +184,7 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
 
     }
 
-    public void onCheckboxClicked(View view) {
+    public void onCheckBoxClicked(View view) {
         // Is the view now checked?
         boolean checked = ((CheckBox) view).isChecked();
 
@@ -190,15 +192,16 @@ public class ServiceSettings extends Prefs implements ServiceListener, View.OnCl
         switch(view.getId()) {
             case R.id.checkNotification:
                 if (checked){
-                    Toast.makeText(getApplicationContext(),"Checked",Toast.LENGTH_SHORT);
+                    
+                    System.out.println("sdfasdfsadf");
                 }
 
                 else{
-                    Toast.makeText(getApplicationContext(),"UnChecked",Toast.LENGTH_SHORT);
+                    System.out.println("un");
 
                 }
 
-                               break;
+                break;
 
         }
     }
