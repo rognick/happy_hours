@@ -80,25 +80,6 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
 
 
-        mProgressBar=(ProgressBar)findViewById(R.id.progressbar);
-        mProgressBar.setProgress(i);
-        mCountDownTimer=new CountDownTimer(5000,1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                Log.v("Log_tag", "Tick of Progress" + i + millisUntilFinished);
-                i++;
-                mProgressBar.setProgress(i);
-
-            }
-
-            @Override
-            public void onFinish() {
-                //Do what you want
-                i++;
-                mProgressBar.setProgress(i);
-            }
-        };
 
     }
 
