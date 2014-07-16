@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffffff"
+              android:padding="15dp">
+
+
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="Ip Address: "
+              android:textSize="15dp"
+              android:textColor="#000000"
+
+            />
+
+    <EditText android:id="@+id/ipAdress"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/edittext_bg"
+              android:padding="10dp"
+              android:textColorHint="#cccccc"
+              android:drawableLeft="@drawable/user"
+              android:shadowColor="#808080"
+              android:layout_marginBottom="15dp"
+              android:textColor="#000000"
+              android:textCursorDrawable="@null"
+            />
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Port: "
+            android:textSize="15dp"
+            android:textColor="#000000"
+            />
+
+    <EditText android:id="@+id/port"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/edittext_bg"
+              android:padding="10dp"
+              android:textColorHint="#cccccc"
+              android:drawableLeft="@drawable/user"
+              android:shadowColor="#808080"
+              android:layout_marginBottom="15dp"
+              android:textColor="#000000"
+              android:textCursorDrawable="@null"
+
+            />
+
+
+    <Button android:id="@+id/editServiceBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:text="Edit"
+            style="@style/DefaultButtonText"
+            android:background="@drawable/button_default_bg"
+            android:layout_marginBottom="15dp"/>
+
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+
+        <TextView
+                android:layout_marginTop="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recieve notofications: "
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:layout_marginBottom="25dp"
+                />
+
+        <CheckBox android:layout_marginTop="25dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/checkNotification"
+                  android:checked="true"/>
+
+    </LinearLayout>
+
+    <TextView
+            android:layout_marginTop="25dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Preferenced Wifi Zones: "
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:layout_marginBottom="25dp"
+            />
+
+</LinearLayout>

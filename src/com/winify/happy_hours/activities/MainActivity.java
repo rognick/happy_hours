@@ -4,15 +4,12 @@ package com.winify.happy_hours.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.controller.Prefs;
@@ -40,10 +37,6 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
     public TimerStartStop timerStartStop = null;
     public Boolean connectet = true;
     public EditText editText;
-    ProgressBar mProgressBar;
-    CountDownTimer mCountDownTimer;
-    int i=0;
-
 
 
     SharedPreferences settings;
@@ -77,29 +70,6 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
         trackerController = serviceGateway.getTrackerController(this);
 
 
-
-
-
-        mProgressBar=(ProgressBar)findViewById(R.id.progressbar);
-        mProgressBar.setProgress(i);
-        mCountDownTimer=new CountDownTimer(5000,1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                Log.v("Log_tag", "Tick of Progress" + i + millisUntilFinished);
-                i++;
-                mProgressBar.setProgress(i);
-
-            }
-
-            @Override
-            public void onFinish() {
-                //Do what you want
-                i++;
-                mProgressBar.setProgress(i);
-            }
-        };
-
     }
 
     public void sayHelloUser() {
@@ -126,8 +96,8 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
                     thread = new Thread(timerStartStop);
                     thread.start();
                     savePrefs("timer", "true");
-                   trackerController.start();
-                    mCountDownTimer.start();
+                    trackerController.start();
+
 
                 } else if (button.getText().equals("Happy Stop")) {
                     button.setBackgroundResource(R.drawable.button_start_bg);
@@ -178,36 +148,27 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
             case R.id.settings: {
 
-               Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 
 
                 startActivity(intent);
 
 
-
-            }break;
-
-
-
-            case  R.id.statistic:{
+            }
+            break;
 
 
+            case R.id.statistic: {
 
 
-
-
-
-
-               Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-
+                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
 
 
                 startActivity(intent);
 
 
-            }break;
-
-
+            }
+            break;
 
 
         }
@@ -232,12 +193,24 @@ public class MainActivity extends Prefs implements ServiceListener, View.OnClick
 
     // Method to start the service
     public void startService() {
-        startService(new Intent(getBaseContext(), WifiService.class));
+
+
+        if (true) {
+            startService(new Intent(getBaseContext(), WifiService.class));
+        }
+
+
+
     }
 
     // Method to stop the service
     public void stopService() {
-        stopService(new Intent(getBaseContext(), WifiService.class));
+
+        if (true) {
+            stopService(new Intent(getBaseContext(), WifiService.class));
+        }
+
+
     }
 
 

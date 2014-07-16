@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Cornel on 7/14/2014.
  */
-public class ServiceSettings extends Prefs   implements ServiceListener, View.OnClickListener{
+public class ServiceSettings extends Prefs implements ServiceListener, View.OnClickListener {
     private EditText ip;
     private EditText port;
     SharedPreferences settings;
@@ -28,6 +28,7 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
     String array;
 
 
+    CheckBox checkBox;
     private ListView list;
     public static String ipAdress;
 
@@ -36,43 +37,76 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
         setContentView(R.layout.service_settings);
 
         super.onCreate(savedInstanceState);
+  
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-
-        array =settings.getString("wifi_list_prefered", "").toString();
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
 
-        List<String> wifiList = Arrays.asList(array.split("\\s*,\\s*"));
+        array = settings.getString("wifi_list_prefered", "").toString();
 
 
 
+        final List<String> wifiList = new ArrayList<String>();
+        wifiList.addAll(Arrays.asList(array.split("\\s*,\\s*")));
 
 
+        list = (ListView) findViewById(R.id.preferencedWifiList);
+
+        View footer = View.inflate(this, R.layout.settings_list_footer, null);
+        list.addFooterView(footer);
 
 
-
-
-
-
-
-
-        list= (ListView) findViewById(R.id.preferencedWifiList);
+        View header = View.inflate(this, R.layout.settings_list_header, null);
+        list.addHeaderView(header);
 
         //todo complete listview
-       list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, wifiList));
-
-        ip= (EditText) findViewById(R.id.ipAdress);
-        port= (EditText) findViewById(R.id.port);
+        list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
+                R.layout.item_list, wifiList));
 
 
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-        edit= (Button) findViewById(R.id.editServiceBtn);
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+
+
+                wifiList.remove(pos - 1);
+                settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = settings.edit();
+                StringBuilder sb = new StringBuilder();
+                for (String s : wifiList) {
+                    sb.append(s);
+                    sb.append(",");
+                }
+
+
+                removePref("wifi_list_prefered");
+
+                editor.putString("wifi_list_prefered", sb.toString());
+                editor.commit();
+
+
+                Intent intent = new Intent(ServiceSettings.this, ServiceSettings.class);
+                startActivity(intent);
+                ServiceSettings.this.finish();
+
+
+                return true;
+            }
+        });
+
+
+        ip = (EditText) findViewById(R.id.ipAdress);
+        port = (EditText) findViewById(R.id.port);
+
+
+        edit = (Button) findViewById(R.id.editServiceBtn);
 
         edit.setOnClickListener(this);
 
-        wifiBtn= (Button) findViewById(R.id.addWifi);
+        wifiBtn = (Button) findViewById(R.id.addWifi);
         wifiBtn.setOnClickListener(this);
 
 
@@ -84,22 +118,17 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
         port.setText(settings.getString("port", "").toString());
 
 
-        ipAdress="htttp://"+ settings.getString("ip", "").toString()+ ":"+settings.getString("port", "").toString();
+        ipAdress = "htttp://" + settings.getString("ip", "").toString() + ":" + settings.getString("port", "").toString();
 
 
-        Toast.makeText(getApplicationContext(), ipAdress,
-                Toast.LENGTH_LONG).show();
 
         editPermision(ip, false, false);
         editPermision(port, false, false);
 
 
-
-
-
-
-
     }
+
+
 
     @Override
     public void onClick(View click) {
@@ -118,58 +147,42 @@ public class ServiceSettings extends Prefs   implements ServiceListener, View.On
                     editPermision(port, true, true);
 
 
-
-
-
-
-
-
-
                 } else if (edit.getText().equals("Save Changes")) {
 
                     System.out.print("Changed");
                     edit.setText("Edit");
 
 
+                    updatePrefs("ip", ip);
 
-                    updatePrefs("ip",ip);
-
-                    updatePrefs("port",port);
-
-
+                    updatePrefs("port", port);
 
 
                     editPermision(ip, false, false);
                     editPermision(port, false, false);
 
 
-
-
-
-
                 }
                 break;
 
 
-
-
-            case R.id.addWifi :{
-
+            case R.id.addWifi: {
 
 
                 Intent intent = new Intent(ServiceSettings.this, WifiPreferences.class);
 
 
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
 
-            }break;
+            }
+            break;
 
-
-            default:
-                break;
         }
 
     }
+
+
+
 
     @Override
     public void onSuccess(Response response) {

@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.controller.Prefs;
 
-
 import java.util.List;
 
 
@@ -32,9 +31,8 @@ public class WifiPreferences extends Prefs {
     ListView list;
     String wifis[];
     String array;
-    String newarray;
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,34 +47,26 @@ public class WifiPreferences extends Prefs {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                 String selectedFromList = (String) (list.getItemAtPosition(myItemInt));
-               Toast.makeText(getApplicationContext(),  selectedFromList  +" has been added to wifi list",
+                Toast.makeText(getApplicationContext(), selectedFromList + " has been added to wifi list",
                         Toast.LENGTH_LONG).show();
 
 
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
 
-                array =settings.getString("wifi_list_prefered", "").toString();
-
-
+                array = settings.getString("wifi_list_prefered", "").toString();
 
 
                 removePref("wifi_list_prefered");
 
 
-
-                editor.putString("wifi_list_prefered",array+selectedFromList+",");
+                editor.putString("wifi_list_prefered", array + selectedFromList + ",");
                 editor.commit();
 
 
-
-                Intent intent = new Intent(WifiPreferences.this,ServiceSettings.class);
+                Intent intent = new Intent(WifiPreferences.this, ServiceSettings.class);
                 startActivity(intent);
                 WifiPreferences.this.finish();
-
-
-
-
 
 
             }
@@ -91,7 +81,6 @@ public class WifiPreferences extends Prefs {
     }
 
 
-
     protected void onPause() {
         unregisterReceiver(wifiReciever);
         super.onPause();
@@ -101,6 +90,7 @@ public class WifiPreferences extends Prefs {
         registerReceiver(wifiReciever, new IntentFilter(
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         super.onResume();
+
     }
 
 
@@ -110,20 +100,15 @@ public class WifiPreferences extends Prefs {
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
             wifis = new String[wifiScanList.size()];
             for (int i = 0; i < wifiScanList.size(); i++) {
-//                wifis[i] = ((wifiScanList.get(i)).toString());
+
                 wifis[i] = (wifiScanList.get(i)).SSID.toString();
             }
 
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
-                    android.R.layout.simple_list_item_1, wifis));
-
-
-
+                    R.layout.item_list, wifis));
 
 
         }
-
-
 
 
     }
