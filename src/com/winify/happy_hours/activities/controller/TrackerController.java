@@ -2,13 +2,11 @@ package com.winify.happy_hours.activities.controller;
 
 import android.content.Context;
 import com.winify.happy_hours.activities.listeners.ServiceListener;
-import com.winify.happy_hours.activities.models.User;
+import com.winify.happy_hours.activities.models.Time;
 import com.winify.happy_hours.activities.service.TrackerService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
-import java.util.List;
 
 /**
  * Created by Mindshifter on 7/2/2014.
@@ -32,19 +30,6 @@ public class TrackerController {
 
 
 
-    public void updateUser(User user) {
-        service.updateUser(user, new Callback<Response>() {
-            @Override
-            public void success(Response loginResponse, Response response) {
-                serviceListener.onSuccess(loginResponse);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                serviceListener.onServerFail(retrofitError);
-            }
-        });
-    }
 
 
 
@@ -97,6 +82,21 @@ public class TrackerController {
             @Override
             public void failure(RetrofitError retrofitError) {
                 serviceListener.onServerFail(retrofitError);
+            }
+        });
+    }
+
+
+    public void getTime(){
+        service.getTime(new Callback<Time>() {
+            @Override
+            public void success(Time time, Response response) {
+                serviceListener.recieveTime(time);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
             }
         });
     }

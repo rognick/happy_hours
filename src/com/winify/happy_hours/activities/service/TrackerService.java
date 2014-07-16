@@ -1,7 +1,8 @@
 package com.winify.happy_hours.activities.service;
 
 
-import com.winify.happy_hours.activities.models.User;
+import com.winify.happy_hours.activities.models.Time;
+
 import retrofit.Callback;
 import retrofit.client.Response;
 
@@ -34,12 +35,12 @@ public interface TrackerService  {
 
 
 
+    @GET("/time")
+    void getTime(Callback<Time> callback);
 
 
 
 
-    @PUT("/update")
-    void  updateUser(@Body User user, Callback<Response> callback);
 
 
 

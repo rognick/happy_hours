@@ -16,11 +16,12 @@
 
 package com.winify.happy_hours.activities.listeners;
 
-import com.winify.happy_hours.activities.models.User;
+import com.winify.happy_hours.activities.models.Time;
+
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import java.util.List;
+
 
 
 public interface ServiceListener {
@@ -29,7 +30,8 @@ public interface ServiceListener {
 
     void onServerFail(RetrofitError error);
 
-    void onUsersList(List<User> list);
 
+
+    void recieveTime(Time time);
 
 }
