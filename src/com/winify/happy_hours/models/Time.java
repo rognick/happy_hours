@@ -1,4 +1,4 @@
-package com.winify.happy_hours.activities.models;
+package com.winify.happy_hours.models;
 
 import java.io.Serializable;
 

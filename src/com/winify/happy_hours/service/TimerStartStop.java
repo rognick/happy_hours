@@ -1,14 +1,12 @@
-package com.winify.happy_hours.activities.service;
+package com.winify.happy_hours.service;
 
 import android.app.Activity;
+import android.content.Context;
 import android.widget.EditText;
 import com.winify.happy_hours.R;
 
 import java.util.concurrent.Semaphore;
 
-/**
- * Created by nicolaerogojan on 7/8/14.
- */
 public class TimerStartStop extends Thread {
 
     private EditText timerView;
@@ -21,8 +19,8 @@ public class TimerStartStop extends Thread {
 
     public TimerStartStop(EditText timerView, Activity activity, Boolean runThread) {
         this.timerView = timerView;
-        this.activity = activity;
         this.runThread = runThread;
+        this.activity=activity;
     }
 
     public Boolean getRunThread() {
@@ -60,7 +58,7 @@ public class TimerStartStop extends Thread {
             synchronized (this) {
 
                 final android.text.format.Time time = new android.text.format.Time();
-                final EditText timerView = (EditText) activity.findViewById(R.id.timerView);
+//                final EditText timerView = (EditText) activity.findViewById(R.id.timerView);
                 while (runThread) {
                     wait(1000);
                     activity.runOnUiThread(new Runnable() {

@@ -1,7 +1,11 @@
-package com.winify.happy_hours.activities.service;
+package com.winify.happy_hours.service;
 
 import android.annotation.SuppressLint;
-import android.content.*;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -12,25 +16,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.activities.controller.Prefs;
+import com.winify.happy_hours.activities.ApplicationPreferencesActivity;
+import com.winify.happy_hours.constants.Extra;
 
 import java.util.List;
 
 
-/**
- * Created by nicolaerogojan on 7/7/14.
- */
-public class WifiPreferences extends Prefs {
+public class WifiPreferences extends Activity {
 
-    /**
-     * Called when the activity is first created.
-     */
+    private WifiManager mainWifiObj;
+    private WifiScanReceiver wifiReciever;
+    private ListView list;
+    private String array;
+    private ApplicationPreferencesActivity preferences;
 
-    WifiManager mainWifiObj;
-    WifiScanReceiver wifiReciever;
-    ListView list;
-    String wifis[];
-    String array;
 
 
     @Override
@@ -38,48 +37,31 @@ public class WifiPreferences extends Prefs {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_list);
 
-        System.out.println("Wifi lisr Start");
-
+        preferences= new ApplicationPreferencesActivity(this);
         list = (ListView) findViewById(R.id.wifiList);
         list.setBackgroundColor(Color.BLACK);
-
-
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                 String selectedFromList = (String) (list.getItemAtPosition(myItemInt));
                 Toast.makeText(getApplicationContext(), selectedFromList + " has been added to wifi list",
                         Toast.LENGTH_LONG).show();
 
-
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = settings.edit();
-
-                array = settings.getString("wifi_list_prefered", "").toString();
-
-
-                removePref("wifi_list_prefered");
-
-
-                editor.putString("wifi_list_prefered", array + selectedFromList + ",");
-                editor.commit();
-
-
-                Intent intent = new Intent(WifiPreferences.this, ServiceSettings.class);
+                array = preferences.getStringValueFromPreferences(Extra.KEY_WIFI_LIST_PREFERED);
+                preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERED);
+                preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERED, array + selectedFromList + ",");
+                Intent intent = new Intent(WifiPreferences.this,ServiceSettings.class);
                 startActivity(intent);
-                WifiPreferences.this.finish();
 
+
+                WifiPreferences.this.finish();
 
             }
         });
 
-
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wifiReciever = new WifiScanReceiver();
         mainWifiObj.startScan();
-
-
     }
-
 
     protected void onPause() {
         unregisterReceiver(wifiReciever);
@@ -90,18 +72,16 @@ public class WifiPreferences extends Prefs {
         registerReceiver(wifiReciever, new IntentFilter(
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         super.onResume();
-
     }
-
 
     class WifiScanReceiver extends BroadcastReceiver {
         @SuppressLint("UseValueOf")
         public void onReceive(Context c, Intent intent) {
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-            wifis = new String[wifiScanList.size()];
+            String[] wifis = new String[wifiScanList.size()];
             for (int i = 0; i < wifiScanList.size(); i++) {
 
-                wifis[i] = (wifiScanList.get(i)).SSID.toString();
+                wifis[i] = (wifiScanList.get(i)).SSID;
             }
 
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
