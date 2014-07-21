@@ -22,14 +22,11 @@ import com.winify.happy_hours.constants.Extra;
 import java.util.Calendar;
 import java.util.List;
 
-
 public class WifiService extends Service {
-
-    private ApplicationPreferencesActivity preferences;
+    public ApplicationPreferencesActivity preferences;
     public WifiManager mainWifiObj;
     public WifiScanReceiver wifiReciever;
     public Boolean isRegistered = false;
-
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -41,6 +38,9 @@ public class WifiService extends Service {
 
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+
+        preferences = new ApplicationPreferencesActivity(this);
 
         if ((dayOfWeek != Calendar.SATURDAY) || (dayOfWeek != Calendar.SUNDAY)) {
 
@@ -64,10 +64,8 @@ public class WifiService extends Service {
     }
 
     class WifiScanReceiver extends BroadcastReceiver {
-
         @SuppressLint("UseValueOf")
         public void onReceive(Context c, Intent intent) {
-
 
             try {
                 Thread.sleep(5000);
@@ -75,20 +73,17 @@ public class WifiService extends Service {
                 e.printStackTrace();
             }
 
-
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 
             WifiInfo wifiInfo = mainWifiObj.getConnectionInfo();
 
-
             if (wifiInfo.getSSID().toUpperCase().equals("\"" + Extra.MyNetwork + "\"") ||
                     wifiInfo.getSSID().toUpperCase().equals(Extra.MyNetwork)) {
 
-
-                if (preferences.getBooleanValueFromPreferences(Extra.KEY_TIMER).equals(true)) {
+                if (preferences.getKeyTimerStatus()) {
                     notification("Status", "Timer ON", true);
 
-                } else if (preferences.getBooleanValueFromPreferences(Extra.KEY_TIMER).equals(false)) {
+                } else {
                     notification("Status", "Timer OFF", true);
                 }
 

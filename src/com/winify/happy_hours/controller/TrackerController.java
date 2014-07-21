@@ -2,6 +2,7 @@ package com.winify.happy_hours.controller;
 
 import android.content.Context;
 import com.winify.happy_hours.listeners.ServiceListener;
+import com.winify.happy_hours.models.User;
 import com.winify.happy_hours.service.TrackerService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -23,12 +24,14 @@ public class TrackerController {
         return new TrackerController(context, service, serviceListener);
     }
 
-    public void loginUser(String login, String password) {
-        service.loginUser(login, password, new Callback<Response>() {
+
+
+    public void geToken(User user) {
+        service.getToken(user, new Callback<User>() {
 
             @Override
-            public void success(Response loginresponse, Response response) {
-                serviceListener.onSuccess(loginresponse);
+            public void success(User user, Response response) {
+                serviceListener.onUsersList(user);
             }
 
             @Override
@@ -38,11 +41,13 @@ public class TrackerController {
         });
     }
 
-    public void start() {
-        service.start(new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
 
+    public void getServerTime(User user) {
+        service.getServerTime(user, new Callback<User>() {
+
+            @Override
+            public void success(User user, Response response) {
+                serviceListener.onUsersList(user);
             }
 
             @Override
@@ -52,13 +57,46 @@ public class TrackerController {
         });
     }
 
-    public void logoutUser(String login, String password) {
-        service.loginUser(login, password, new Callback<Response>() {
 
+    //todo CHECK IF WORKS
+
+    public void getWorkedTime(User user) {
+
+        service.getToken(user, new Callback<User>() {
 
             @Override
-            public void success(Response logoutresponse, Response response) {
-                serviceListener.onSuccess(logoutresponse);
+            public void success(User user, Response response) {
+                serviceListener.onUsersList(user);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                serviceListener.onServerFail(retrofitError);
+            }
+        });
+
+    }
+
+
+    public void startWorkTime(User user) {
+        service.startWorkTime(user, new Callback<Response>() {
+            @Override
+            public void success(Response loginResponse, Response response) {
+                serviceListener.onSuccess(loginResponse);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                serviceListener.onServerFail(retrofitError);
+            }
+        });
+    }
+
+    public void stopWorkTime(User user) {
+        service.stopWorkTime(user, new Callback<Response>() {
+            @Override
+            public void success(Response logoutResponse, Response response) {
+                serviceListener.onSuccess(logoutResponse);
             }
 
             @Override

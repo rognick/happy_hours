@@ -46,9 +46,9 @@ public class WifiPreferences extends Activity {
                 Toast.makeText(getApplicationContext(), selectedFromList + " has been added to wifi list",
                         Toast.LENGTH_LONG).show();
 
-                array = preferences.getStringValueFromPreferences(Extra.KEY_WIFI_LIST_PREFERED);
-                preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERED);
-                preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERED, array + selectedFromList + ",");
+                array = preferences.getWifiListPreferred();
+                preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERRED);
+                preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, array + selectedFromList + ",");
                 Intent intent = new Intent(WifiPreferences.this,ServiceSettings.class);
                 startActivity(intent);
 

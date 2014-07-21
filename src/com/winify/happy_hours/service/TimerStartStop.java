@@ -1,77 +1,84 @@
 package com.winify.happy_hours.service;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.EditText;
-import com.winify.happy_hours.R;
+import com.winify.happy_hours.activities.ApplicationPreferencesActivity;
+import com.winify.happy_hours.controller.ServiceGateway;
+import com.winify.happy_hours.controller.TrackerController;
+import com.winify.happy_hours.listeners.ServiceListener;
+import com.winify.happy_hours.models.User;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
-import java.util.concurrent.Semaphore;
-
-public class TimerStartStop extends Thread {
+public class TimerStartStop extends Thread implements ServiceListener {
 
     private EditText timerView;
     private Activity activity;
     private Boolean runThread;
-
-    public TimerStartStop() {
-
-    }
+    private TrackerController trackerController;
+    private String serverTime;
 
     public TimerStartStop(EditText timerView, Activity activity, Boolean runThread) {
         this.timerView = timerView;
         this.runThread = runThread;
-        this.activity=activity;
-    }
-
-    public Boolean getRunThread() {
-        return runThread;
+        this.activity = activity;
     }
 
     public void setRunThread(Boolean runThread) {
         this.runThread = runThread;
     }
 
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
-
-
-    public EditText getTimerView() {
-        return timerView;
-    }
-
-    public void setTimerView(EditText timerView) {
-        this.timerView = timerView;
-    }
-
-
     @Override
     public void run() {
+
         super.run();
 
         try {
             synchronized (this) {
-
-                final android.text.format.Time time = new android.text.format.Time();
-//                final EditText timerView = (EditText) activity.findViewById(R.id.timerView);
+                ServiceGateway serviceGateway = new ServiceGateway(activity);
+                trackerController = serviceGateway.getTrackerController(this);
                 while (runThread) {
-                    wait(1000);
+                    getServerTime();
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            time.setToNow();
-                            timerView.setText(time.hour + ":" + time.minute + ":" + time.second);
+                            timerView.setText(serverTime);
                         }
                     });
+
+                    Thread.sleep(1000);
                 }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getServerTime() {
+        ApplicationPreferencesActivity preferences = new ApplicationPreferencesActivity(activity);
+        User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
+        trackerController.getServerTime(user);
+    }
+
+    @Override
+    public void onSuccess(Response response) {
+    }
+
+    @Override
+    public void onServerFail(RetrofitError error) {
+
+    }
+
+    @Override
+    public void onUsersList(User user) {
+        serverTime = convertTime(user.getTime());
+    }
+
+    private String convertTime(String time) {
+
+        int milliseconds = Integer.parseInt(time);
+        int hour = (milliseconds / (1000 * 60 * 60)) % 24;
+        int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
+        return hour + ":" + min;
     }
 }

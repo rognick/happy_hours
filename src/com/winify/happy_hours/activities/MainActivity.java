@@ -23,18 +23,24 @@ import retrofit.client.Response;
 
 public class MainActivity extends Activity implements ServiceListener, View.OnClickListener {
 
-    private TrackerController trackerController;
     public Thread thread = new Thread();
     public TimerStartStop timerStartStop = null;
     public EditText editText;
+    private TrackerController trackerController;
     private ApplicationPreferencesActivity preferences;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        preferences= new ApplicationPreferencesActivity(this);
+        preferences = new ApplicationPreferencesActivity(this);
+
+        if (preferences.getKeyToken().equals("")) {
+            Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
+            redirectLoginPage();
+        }
         stopService();
 
         Button button = (Button) findViewById(R.id.buttonHappyStart);
@@ -43,7 +49,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         editText = (EditText) findViewById(R.id.timerView);
         timerStartStop = new TimerStartStop(editText, this, true);
 
-        if (preferences.getBooleanValueFromPreferences(Extra.KEY_TIMER)) {
+        if (preferences.getKeyTimerStatus()) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText("Happy Stop");
             thread = new Thread(timerStartStop);
@@ -52,6 +58,13 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
 
         ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
         trackerController = serviceGateway.getTrackerController(this);
+
+    }
+
+    private void redirectLoginPage() {
+        Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void onClick(View click) {
@@ -68,16 +81,14 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
                     thread = new Thread(timerStartStop);
                     thread.start();
                     preferences.savePreferences(Extra.KEY_TIMER, true);
-                    trackerController.logoutUser(preferences.getStringValueFromPreferences(Extra.KEY_USER_NAME),
-                            preferences.getStringValueFromPreferences(Extra.KEY_PASSWORD));
+
 
                 } else if (button.getText().equals("Happy Stop")) {
                     button.setBackgroundResource(R.drawable.button_start_bg);
                     button.setText("Happy Start");
                     timerStartStop.setRunThread(false);
                     preferences.updatePreferences(Extra.KEY_TIMER, false);
-                    trackerController.logoutUser(preferences.getStringValueFromPreferences(Extra.KEY_USER_NAME),
-                            preferences.getStringValueFromPreferences(Extra.KEY_PASSWORD));
+
 
                 }
                 break;
@@ -98,7 +109,8 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     }
 
     @Override
-    public void getUser(User user) {
+    public void onUsersList(User user) {
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,19 +124,16 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         switch (item.getItemId()) {
             case R.id.settings: {
 
-                Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
-
 
             }
             break;
 
             case R.id.statistic: {
 
-
-                Intent intent = new Intent(MainActivity.this,CalendarActivity.class);
+                Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
                 startActivity(intent);
-
 
             }
             break;
@@ -145,13 +154,13 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     }
 
     public void startService() {
-        if (preferences.getBooleanValueFromPreferences(Extra.Notification_Status)) {
+        if (preferences.getNotificationStatus()) {
             startService(new Intent(getBaseContext(), WifiService.class));
         }
     }
 
     public void stopService() {
-        if (preferences.getBooleanValueFromPreferences(Extra.Notification_Status)) {
+        if (preferences.getNotificationStatus()) {
             stopService(new Intent(getBaseContext(), WifiService.class));
         }
     }

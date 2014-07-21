@@ -18,13 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ServiceSettings extends Activity implements ServiceListener, View.OnClickListener {
+    public static String ipAdress;
+    public CheckBox checkBox;
+    String array;
     private EditText ip;
     private EditText port;
-
     private Button edit;
-    String array;
-    public CheckBox checkBox;
-    public static String ipAdress;
     private ApplicationPreferencesActivity preferences;
 
     @Override
@@ -34,7 +33,7 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
         preferences = new ApplicationPreferencesActivity(this);
 
 
-        array = preferences.getStringValueFromPreferences(Extra.KEY_WIFI_LIST_PREFERED);
+        array = preferences.getWifiListPreferred();
         final List<String> wifiList = new ArrayList<String>();
         wifiList.addAll(Arrays.asList(array.split("\\s*,\\s*")));
 
@@ -45,7 +44,7 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
         list.addHeaderView(header);
         checkBox = (CheckBox) findViewById(R.id.checkNotification);
 
-        if (preferences.getBooleanValueFromPreferences(Extra.Notification_Status).equals(false)) {
+        if (preferences.getNotificationStatus().equals(false)) {
             checkBox.setChecked(true);
         } else {
             checkBox.setChecked(false);
@@ -66,8 +65,8 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
                     sb.append(s);
                     sb.append(",");
                 }
-                preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERED);
-                preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERED, sb.toString());
+                preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERRED);
+                preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, sb.toString());
 
 
                 Intent intent = new Intent(ServiceSettings.this, ServiceSettings.class);
@@ -86,12 +85,12 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
         wifiBtn.setOnClickListener(this);
 
 
-        ip.setText(preferences.getStringValueFromPreferences(Extra.KEY_IP));
-        port.setText(preferences.getStringValueFromPreferences(Extra.KEY_PORT));
+        ip.setText(preferences.getIp());
+        port.setText(preferences.getPort());
 
 
-        ipAdress = "htttp://" + preferences.getStringValueFromPreferences(Extra.KEY_IP) + ":"+
-                preferences.getStringValueFromPreferences(Extra.KEY_PORT);
+        ipAdress = "htttp://" + preferences.getIp() + ":" +
+                preferences.getPort();
 
         preferences.editPermission(ip, false, false);
         preferences.editPermission(port, false, false);
@@ -106,14 +105,14 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
             case R.id.editServiceBtn:
                 if (edit.getText().equals("Edit")) {
 
-                   edit.setText("Save Changes");
+                    edit.setText("Save Changes");
                     preferences.editPermission(ip, true, true);
                     preferences.editPermission(port, true, true);
 
                 } else if (edit.getText().equals("Save Changes")) {
 
 
-                 edit.setText("Edit");
+                    edit.setText("Edit");
 
 
                     preferences.updatePreferences(Extra.KEY_IP, ip);
@@ -167,6 +166,8 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
     }
 
     @Override
-    public void getUser(User user) {
+    public void onUsersList(User user) {
+
     }
+
 }

@@ -24,10 +24,11 @@ public class SettingsActivity extends Activity implements ServiceListener, View.
         Button logout = (Button) findViewById(R.id.logoutBtn);
         Button userInfo = (Button) findViewById(R.id.userSettingsBtn);
         Button serviceEndPoint = (Button) findViewById(R.id.serviceBtn);
+
         logout.setOnClickListener(this);
         userInfo.setOnClickListener(this);
         serviceEndPoint.setOnClickListener(this);
-        preferences= new ApplicationPreferencesActivity(this);
+        preferences = new ApplicationPreferencesActivity(this);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class SettingsActivity extends Activity implements ServiceListener, View.
     }
 
     @Override
-    public void getUser(User user) {
+    public void onUsersList(User user) {
     }
 
     @Override
@@ -48,34 +49,21 @@ public class SettingsActivity extends Activity implements ServiceListener, View.
         switch (click.getId()) {
 
             case R.id.logoutBtn: {
-
-                preferences.removePreferences(Extra.KEY_USER_NAME);
-                preferences.removePreferences(Extra.KEY_PASSWORD);
-
-
-                Intent intent = new Intent(SettingsActivity.this,LogInActivity.class);
+                preferences.removePreferences(Extra.KEY_TOKEN);
+                Intent intent = new Intent(SettingsActivity.this, LogInActivity.class);
                 startActivity(intent);
-
             }
             break;
 
             case R.id.userSettingsBtn: {
 
-
-                Intent intent = new Intent(SettingsActivity.this,ShowUserInfoActivity.class);
+                Intent intent = new Intent(SettingsActivity.this, ShowUserInfoActivity.class);
                 startActivity(intent);
-
-
             }
             break;
-
             case R.id.serviceBtn: {
-
-
-                Intent intent = new Intent(SettingsActivity.this,ServiceSettings.class);
+                Intent intent = new Intent(SettingsActivity.this, ServiceSettings.class);
                 startActivity(intent);
-
-
             }
             break;
         }

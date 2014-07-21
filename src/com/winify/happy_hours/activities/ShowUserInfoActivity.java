@@ -82,8 +82,11 @@ public class ShowUserInfoActivity extends Activity implements ServiceListener, V
     }
 
     @Override
-    public void getUser(User user) {
+    public void onUsersList(User user) {
+
     }
+
+
 
     public void disableEditText() {
         preferences.editPermission(firstName, false, false);

@@ -11,48 +11,41 @@
                 android:background="#FFFFFF">
     <ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-
         <LinearLayout android:orientation="vertical"
                       android:layout_width="match_parent"
                       android:layout_height="match_parent">
 
+            <Button android:id="@+id/userSettingsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_margin="4dp"
+                    android:text="User Info"
+                    style="@style/DefaultButtonText"
+                    android:background="@drawable/button_default_bg"
+                    android:layout_marginBottom="15dp"/>
 
 
-            <Button  android:id="@+id/userSettingsBtn"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:padding="10dp"
-                     android:layout_margin="4dp"
-                     android:text="User Info"
-                     style="@style/DefaultButtonText"
-                     android:background="@drawable/button_default_bg"
-                     android:layout_marginBottom="15dp"/>
+            <Button android:id="@+id/serviceBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_margin="4dp"
+                    android:text="Service Settings"
+                    style="@style/DefaultButtonText"
+                    android:background="@drawable/button_default_bg"
+                    android:layout_marginBottom="15dp"/>
 
-
-
-            <Button  android:id="@+id/serviceBtn"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:padding="10dp"
-                     android:layout_margin="4dp"
-                     android:text="Service Settings"
-                     style="@style/DefaultButtonText"
-                     android:background="@drawable/button_default_bg"
-                     android:layout_marginBottom="15dp"/>
-
-            <Button  android:id="@+id/logoutBtn"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:padding="10dp"
-                     android:layout_margin="4dp"
-                     android:text="Log Out"
-                     style="@style/DefaultButtonText"
-                     android:background="@drawable/button_default_bg"
-                     android:layout_marginBottom="15dp"/>
-
-
+            <Button android:id="@+id/logoutBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_margin="4dp"
+                    android:text="Log Out"
+                    style="@style/DefaultButtonText"
+                    android:background="@drawable/button_default_bg"
+                    android:layout_marginBottom="15dp"/>
 
         </LinearLayout>
-
     </ScrollView>
 </RelativeLayout>

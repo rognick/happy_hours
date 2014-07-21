@@ -5,47 +5,85 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private String email;
-    private String firstName;
-    private String lastName;
-    private int age;
+    private String username;
+    private String password;
+    private String token;
+    private String daily;
+    private String monthly;
+    private String weekly;
+    private String time;
 
     public User() {
-        
+
     }
 
-    public User(String email, String firstName, String lastName, int age) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
+
+    public User(String username, String password, String token, String daily, String weekly, String monthly, String time) {
+
+        this.username = username;
+        this.password = password;
+        this.token = token;
+        this.daily = daily;
+        this.monthly = monthly;
+        this.weekly = weekly;
+        this.time = time;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public  String getEmail() {
-        return email;
+    public String getToken() {
+        return token;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public void setAge(Integer age) {this.age = age;}
+    public String getDaily() {
+        return daily;
+    }
 
-    public int getAge() {return age;}
+    public void setDaily(String daily) {
+        this.daily = daily;
+    }
+
+    public String getWeekly() {
+        return weekly;
+    }
+
+    public void setWeekly(String weekly) {
+        this.weekly = weekly;
+    }
+
+    public String getMonthly() {
+        return monthly;
+    }
+
+    public void setMonthly(String monthly) {
+        this.monthly = monthly;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+
 }

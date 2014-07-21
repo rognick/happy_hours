@@ -1,33 +1,28 @@
 package com.winify.happy_hours.service;
 
 
-import com.winify.happy_hours.models.Time;
 import com.winify.happy_hours.models.User;
 import retrofit.Callback;
 import retrofit.client.Response;
+import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Path;
 
 
 public interface TrackerService {
 
+   // public static String SERVICE_ENDPOINT = "http://192.168.3.93:9000";
 
-    @GET("/start/1")
-    void start(Callback<Response> callback);
+    @POST("/authenticate")
+    void getToken(@Body User user, Callback<User> callback);
 
+    @POST("/start")
+    void startWorkTime(@Body User user, Callback<Response> callback);
 
-    @GET("/start/1")
-    void loginUser(@Path("login") String login, @Path("password") String password, Callback<Response> callback);
+    @POST("/stop")
+    void stopWorkTime(@Body User user, Callback<Response> callback);
 
-
-    @GET("/stop/1")
-    void logoutUser(@Path("login") String login, @Path("password") String password, Callback<Response> callback);
-
-    @GET("/time")
-    void getTime(Callback<Time> callback);
-
-    @GET("/users/{email}")
-    void getUser(@Path("email") String email, Callback<User> callback);
-
-
+    @POST("/time")
+    void getServerTime(@Body User user,Callback<User> cb);
 }

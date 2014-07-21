@@ -7,22 +7,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.winify.happy_hours.constants.Extra;
 
-
-public class ApplicationPreferencesActivity  {
+public class ApplicationPreferencesActivity {
 
     public static final String PREFS_NAME = "LoginPrefs";
     private final SharedPreferences.Editor editor;
     SharedPreferences settings;
 
     public ApplicationPreferencesActivity(Context context) {
-        this.settings = context.getSharedPreferences(PREFS_NAME,Activity.MODE_PRIVATE);
+        this.settings = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
         this.editor = settings.edit();
         editor.commit();
-
     }
 
     public void savePreferences(String key, EditText item) {
-
         editor.putString(key, item.getText().toString());
         editor.commit();
     }
@@ -33,8 +30,6 @@ public class ApplicationPreferencesActivity  {
     }
 
     public String getStringValueFromPreferences(String key) {
-
-
         return settings.getString(key, "");
     }
 
@@ -50,7 +45,6 @@ public class ApplicationPreferencesActivity  {
     }
 
     public void savePreferences(String key, Boolean item) {
-
         editor.putBoolean(key, item);
         editor.commit();
     }
@@ -60,14 +54,8 @@ public class ApplicationPreferencesActivity  {
         savePreferences(key, value);
     }
 
-    public Boolean getBooleanValueFromPreferences(String key) {
-
-
-        return settings.getBoolean(key, false);
-    }
 
     public void removePreferences(String key) {
-
         editor.remove(key);
         editor.commit();
     }
@@ -77,9 +65,29 @@ public class ApplicationPreferencesActivity  {
         name.setFocusable(focus);
     }
 
-    public void saveCredentials(String userName, String password) {
-        savePreferences(Extra.KEY_USER_NAME, userName);
-        savePreferences(Extra.KEY_PASSWORD, password);
+    public Boolean getNotificationStatus() {
+        return settings.getBoolean(Extra.Notification_Status, false);
+    }
+
+    public Boolean getKeyTimerStatus() {
+        return settings.getBoolean(Extra.KEY_TIMER, false);
+    }
+
+    public String getKeyToken() {
+        return settings.getString(Extra.KEY_TOKEN, "");
+    }
+
+    public String getWifiListPreferred() {
+        return settings.getString(Extra.KEY_WIFI_LIST_PREFERRED, "");
+    }
+
+
+    public String getIp() {
+        return settings.getString(Extra.KEY_IP, "");
+    }
+
+    public String getPort() {
+        return settings.getString(Extra.KEY_PORT, "");
     }
 
 

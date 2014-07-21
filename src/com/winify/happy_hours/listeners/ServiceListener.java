@@ -27,6 +27,8 @@ public interface ServiceListener {
 
     void onServerFail(RetrofitError error);
 
-    void getUser(User user);
+    void onUsersList(User user);
+
+
 
 }
