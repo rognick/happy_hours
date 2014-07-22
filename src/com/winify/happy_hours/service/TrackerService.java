@@ -12,7 +12,7 @@ import retrofit.http.Path;
 
 public interface TrackerService {
 
-   // public static String SERVICE_ENDPOINT = "http://192.168.3.93:9000";
+  // public static String SERVICE_ENDPOINT = "http://192.168.3.93:9000";
 
     @POST("/authenticate")
     void getToken(@Body User user, Callback<User> callback);
@@ -25,4 +25,7 @@ public interface TrackerService {
 
     @POST("/time")
     void getServerTime(@Body User user,Callback<User> cb);
+
+    @POST("/statistic")
+    void getWorkedTime(@Body User user , Callback<User> cb);
 }

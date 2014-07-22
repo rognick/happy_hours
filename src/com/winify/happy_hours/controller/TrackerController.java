@@ -58,11 +58,10 @@ public class TrackerController {
     }
 
 
-    //todo CHECK IF WORKS
 
     public void getWorkedTime(User user) {
 
-        service.getToken(user, new Callback<User>() {
+        service.getWorkedTime(user, new Callback<User>() {
 
             @Override
             public void success(User user, Response response) {

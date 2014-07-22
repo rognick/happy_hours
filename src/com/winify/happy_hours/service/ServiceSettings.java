@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ServiceSettings extends Activity implements ServiceListener, View.OnClickListener {
-    public static String ipAdress;
+
     public CheckBox checkBox;
     String array;
     private EditText ip;
@@ -45,9 +45,9 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
         checkBox = (CheckBox) findViewById(R.id.checkNotification);
 
         if (preferences.getNotificationStatus().equals(false)) {
-            checkBox.setChecked(true);
-        } else {
             checkBox.setChecked(false);
+        } else {
+            checkBox.setChecked(true);
         }
 
         list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
@@ -88,9 +88,6 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
         ip.setText(preferences.getIp());
         port.setText(preferences.getPort());
 
-
-        ipAdress = "htttp://" + preferences.getIp() + ":" +
-                preferences.getPort();
 
         preferences.editPermission(ip, false, false);
         preferences.editPermission(port, false, false);

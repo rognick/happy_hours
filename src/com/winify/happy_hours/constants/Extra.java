@@ -15,6 +15,7 @@ public class Extra {
     public static String KEY_PHONE_NUMBER = "mobile";
     public static String KEY_POSITION = "position";
     public static String KEY_TEAM = "team";
-    public static String KEY_IP;
-    public static String KEY_PORT;
+    public static String KEY_IP="key_ip";
+    public static String KEY_PORT="key_port";
+    public static String KEY_IP_ADRESS="key_ip_adress";
 }

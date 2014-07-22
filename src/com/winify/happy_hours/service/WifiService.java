@@ -17,6 +17,7 @@ import android.provider.Settings;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.ApplicationPreferencesActivity;
 import com.winify.happy_hours.activities.LogInActivity;
+import com.winify.happy_hours.activities.MainActivity;
 import com.winify.happy_hours.constants.Extra;
 
 import java.util.Calendar;
@@ -38,7 +39,6 @@ public class WifiService extends Service {
 
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
 
         preferences = new ApplicationPreferencesActivity(this);
 
@@ -68,7 +68,7 @@ public class WifiService extends Service {
         public void onReceive(Context c, Intent intent) {
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -99,7 +99,7 @@ public class WifiService extends Service {
 
         public void notification(String contentTitle, String contentText, Boolean onGoing) {
 
-            Intent intent2 = new Intent(WifiService.this, LogInActivity.class);
+            Intent intent2 = new Intent(WifiService.this, MainActivity.class);
             if (!onGoing) {
                 intent2 = new Intent(Settings.ACTION_WIFI_SETTINGS);
             }

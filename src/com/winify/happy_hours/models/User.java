@@ -17,7 +17,6 @@ public class User implements Serializable {
 
     }
 
-
     public User(String username, String password, String token, String daily, String weekly, String monthly, String time) {
 
         this.username = username;

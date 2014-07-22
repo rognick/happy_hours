@@ -29,6 +29,4 @@ public interface ServiceListener {
 
     void onUsersList(User user);
 
-
-
 }

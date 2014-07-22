@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     public EditText editText;
     private TrackerController trackerController;
     private ApplicationPreferencesActivity preferences;
-
+    private  Button button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         }
         stopService();
 
-        Button button = (Button) findViewById(R.id.buttonHappyStart);
+         button = (Button) findViewById(R.id.buttonHappyStart);
         button.setOnClickListener(this);
 
         editText = (EditText) findViewById(R.id.timerView);
@@ -72,23 +72,20 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         switch (click.getId()) {
             case R.id.buttonHappyStart:
 
-                Button button = (Button) findViewById(R.id.buttonHappyStart);
+
 
                 if (button.getText().equals("Happy Start")) {
-                    button.setBackgroundResource(R.drawable.button_stop_bg);
-                    button.setText("Happy Stop");
-                    timerStartStop.setRunThread(true);
-                    thread = new Thread(timerStartStop);
-                    thread.start();
-                    preferences.savePreferences(Extra.KEY_TIMER, true);
+                    User user = new User("", "",preferences.getKeyToken(),"","","","");
+                    trackerController.startWorkTime(user);
+
+
+
 
 
                 } else if (button.getText().equals("Happy Stop")) {
-                    button.setBackgroundResource(R.drawable.button_start_bg);
-                    button.setText("Happy Start");
-                    timerStartStop.setRunThread(false);
-                    preferences.updatePreferences(Extra.KEY_TIMER, false);
 
+                    User user = new User("", "",preferences.getKeyToken(),"","","","");
+                    trackerController.stopWorkTime(user);
 
                 }
                 break;
@@ -101,6 +98,20 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     @Override
     public void onSuccess(Response response) {
         Toast.makeText(MainActivity.this, "Server OK", Toast.LENGTH_SHORT).show();
+
+        if (button.getText().equals("Happy Start")) { button.setBackgroundResource(R.drawable.button_stop_bg);
+            button.setText("Happy Stop");
+            timerStartStop.setRunThread(true);
+            thread = new Thread(timerStartStop);
+            thread.start();
+            preferences.savePreferences(Extra.KEY_TIMER, true);
+        }
+        else if (button.getText().equals("Happy Stop")) {  button.setBackgroundResource(R.drawable.button_start_bg);
+            button.setText("Happy Start");
+            timerStartStop.setRunThread(false);
+            preferences.updatePreferences(Extra.KEY_TIMER, false);}
+
+
     }
 
     @Override
