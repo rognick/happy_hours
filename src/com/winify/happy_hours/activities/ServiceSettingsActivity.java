@@ -1,4 +1,4 @@
-package com.winify.happy_hours.service;
+package com.winify.happy_hours.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.activities.ApplicationPreferencesActivity;
 import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.User;
+import com.winify.happy_hours.service.WifiPreferences;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -17,20 +17,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ServiceSettings extends Activity implements ServiceListener, View.OnClickListener {
+public class ServiceSettingsActivity extends Activity implements ServiceListener, View.OnClickListener {
 
     public CheckBox checkBox;
     String array;
     private EditText ip;
     private EditText port;
     private Button edit;
-    private ApplicationPreferencesActivity preferences;
+    private ApplicationPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.service_settings);
         super.onCreate(savedInstanceState);
-        preferences = new ApplicationPreferencesActivity(this);
+        preferences = new ApplicationPreferences(this);
 
 
         array = preferences.getWifiListPreferred();
@@ -69,10 +69,10 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
                 preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, sb.toString());
 
 
-                Intent intent = new Intent(ServiceSettings.this, ServiceSettings.class);
+                Intent intent = new Intent(ServiceSettingsActivity.this, ServiceSettingsActivity.class);
                 startActivity(intent);
 
-                ServiceSettings.this.finish();
+                ServiceSettingsActivity.this.finish();
                 return true;
             }
         });
@@ -117,9 +117,9 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
 
             case R.id.addWifi: {
 
-                Intent intent = new Intent(ServiceSettings.this, WifiPreferences.class);
+                Intent intent = new Intent(ServiceSettingsActivity.this, WifiPreferences.class);
                 startActivity(intent);
-                ServiceSettings.this.finish();
+                ServiceSettingsActivity.this.finish();
 
             }
             break;

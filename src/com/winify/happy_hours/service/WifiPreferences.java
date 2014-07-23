@@ -16,7 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.activities.ApplicationPreferencesActivity;
+import com.winify.happy_hours.activities.ApplicationPreferences;
+import com.winify.happy_hours.activities.ServiceSettingsActivity;
 import com.winify.happy_hours.constants.Extra;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class WifiPreferences extends Activity {
     private WifiScanReceiver wifiReciever;
     private ListView list;
     private String array;
-    private ApplicationPreferencesActivity preferences;
+    private ApplicationPreferences preferences;
 
 
 
@@ -37,7 +38,7 @@ public class WifiPreferences extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_list);
 
-        preferences= new ApplicationPreferencesActivity(this);
+        preferences= new ApplicationPreferences(this);
         list = (ListView) findViewById(R.id.wifiList);
         list.setBackgroundColor(Color.BLACK);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -49,7 +50,7 @@ public class WifiPreferences extends Activity {
                 array = preferences.getWifiListPreferred();
                 preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERRED);
                 preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, array + selectedFromList + ",");
-                Intent intent = new Intent(WifiPreferences.this,ServiceSettings.class);
+                Intent intent = new Intent(WifiPreferences.this,ServiceSettingsActivity.class);
                 startActivity(intent);
 
 

@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     public EditText editText;
     private TrackerController trackerController;
     private ApplicationPreferencesActivity preferences;
-    private Button button;
+    private  Button button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         }
         stopService();
 
-        button = (Button) findViewById(R.id.buttonHappyStart);
+         button = (Button) findViewById(R.id.buttonHappyStart);
         button.setOnClickListener(this);
 
         editText = (EditText) findViewById(R.id.timerView);
@@ -72,13 +72,19 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         switch (click.getId()) {
             case R.id.buttonHappyStart:
 
+
+
                 if (button.getText().equals("Happy Start")) {
-                    User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
+                    User user = new User("", "",preferences.getKeyToken(),"","","","");
                     trackerController.startWorkTime(user);
+
+
+
+
 
                 } else if (button.getText().equals("Happy Stop")) {
 
-                    User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
+                    User user = new User("", "",preferences.getKeyToken(),"","","","");
                     trackerController.stopWorkTime(user);
 
                 }
@@ -93,19 +99,19 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     public void onSuccess(Response response) {
         Toast.makeText(MainActivity.this, "Server OK", Toast.LENGTH_SHORT).show();
 
-        if (button.getText().equals("Happy Start")) {
-            button.setBackgroundResource(R.drawable.button_stop_bg);
+        if (button.getText().equals("Happy Start")) { button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText("Happy Stop");
             timerStartStop.setRunThread(true);
             thread = new Thread(timerStartStop);
             thread.start();
             preferences.savePreferences(Extra.KEY_TIMER, true);
-        } else if (button.getText().equals("Happy Stop")) {
-            button.setBackgroundResource(R.drawable.button_start_bg);
+        }
+        else if (button.getText().equals("Happy Stop")) {  button.setBackgroundResource(R.drawable.button_start_bg);
             button.setText("Happy Start");
             timerStartStop.setRunThread(false);
-            preferences.updatePreferences(Extra.KEY_TIMER, false);
-        }
+            preferences.updatePreferences(Extra.KEY_TIMER, false);}
+
+
     }
 
     @Override

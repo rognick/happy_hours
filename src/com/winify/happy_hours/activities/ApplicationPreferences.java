@@ -7,13 +7,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.winify.happy_hours.constants.Extra;
 
-public class ApplicationPreferencesActivity {
+public class ApplicationPreferences {
 
     public static final String PREFS_NAME = "LoginPrefs";
     private final SharedPreferences.Editor editor;
     SharedPreferences settings;
 
-    public ApplicationPreferencesActivity(Context context) {
+    public ApplicationPreferences(Context context) {
         this.settings = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
         this.editor = settings.edit();
         editor.commit();

@@ -1,8 +1,6 @@
 package com.winify.happy_hours.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -45,23 +43,8 @@ public class LogInActivity extends Activity implements ServiceListener {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (preferences.getIp().equals("") || preferences.getPort().equals("")) {
-
-
-                    AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
-                    ad.setCancelable(false); // This blocks the 'BACK' button
-                    ad.setMessage("Check youre Ip Address and Port in  settings");
-                    ad.setButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    ad.show();
-                } else {
-                    if (login.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
-                        getKeyToken(login.getText().toString(), password.getText().toString());
-                    }
+                if (login.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
+                    getKeyToken(login.getText().toString(), password.getText().toString());
                 }
             }
         });
@@ -79,31 +62,23 @@ public class LogInActivity extends Activity implements ServiceListener {
 
     @Override
     public void onServerFail(RetrofitError error) {
-        AlertDialog ad = new AlertDialog.Builder(this).create();
-        ad.setCancelable(false); // This blocks the 'BACK' button
-        ad.setMessage("Please check youre Username and Password or youre connection with Server");
-        ad.setButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        ad.show();
     }
 
     @Override
     public void onUsersList(User user) {
         preferences.savePreferences(Extra.KEY_TOKEN, user.getToken());
-        Toast.makeText(LogInActivity.this, preferences.getKeyToken(), Toast.LENGTH_LONG).show();
+        Toast.makeText(LogInActivity.this,  preferences.getKeyToken(), Toast.LENGTH_LONG).show();
         redirectHomePage();
         finish();
     }
 
     public void getKeyToken(String login, String password) {
-        User user = new User(login, password, "", "", "", "", "");
+        User user = new User(login, password,"","","","","");
         preferences.removePreferences(Extra.KEY_TOKEN);
         trackerController.geToken(user);
+
     }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater Inflater = getMenuInflater();
@@ -115,12 +90,16 @@ public class LogInActivity extends Activity implements ServiceListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.startSettings: {
+
                 Intent intent = new Intent(LogInActivity.this, ServiceSettings.class);
                 startActivity(intent);
+
             }
             break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
 
