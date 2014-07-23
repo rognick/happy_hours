@@ -27,7 +27,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     public TimerStartStop timerStartStop = null;
     public EditText editText;
     private TrackerController trackerController;
-    private ApplicationPreferencesActivity preferences;
+    private ApplicationPreferences preferences;
     private Button button;
 
     @Override
@@ -35,7 +35,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        preferences = new ApplicationPreferencesActivity(this);
+        preferences = new ApplicationPreferences(this);
 
         if (preferences.getKeyToken().equals("")) {
             Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();

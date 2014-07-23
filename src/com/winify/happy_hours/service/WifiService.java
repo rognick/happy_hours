@@ -15,8 +15,7 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.provider.Settings;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.activities.ApplicationPreferencesActivity;
-import com.winify.happy_hours.activities.LogInActivity;
+import com.winify.happy_hours.activities.ApplicationPreferences;
 import com.winify.happy_hours.activities.MainActivity;
 import com.winify.happy_hours.constants.Extra;
 
@@ -24,7 +23,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class WifiService extends Service {
-    public ApplicationPreferencesActivity preferences;
+    public ApplicationPreferences preferences;
     public WifiManager mainWifiObj;
     public WifiScanReceiver wifiReciever;
     public Boolean isRegistered = false;
@@ -40,7 +39,7 @@ public class WifiService extends Service {
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-        preferences = new ApplicationPreferencesActivity(this);
+        preferences = new ApplicationPreferences(this);
 
         if ((dayOfWeek != Calendar.SATURDAY) || (dayOfWeek != Calendar.SUNDAY)) {
 

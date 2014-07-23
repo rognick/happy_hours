@@ -49,7 +49,7 @@ public class StatisticsActivity extends Activity implements ServiceListener {
     }
 
     private void getStatistics() {
-        ApplicationPreferencesActivity preferences = new ApplicationPreferencesActivity(StatisticsActivity.this);
+        ApplicationPreferences preferences = new ApplicationPreferences(StatisticsActivity.this);
         User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
         trackerController.getWorkedTime(user);
     }

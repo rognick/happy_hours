@@ -18,7 +18,7 @@
         <activity android:name=".activities.LogInActivity"/>
         <activity android:name=".activities.ShowUserInfoActivity"/>
         <activity android:name=".activities.SettingsActivity"/>
-        <activity android:name=".service.ServiceSettings"/>
+        <activity android:name=".activities.ServiceSettingsActivity"/>
         <activity android:name=".service.WifiPreferences"/>
         <activity android:name=".activities.StatisticsActivity"/>
         <service android:name=".service.WifiService"/>

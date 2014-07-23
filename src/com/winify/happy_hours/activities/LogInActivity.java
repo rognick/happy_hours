@@ -16,14 +16,13 @@ import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.controller.TrackerController;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.User;
-import com.winify.happy_hours.service.ServiceSettings;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class LogInActivity extends Activity implements ServiceListener {
     private EditText login;
     private EditText password;
-    private ApplicationPreferencesActivity preferences;
+    private ApplicationPreferences preferences;
     private TrackerController trackerController;
 
     @Override
@@ -34,7 +33,7 @@ public class LogInActivity extends Activity implements ServiceListener {
         ServiceGateway serviceGateway = new ServiceGateway(LogInActivity.this);
         trackerController = serviceGateway.getTrackerController(this);
 
-        preferences = new ApplicationPreferencesActivity(this);
+        preferences = new ApplicationPreferences(this);
 
         login = (EditText) findViewById(R.id.login);
         password = (EditText) findViewById(R.id.password);
@@ -91,7 +90,7 @@ public class LogInActivity extends Activity implements ServiceListener {
         switch (item.getItemId()) {
             case R.id.startSettings: {
 
-                Intent intent = new Intent(LogInActivity.this, ServiceSettings.class);
+                Intent intent = new Intent(LogInActivity.this, ServiceSettingsActivity.class);
                 startActivity(intent);
 
             }

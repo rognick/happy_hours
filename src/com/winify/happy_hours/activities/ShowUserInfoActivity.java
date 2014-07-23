@@ -14,7 +14,7 @@ import retrofit.client.Response;
 
 public class ShowUserInfoActivity extends Activity implements ServiceListener, View.OnClickListener {
 
-    private ApplicationPreferencesActivity preferences;
+    private ApplicationPreferences preferences;
     private Button button;
     private EditText firstName;
     private EditText lastName;
@@ -28,7 +28,7 @@ public class ShowUserInfoActivity extends Activity implements ServiceListener, V
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_user_settings);
-        preferences= new ApplicationPreferencesActivity(this);
+        preferences= new ApplicationPreferences(this);
 
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);

@@ -2,7 +2,7 @@ package com.winify.happy_hours.service;
 
 import android.app.Activity;
 import android.widget.EditText;
-import com.winify.happy_hours.activities.ApplicationPreferencesActivity;
+import com.winify.happy_hours.activities.ApplicationPreferences;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.controller.TrackerController;
 import com.winify.happy_hours.listeners.ServiceListener;
@@ -55,7 +55,7 @@ public class TimerStartStop extends Thread implements ServiceListener {
     }
 
     private void getServerTime() {
-        ApplicationPreferencesActivity preferences = new ApplicationPreferencesActivity(activity);
+        ApplicationPreferences preferences = new ApplicationPreferences(activity);
         User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
         trackerController.getServerTime(user);
     }

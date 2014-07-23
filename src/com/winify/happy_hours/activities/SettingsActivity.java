@@ -9,13 +9,12 @@ import com.winify.happy_hours.R;
 import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.User;
-import com.winify.happy_hours.service.ServiceSettings;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class SettingsActivity extends Activity implements ServiceListener, View.OnClickListener {
 
-    private ApplicationPreferencesActivity preferences;
+    private ApplicationPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,7 @@ public class SettingsActivity extends Activity implements ServiceListener, View.
         logout.setOnClickListener(this);
         userInfo.setOnClickListener(this);
         serviceEndPoint.setOnClickListener(this);
-        preferences = new ApplicationPreferencesActivity(this);
+        preferences = new ApplicationPreferences(this);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class SettingsActivity extends Activity implements ServiceListener, View.
             }
             break;
             case R.id.serviceBtn: {
-                Intent intent = new Intent(SettingsActivity.this, ServiceSettings.class);
+                Intent intent = new Intent(SettingsActivity.this, ServiceSettingsActivity.class);
                 startActivity(intent);
             }
             break;
