@@ -71,9 +71,6 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
 
         switch (click.getId()) {
             case R.id.buttonHappyStart:
-
-
-
                 if (button.getText().equals("Happy Start")) {
                     User user = new User("", "",preferences.getKeyToken(),"","","","");
                     trackerController.startWorkTime(user);
