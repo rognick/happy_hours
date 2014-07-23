@@ -89,7 +89,6 @@ public class ApplicationPreferences {
         return settings.getString(Extra.KEY_PORT, "");
     }
 
-
 }
 
 

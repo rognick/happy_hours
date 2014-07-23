@@ -28,7 +28,7 @@ public class ShowUserInfoActivity extends Activity implements ServiceListener, V
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_user_settings);
-        preferences= new ApplicationPreferences(this);
+        preferences = new ApplicationPreferences(this);
 
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
@@ -83,10 +83,7 @@ public class ShowUserInfoActivity extends Activity implements ServiceListener, V
 
     @Override
     public void onUsersList(User user) {
-
     }
-
-
 
     public void disableEditText() {
         preferences.editPermission(firstName, false, false);
@@ -99,7 +96,6 @@ public class ShowUserInfoActivity extends Activity implements ServiceListener, V
     }
 
     public void populateWithData() {
-
         firstName.setText(preferences.getStringValueFromPreferences(Extra.KEY_FIRST_NAME));
         lastName.setText(preferences.getStringValueFromPreferences(Extra.KEY_LAST_NAME));
         email.setText(preferences.getStringValueFromPreferences(Extra.KEY_EMAIL));

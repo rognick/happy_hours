@@ -84,6 +84,7 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.dailyBtn: {
                 CreatePieChart(dailyMiliSec, 28800000);
             }
@@ -93,6 +94,7 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
             }
             break;
             case R.id.monthlyBtn: {
+
                 CreatePieChart(monthlyMiliSec, 576000000);
             }
             break;
@@ -102,31 +104,54 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
     private void CreatePieChart(int workedTime, int totalTime) {
 
         if (workedTime > totalTime) {
-            workedTime = totalTime;
+            String[] code = new String[]{"OverTime Hours", "Hours Left To Work"};
+            double[] distribution = {workedTime - totalTime, totalTime};
+
+            int[] colors = {Color.YELLOW, Color.GREEN};
+
+            CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
+            for (int i = 0; i < distribution.length; i++) {
+                distributionSeries.add(code[i], distribution[i]);
+            }
+            DefaultRenderer defaultRenderer = new DefaultRenderer();
+            for (int i = 0; i < distribution.length; i++) {
+                SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
+                seriesRenderer.setColor(colors[i]);
+                seriesRenderer.setDisplayChartValues(true);
+                defaultRenderer.addSeriesRenderer(seriesRenderer);
+            }
+            defaultRenderer.setLegendTextSize(30);
+            defaultRenderer.setChartTitle("Work Time Chart");
+            defaultRenderer.setChartTitleTextSize(20);
+            defaultRenderer.setZoomButtonsVisible(true);
+            defaultRenderer.setBackgroundColor(45454545);
+            Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
+                    distributionSeries, defaultRenderer, "PieChart");
+            startActivity(intent);
+        } else {
+            String[] code = new String[]{"Worked Hours", "Hours Left To Work"};
+            double[] distribution = {workedTime, totalTime};
+            int[] colors = {Color.GREEN, Color.RED};
+            CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
+            for (int i = 0; i < distribution.length; i++) {
+                distributionSeries.add(code[i], distribution[i]);
+            }
+            DefaultRenderer defaultRenderer = new DefaultRenderer();
+            for (int i = 0; i < distribution.length; i++) {
+                SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
+                seriesRenderer.setColor(colors[i]);
+                seriesRenderer.setDisplayChartValues(true);
+                defaultRenderer.addSeriesRenderer(seriesRenderer);
+            }
+            defaultRenderer.setLegendTextSize(30);
+            defaultRenderer.setChartTitle("Work Time Chart");
+            defaultRenderer.setChartTitleTextSize(20);
+            defaultRenderer.setZoomButtonsVisible(true);
+            defaultRenderer.setBackgroundColor(45454545);
+
+            Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
+                    distributionSeries, defaultRenderer, "PieChart");
+            startActivity(intent);
         }
-        String[] code = new String[]{"Worked Hours", "Hours Left To Work"};
-        double[] distribution = {workedTime, totalTime};
-        int[] colors = {Color.GREEN, Color.RED};
-        CategorySeries distributionSeries = new CategorySeries(
-                "Work Time Chart");
-        for (int i = 0; i < distribution.length; i++) {
-            distributionSeries.add(code[i], distribution[i]);
-        }
-        DefaultRenderer defaultRenderer = new DefaultRenderer();
-        for (int i = 0; i < distribution.length; i++) {
-            SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
-            seriesRenderer.setColor(colors[i]);
-            seriesRenderer.setDisplayChartValues(true);
-            defaultRenderer.addSeriesRenderer(seriesRenderer);
-        }
-        defaultRenderer.setLegendTextSize(30);
-        defaultRenderer.setChartTitle("Work Time Chart");
-        defaultRenderer.setChartTitleTextSize(20);
-        defaultRenderer.setZoomButtonsVisible(true);
-        defaultRenderer.setBackgroundColor(45454545);
-        Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
-                distributionSeries, defaultRenderer,
-                "PieChart");
-        startActivity(intent);
     }
 }

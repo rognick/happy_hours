@@ -38,7 +38,6 @@ public class TrackerController {
         });
     }
 
-
     public void geToken(User user) {
         service.getToken(user, new Callback<User>() {
 

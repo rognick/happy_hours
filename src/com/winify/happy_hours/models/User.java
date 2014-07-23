@@ -83,5 +83,4 @@ public class User implements Serializable {
     public void setTime(String time) {
         this.time = time;
     }
-
 }

@@ -31,14 +31,12 @@ public class WifiPreferences extends Activity {
     private String array;
     private ApplicationPreferences preferences;
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_list);
 
-        preferences= new ApplicationPreferences(this);
+        preferences = new ApplicationPreferences(this);
         list = (ListView) findViewById(R.id.wifiList);
         list.setBackgroundColor(Color.BLACK);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -50,9 +48,8 @@ public class WifiPreferences extends Activity {
                 array = preferences.getWifiListPreferred();
                 preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERRED);
                 preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, array + selectedFromList + ",");
-                Intent intent = new Intent(WifiPreferences.this,ServiceSettingsActivity.class);
+                Intent intent = new Intent(WifiPreferences.this, ServiceSettingsActivity.class);
                 startActivity(intent);
-
 
                 WifiPreferences.this.finish();
 
@@ -81,17 +78,10 @@ public class WifiPreferences extends Activity {
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
             String[] wifis = new String[wifiScanList.size()];
             for (int i = 0; i < wifiScanList.size(); i++) {
-
                 wifis[i] = (wifiScanList.get(i)).SSID;
             }
-
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
                     R.layout.item_list, wifis));
-
-
         }
-
-
     }
-
 }

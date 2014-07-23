@@ -32,7 +32,6 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
         super.onCreate(savedInstanceState);
         preferences = new ApplicationPreferences(this);
 
-
         array = preferences.getWifiListPreferred();
         final List<String> wifiList = new ArrayList<String>();
         wifiList.addAll(Arrays.asList(array.split("\\s*,\\s*")));
@@ -59,7 +58,6 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
                                            int pos, long id) {
 
                 wifiList.remove(pos - 1);
-
                 StringBuilder sb = new StringBuilder();
                 for (String s : wifiList) {
                     sb.append(s);
@@ -67,7 +65,6 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
                 }
                 preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERRED);
                 preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, sb.toString());
-
 
                 Intent intent = new Intent(ServiceSettingsActivity.this, ServiceSettingsActivity.class);
                 startActivity(intent);
@@ -103,7 +100,6 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
                     preferences.editPermission(port, true, true);
 
                 } else if (edit.getText().equals("Save Changes")) {
-
                     edit.setText("Edit");
 
                     preferences.updatePreferences(Extra.KEY_IP, ip);
@@ -111,16 +107,13 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
 
                     preferences.editPermission(ip, false, false);
                     preferences.editPermission(port, false, false);
-
                 }
                 break;
 
             case R.id.addWifi: {
-
                 Intent intent = new Intent(ServiceSettingsActivity.this, WifiPreferences.class);
                 startActivity(intent);
                 ServiceSettingsActivity.this.finish();
-
             }
             break;
         }
@@ -131,15 +124,11 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
         switch (view.getId()) {
             case R.id.checkNotification:
                 if (checked) {
-
                     preferences.removePreferences(Extra.Notification_Status);
                     preferences.savePreferences(Extra.Notification_Status, true);
-
                 } else {
-
                     preferences.removePreferences(Extra.Notification_Status);
                     preferences.savePreferences(Extra.Notification_Status, false);
-
                 }
                 break;
         }

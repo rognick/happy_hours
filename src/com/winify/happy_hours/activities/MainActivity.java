@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     public EditText editText;
     private TrackerController trackerController;
     private ApplicationPreferences preferences;
-    private  Button button;
+    private Button button;
     private ProgressBar progressBar;
 
     @Override
@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         }
         stopService();
 
-         button = (Button) findViewById(R.id.buttonHappyStart);
+        button = (Button) findViewById(R.id.buttonHappyStart);
         button.setOnClickListener(this);
 
         editText = (EditText) findViewById(R.id.timerView);
@@ -57,10 +57,8 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
             thread = new Thread(timerStartStop);
             thread.start();
         }
-
         ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
         trackerController = serviceGateway.getTrackerController(this);
-
     }
 
     private void redirectLoginPage() {
@@ -70,25 +68,15 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     }
 
     public void onClick(View click) {
-
         switch (click.getId()) {
             case R.id.buttonHappyStart:
-
-
-
                 if (button.getText().equals("Happy Start")) {
-                    User user = new User("", "",preferences.getKeyToken(),"","","","");
+                    User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
                     trackerController.startWorkTime(user);
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
-
-
-
-
-
                 } else if (button.getText().equals("Happy Stop")) {
-
-                    User user = new User("", "",preferences.getKeyToken(),"","","","");
+                    User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
                     trackerController.stopWorkTime(user);
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
@@ -105,19 +93,19 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     public void onSuccess(Response response) {
         Toast.makeText(MainActivity.this, "Server OK", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
-        if (button.getText().equals("Happy Start")) { button.setBackgroundResource(R.drawable.button_stop_bg);
+        if (button.getText().equals("Happy Start")) {
+            button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText("Happy Stop");
             timerStartStop.setRunThread(true);
             thread = new Thread(timerStartStop);
             thread.start();
             preferences.savePreferences(Extra.KEY_TIMER, true);
-        }
-        else if (button.getText().equals("Happy Stop")) {  button.setBackgroundResource(R.drawable.button_start_bg);
+        } else if (button.getText().equals("Happy Stop")) {
+            button.setBackgroundResource(R.drawable.button_start_bg);
             button.setText("Happy Start");
             timerStartStop.setRunThread(false);
-            preferences.updatePreferences(Extra.KEY_TIMER, false);}
-
-
+            preferences.updatePreferences(Extra.KEY_TIMER, false);
+        }
     }
 
     @Override
@@ -128,7 +116,6 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
 
     @Override
     public void onUsersList(User user) {
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,10 +128,8 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings: {
-
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
-
             }
             break;
 
@@ -152,7 +137,6 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
 
                 Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
                 startActivity(intent);
-
             }
             break;
         }

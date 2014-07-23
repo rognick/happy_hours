@@ -30,7 +30,6 @@ public class ServiceGateway {
     private final TrackerService service;
     private Context context;
 
-
     public ServiceGateway(Context context) {
       ApplicationPreferences  preferences = new ApplicationPreferences(context);
         this.context = context;
@@ -41,7 +40,6 @@ public class ServiceGateway {
         builder.setConverter(new JacksonConverter());
         builder.setLogLevel(RestAdapter.LogLevel.FULL);
         service = builder.build().create(TrackerService.class);
-
     }
 
     public TrackerService getService() {

@@ -66,7 +66,6 @@ public class TimerStartStop extends Thread implements ServiceListener {
 
     @Override
     public void onServerFail(RetrofitError error) {
-
     }
 
     @Override

@@ -73,7 +73,6 @@ public class WifiService extends Service {
             }
 
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-
             WifiInfo wifiInfo = mainWifiObj.getConnectionInfo();
 
             if (wifiInfo.getSSID().toUpperCase().equals("\"" + Extra.MyNetwork + "\"") ||
