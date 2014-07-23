@@ -1,6 +1,8 @@
 package com.winify.happy_hours.activities;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,16 +12,17 @@ import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.controller.TrackerController;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.User;
+import org.achartengine.ChartFactory;
+import org.achartengine.model.CategorySeries;
+import org.achartengine.renderer.DefaultRenderer;
+import org.achartengine.renderer.SimpleSeriesRenderer;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class StatisticsActivity extends Activity implements ServiceListener, View.OnClickListener {
     private TextView monthly;
-    private Button monthlyBtn;
     private TextView weekly;
-    private Button weeklyBtn;
     private TextView daily;
-    private Button dailyBtn;
     private int monthlyMiliSec;
     private int dailyMiliSec;
     private int weeklyMiliSec;
@@ -33,13 +36,13 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
         ServiceGateway serviceGateway = new ServiceGateway(StatisticsActivity.this);
         trackerController = serviceGateway.getTrackerController(this);
         monthly = (TextView) findViewById(R.id.monthly_work);
-        monthlyBtn = (Button) findViewById(R.id.monthlyBtn);
+        Button monthlyBtn = (Button) findViewById(R.id.monthlyBtn);
         monthlyBtn.setOnClickListener(this);
         weekly = (TextView) findViewById(R.id.weekly_work);
-        weeklyBtn = (Button) findViewById(R.id.weeklyBtn);
+        Button weeklyBtn = (Button) findViewById(R.id.weeklyBtn);
         weeklyBtn.setOnClickListener(this);
         daily = (TextView) findViewById(R.id.daily_work);
-        dailyBtn = (Button) findViewById(R.id.dailyBtn);
+        Button dailyBtn = (Button) findViewById(R.id.dailyBtn);
         dailyBtn.setOnClickListener(this);
         getStatistics();
     }
@@ -81,17 +84,49 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.dailyBtn: {
+                CreatePieChart(dailyMiliSec, 28800000);
             }
             break;
             case R.id.weeklyBtn: {
+                CreatePieChart(weeklyMiliSec, 144000000);
             }
             break;
             case R.id.monthlyBtn: {
+                CreatePieChart(monthlyMiliSec, 576000000);
             }
             break;
         }
+    }
 
+    private void CreatePieChart(int workedTime, int totalTime) {
+
+        if (workedTime > totalTime) {
+            workedTime = totalTime;
+        }
+        String[] code = new String[]{"Worked Hours", "Hours Left To Work"};
+        double[] distribution = {workedTime, totalTime};
+        int[] colors = {Color.GREEN, Color.RED};
+        CategorySeries distributionSeries = new CategorySeries(
+                "Work Time Chart");
+        for (int i = 0; i < distribution.length; i++) {
+            distributionSeries.add(code[i], distribution[i]);
+        }
+        DefaultRenderer defaultRenderer = new DefaultRenderer();
+        for (int i = 0; i < distribution.length; i++) {
+            SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
+            seriesRenderer.setColor(colors[i]);
+            seriesRenderer.setDisplayChartValues(true);
+            defaultRenderer.addSeriesRenderer(seriesRenderer);
+        }
+        defaultRenderer.setLegendTextSize(30);
+        defaultRenderer.setChartTitle("Work Time Chart");
+        defaultRenderer.setChartTitleTextSize(20);
+        defaultRenderer.setZoomButtonsVisible(true);
+        defaultRenderer.setBackgroundColor(45454545);
+        Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
+                distributionSeries, defaultRenderer,
+                "PieChart");
+        startActivity(intent);
     }
 }

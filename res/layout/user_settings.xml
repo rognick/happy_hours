@@ -7,7 +7,6 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity"
-
                 android:background="@drawable/clock">
 
         <LinearLayout
@@ -62,6 +61,19 @@
                     android:background="@drawable/button_default_bg"
                     android:layout_marginBottom="15dp"
                     />
+
+
         </LinearLayout>
+    <ProgressBar
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:indeterminateDrawable="@drawable/loader_0"
+            android:layout_gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            android:id="@+id/progressBar"/>
+
 
 </RelativeLayout>
+

@@ -22,6 +22,7 @@
         <activity android:name=".service.WifiPreferences"/>
         <activity android:name=".activities.StatisticsActivity"/>
         <service android:name=".service.WifiService"/>
+        <activity android:name="org.achartengine.GraphicalActivity" />
     </application>
-    <activity android:name="org.achartengine.GraphicalActivity" />
+
 </manifest>

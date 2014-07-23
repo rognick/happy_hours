@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.constants.Extra;
@@ -21,13 +22,12 @@ import com.winify.happy_hours.models.User;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-
-
 public class LogInActivity extends Activity implements ServiceListener {
     private EditText login;
     private EditText password;
     private ApplicationPreferences preferences;
     private TrackerController trackerController;
+    private  ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,6 @@ public class LogInActivity extends Activity implements ServiceListener {
             public void onClick(View v) {
                 if (preferences.getIp().equals("") || preferences.getPort().equals("")) {
 
-
                     AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
                     ad.setCancelable(false); // This blocks the 'BACK' button
                     ad.setMessage("Check youre Ip Address and Port in  settings");
@@ -62,6 +61,8 @@ public class LogInActivity extends Activity implements ServiceListener {
                 } else {
                     if (login.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
                         getKeyToken(login.getText().toString(), password.getText().toString());
+                        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                        progressBar.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -80,6 +81,7 @@ public class LogInActivity extends Activity implements ServiceListener {
 
     @Override
     public void onServerFail(RetrofitError error) {
+        progressBar.setVisibility(View.GONE);
         AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setCancelable(false); // This blocks the 'BACK' button
         ad.setMessage("Please check youre Username and Password or youre connection with Server");

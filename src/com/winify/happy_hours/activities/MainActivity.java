@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.constants.Extra;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     private TrackerController trackerController;
     private ApplicationPreferences preferences;
     private  Button button;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,8 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
                 if (button.getText().equals("Happy Start")) {
                     User user = new User("", "",preferences.getKeyToken(),"","","","");
                     trackerController.startWorkTime(user);
+                    progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                    progressBar.setVisibility(View.VISIBLE);
 
 
 
@@ -86,6 +90,8 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
 
                     User user = new User("", "",preferences.getKeyToken(),"","","","");
                     trackerController.stopWorkTime(user);
+                    progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                    progressBar.setVisibility(View.VISIBLE);
 
                 }
                 break;
@@ -98,7 +104,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     @Override
     public void onSuccess(Response response) {
         Toast.makeText(MainActivity.this, "Server OK", Toast.LENGTH_SHORT).show();
-
+        progressBar.setVisibility(View.GONE);
         if (button.getText().equals("Happy Start")) { button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText("Happy Stop");
             timerStartStop.setRunThread(true);
@@ -117,6 +123,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     @Override
     public void onServerFail(RetrofitError error) {
         Toast.makeText(MainActivity.this, "Server Fail", Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
