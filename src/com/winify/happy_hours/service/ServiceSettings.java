@@ -84,19 +84,15 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
         Button wifiBtn = (Button) findViewById(R.id.addWifi);
         wifiBtn.setOnClickListener(this);
 
-
         ip.setText(preferences.getIp());
         port.setText(preferences.getPort());
 
-
         preferences.editPermission(ip, false, false);
         preferences.editPermission(port, false, false);
-
     }
 
     @Override
     public void onClick(View click) {
-
 
         switch (click.getId()) {
             case R.id.editServiceBtn:
@@ -108,16 +104,13 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
 
                 } else if (edit.getText().equals("Save Changes")) {
 
-
                     edit.setText("Edit");
-
 
                     preferences.updatePreferences(Extra.KEY_IP, ip);
                     preferences.updatePreferences(Extra.KEY_PORT, port);
 
                     preferences.editPermission(ip, false, false);
                     preferences.editPermission(port, false, false);
-
 
                 }
                 break;
@@ -134,9 +127,7 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
     }
 
     public void onCheckBoxClicked(View view) {
-
         boolean checked = ((CheckBox) view).isChecked();
-
         switch (view.getId()) {
             case R.id.checkNotification:
                 if (checked) {
@@ -166,5 +157,4 @@ public class ServiceSettings extends Activity implements ServiceListener, View.O
     public void onUsersList(User user) {
 
     }
-
 }

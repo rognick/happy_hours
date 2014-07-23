@@ -23,4 +23,5 @@
         <activity android:name=".activities.StatisticsActivity"/>
         <service android:name=".service.WifiService"/>
     </application>
+    <activity android:name="org.achartengine.GraphicalActivity" />
 </manifest>

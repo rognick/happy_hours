@@ -29,6 +29,17 @@
                   android:textSize="15dp"/>
     </LinearLayout>
 
+    <Button
+            android:id="@+id/dailyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:text="Get daily chart"
+            style="@style/DefaultButtonText"
+            android:background="@drawable/button_default_bg"
+            android:layout_marginBottom="15dp"
+            />
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
@@ -45,6 +56,17 @@
                   android:textColor="#000000"
                   android:textSize="15dp"/>
     </LinearLayout>
+    <Button
+            android:id="@+id/weeklyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:text="Get weekly chart"
+            style="@style/DefaultButtonText"
+            android:background="@drawable/button_default_bg"
+            android:layout_marginBottom="15dp"
+            />
 
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -62,5 +84,16 @@
                   android:textColor="#000000"
                   android:textSize="15dp"/>
     </LinearLayout>
+    <Button
+            android:id="@+id/monthlyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:text="Get monthly chart"
+            style="@style/DefaultButtonText"
+            android:background="@drawable/button_default_bg"
+            android:layout_marginBottom="15dp"
+            />
 
 </LinearLayout>

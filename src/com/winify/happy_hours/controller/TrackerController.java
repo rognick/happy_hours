@@ -24,6 +24,19 @@ public class TrackerController {
         return new TrackerController(context, service, serviceListener);
     }
 
+    public void logOut(User user) {
+        service.logOut(user, new Callback<Response>() {
+            @Override
+            public void success(Response logoutResponse, Response response) {
+                serviceListener.onSuccess(logoutResponse);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                serviceListener.onServerFail(retrofitError);
+            }
+        });
+    }
 
 
     public void geToken(User user) {
@@ -41,7 +54,6 @@ public class TrackerController {
         });
     }
 
-
     public void getServerTime(User user) {
         service.getServerTime(user, new Callback<User>() {
 
@@ -56,8 +68,6 @@ public class TrackerController {
             }
         });
     }
-
-
 
     public void getWorkedTime(User user) {
 
@@ -75,7 +85,6 @@ public class TrackerController {
         });
 
     }
-
 
     public void startWorkTime(User user) {
         service.startWorkTime(user, new Callback<Response>() {

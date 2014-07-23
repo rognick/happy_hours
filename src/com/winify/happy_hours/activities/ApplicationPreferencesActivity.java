@@ -81,7 +81,6 @@ public class ApplicationPreferencesActivity {
         return settings.getString(Extra.KEY_WIFI_LIST_PREFERRED, "");
     }
 
-
     public String getIp() {
         return settings.getString(Extra.KEY_IP, "");
     }
