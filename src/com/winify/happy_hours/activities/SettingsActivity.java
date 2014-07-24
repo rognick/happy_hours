@@ -24,11 +24,8 @@ public class SettingsActivity extends Activity implements ServiceListener, View.
         setContentView(R.layout.settings);
         super.onCreate(savedInstanceState);
         Button logout = (Button) findViewById(R.id.logoutBtn);
-        Button userInfo = (Button) findViewById(R.id.userSettingsBtn);
         Button serviceEndPoint = (Button) findViewById(R.id.serviceBtn);
-
         logout.setOnClickListener(this);
-        userInfo.setOnClickListener(this);
         serviceEndPoint.setOnClickListener(this);
         preferences = new ApplicationPreferences(this);
         ServiceGateway serviceGateway = new ServiceGateway(SettingsActivity.this);
@@ -56,13 +53,6 @@ public class SettingsActivity extends Activity implements ServiceListener, View.
                 trackerController.logOut(user);
                 preferences.removePreferences(Extra.KEY_TOKEN);
                 Intent intent = new Intent(SettingsActivity.this, LogInActivity.class);
-                startActivity(intent);
-
-            }
-            break;
-            case R.id.userSettingsBtn: {
-
-                Intent intent = new Intent(SettingsActivity.this, ShowUserInfoActivity.class);
                 startActivity(intent);
             }
             break;
