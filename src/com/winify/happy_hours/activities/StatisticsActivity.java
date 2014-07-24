@@ -84,6 +84,7 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.dailyBtn: {
                 CreatePieChart(dailyMiliSec, 28800000);
             }
@@ -120,7 +121,7 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
                 defaultRenderer.addSeriesRenderer(seriesRenderer);
             }
             defaultRenderer.setLegendTextSize(30);
-            defaultRenderer.setChartTitle("Work Time Chart");
+            defaultRenderer.setChartTitle("OverTime Work Chart");
             defaultRenderer.setChartTitleTextSize(20);
             defaultRenderer.setZoomButtonsVisible(true);
             defaultRenderer.setBackgroundColor(45454545);

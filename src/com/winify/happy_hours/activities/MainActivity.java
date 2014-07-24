@@ -1,8 +1,15 @@
 package com.winify.happy_hours.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +38,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     private ApplicationPreferences preferences;
     private Button button;
     private ProgressBar progressBar;
+    private SharedPreferences prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,21 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         preferences = new ApplicationPreferences(this);
+        prefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        if (!isNetworkAvailable()) {
+            AlertDialog ad = new AlertDialog.Builder(MainActivity.this).create();
+            ad.setCancelable(false); // This blocks the 'BACK' button
+            ad.setMessage("Check you're Internet connection,it might be closed");
+            ad.setButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    System.exit(0);
+                }
+            });
+            ad.show();
+        }
 
         if (preferences.getKeyToken().equals("")) {
             Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
@@ -135,6 +158,18 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
                 startActivity(intent);
             }
             break;
+            case R.id.logout: {
+
+
+                User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
+                trackerController.stopWorkTime(user);
+                progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
+                trackerController.logOut(user);
+                preferences.removePreferences(Extra.KEY_TOKEN);
+                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(intent);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -152,14 +187,21 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     }
 
     public void startService() {
-        if (preferences.getNotificationStatus()) {
+        if (prefs.getBoolean(Extra.Notification_Status,false)) {
             startService(new Intent(getBaseContext(), WifiService.class));
         }
     }
 
     public void stopService() {
-        if (preferences.getNotificationStatus()) {
+        if (prefs.getBoolean(Extra.Notification_Status,false)) {
             stopService(new Intent(getBaseContext(), WifiService.class));
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

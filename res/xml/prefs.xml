@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="URL information">
+        <EditTextPreference
+                android:key="key_ip"
+                android:summary="Please enter your Ip address"
+                android:title="Ip Address"/>
+        <EditTextPreference
+                android:key="key_port"
+                android:summary="Enter your port"
+                android:title="Port"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+                android:title="Settings">
+        <CheckBoxPreference
+                android:key="notification_status"
+                android:summary="On/Off"
+                android:title="Receive Notifications"/>
+       </PreferenceCategory>
+</PreferenceScreen>

@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.ApplicationPreferences;
-import com.winify.happy_hours.activities.ServiceSettingsActivity;
+import com.winify.happy_hours.activities.SettingsActivity;
 import com.winify.happy_hours.constants.Extra;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class WifiPreferences extends Activity {
                 array = preferences.getWifiListPreferred();
                 preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERRED);
                 preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, array + selectedFromList + ",");
-                Intent intent = new Intent(WifiPreferences.this, ServiceSettingsActivity.class);
+                Intent intent = new Intent(WifiPreferences.this, SettingsActivity.class);
                 startActivity(intent);
 
                 WifiPreferences.this.finish();

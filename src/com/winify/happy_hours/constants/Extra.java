@@ -8,13 +8,6 @@ public class Extra {
     public static String KEY_TOKEN = "key_token";
 
     public static String KEY_TIMER = "timer";
-    public static String KEY_FIRST_NAME = "firstName";
-    public static String KEY_LAST_NAME = "lastName";
-    public static String KEY_EMAIL = "email";
-    public static String KEY_BIRTHDAY = "birthDay";
-    public static String KEY_PHONE_NUMBER = "mobile";
-    public static String KEY_POSITION = "position";
-    public static String KEY_TEAM = "team";
     public static String KEY_IP="key_ip";
     public static String KEY_PORT="key_port";
 }

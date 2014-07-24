@@ -2,9 +2,14 @@ package com.winify.happy_hours.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,11 +33,26 @@ public class LogInActivity extends Activity implements ServiceListener {
     private ApplicationPreferences preferences;
     private TrackerController trackerController;
     private ProgressBar progressBar;
+    private SharedPreferences prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_settings);
+
+        if (!isNetworkAvailable()) {
+            AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
+            ad.setCancelable(false); // This blocks the 'BACK' button
+            ad.setMessage("Check you're Internet connection,it might be closed");
+            ad.setButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    System.exit(0);
+                }
+            });
+            ad.show();
+        }
 
         ServiceGateway serviceGateway = new ServiceGateway(LogInActivity.this);
         trackerController = serviceGateway.getTrackerController(this);
@@ -42,11 +62,16 @@ public class LogInActivity extends Activity implements ServiceListener {
         login = (EditText) findViewById(R.id.login);
         password = (EditText) findViewById(R.id.password);
 
+        prefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
         Button b = (Button) findViewById(R.id.logingBtn);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (preferences.getIp().equals("") || preferences.getPort().equals("")) {
+
+                if (prefs.getString(Extra.KEY_IP, "Default NickName").equals("") ||
+                        prefs.getString(Extra.KEY_PORT, "Default NickName").equals("")) {
+
                     AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
                     ad.setCancelable(false); // This blocks the 'BACK' button
                     ad.setMessage("Check youre Ip Address and Port in  settings");
@@ -117,12 +142,19 @@ public class LogInActivity extends Activity implements ServiceListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.startSettings: {
-                Intent intent = new Intent(LogInActivity.this, ServiceSettingsActivity.class);
+                Intent intent = new Intent(LogInActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
             break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 
