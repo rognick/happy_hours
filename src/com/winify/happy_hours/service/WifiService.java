@@ -71,7 +71,6 @@ public class WifiService extends Service {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
             WifiInfo wifiInfo = mainWifiObj.getConnectionInfo();
 
@@ -84,9 +83,7 @@ public class WifiService extends Service {
                 } else {
                     notification("Status", "Timer OFF", true);
                 }
-
             } else {
-
                 for (int i = 0; i < wifiScanList.size(); i++) {
                     if (wifiScanList.get(i).SSID.toUpperCase().equals(Extra.MyNetwork)) {
                         notification("Network", wifiScanList.get(i).SSID, false);

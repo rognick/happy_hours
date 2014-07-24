@@ -27,7 +27,7 @@ public class LogInActivity extends Activity implements ServiceListener {
     private EditText password;
     private ApplicationPreferences preferences;
     private TrackerController trackerController;
-    private  ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,6 @@ public class LogInActivity extends Activity implements ServiceListener {
             @Override
             public void onClick(View v) {
                 if (preferences.getIp().equals("") || preferences.getPort().equals("")) {
-
                     AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
                     ad.setCancelable(false); // This blocks the 'BACK' button
                     ad.setMessage("Check youre Ip Address and Port in  settings");

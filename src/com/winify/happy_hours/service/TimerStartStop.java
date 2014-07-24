@@ -74,7 +74,6 @@ public class TimerStartStop extends Thread implements ServiceListener {
     }
 
     private String convertTime(String time) {
-
         int milliseconds = Integer.parseInt(time);
         int hour = (milliseconds / (1000 * 60 * 60)) % 24;
         int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;

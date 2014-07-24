@@ -90,7 +90,6 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
 
     @Override
     public void onClick(View click) {
-
         switch (click.getId()) {
             case R.id.editServiceBtn:
                 if (edit.getText().equals("Edit")) {
@@ -109,7 +108,6 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
                     preferences.editPermission(port, false, false);
                 }
                 break;
-
             case R.id.addWifi: {
                 Intent intent = new Intent(ServiceSettingsActivity.this, WifiPreferences.class);
                 startActivity(intent);
@@ -144,6 +142,5 @@ public class ServiceSettingsActivity extends Activity implements ServiceListener
 
     @Override
     public void onUsersList(User user) {
-
     }
 }

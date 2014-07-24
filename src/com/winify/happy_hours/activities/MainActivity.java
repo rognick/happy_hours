@@ -83,9 +83,6 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
 
                 }
                 break;
-
-            default:
-                break;
         }
     }
 
@@ -132,7 +129,6 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
                 startActivity(intent);
             }
             break;
-
             case R.id.statistic: {
 
                 Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);

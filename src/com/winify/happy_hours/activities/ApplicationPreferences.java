@@ -39,11 +39,6 @@ public class ApplicationPreferences {
         editor.commit();
     }
 
-    public void updatePreferences(String key, String value) {
-        removePreferences(key);
-        savePreferences(key, value);
-    }
-
     public void savePreferences(String key, Boolean item) {
         editor.putBoolean(key, item);
         editor.commit();
@@ -53,7 +48,6 @@ public class ApplicationPreferences {
         removePreferences(key);
         savePreferences(key, value);
     }
-
 
     public void removePreferences(String key) {
         editor.remove(key);
@@ -88,7 +82,6 @@ public class ApplicationPreferences {
     public String getPort() {
         return settings.getString(Extra.KEY_PORT, "");
     }
-
 }
 
 

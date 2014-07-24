@@ -84,7 +84,6 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.dailyBtn: {
                 CreatePieChart(dailyMiliSec, 28800000);
             }
