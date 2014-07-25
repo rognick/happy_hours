@@ -12,7 +12,6 @@ import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;
 import com.winify.happy_hours.models.Token;
-import com.winify.happy_hours.models.User;
 import com.winify.happy_hours.service.TrackerService;
 import org.achartengine.ChartFactory;
 import org.achartengine.model.CategorySeries;
@@ -86,72 +85,80 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.dailyBtn: {
-                CreatePieChart(dailyMiliSec, 28800000);
+                createPieChart(dailyMiliSec, 28800000);
             }
             break;
             case R.id.weeklyBtn: {
-                CreatePieChart(weeklyMiliSec, 144000000);
+                createPieChart(weeklyMiliSec, 144000000);
             }
             break;
             case R.id.monthlyBtn: {
 
-                CreatePieChart(monthlyMiliSec, 576000000);
+                createPieChart(monthlyMiliSec, 576000000);
             }
             break;
         }
     }
 
-    private void CreatePieChart(int workedTime, int totalTime) {
+    private void createPieChart(int workedTime, int totalTime) {
 
         if (workedTime > totalTime) {
-            String[] code = new String[]{"OverTime Hours", "Hours Left To Work"};
-            double[] distribution = {workedTime - totalTime, totalTime};
-
-            int[] colors = {Color.YELLOW, Color.GREEN};
-
-            CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
-            for (int i = 0; i < distribution.length; i++) {
-                distributionSeries.add(code[i], distribution[i]);
-            }
-            DefaultRenderer defaultRenderer = new DefaultRenderer();
-            for (int i = 0; i < distribution.length; i++) {
-                SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
-                seriesRenderer.setColor(colors[i]);
-                seriesRenderer.setDisplayChartValues(true);
-                defaultRenderer.addSeriesRenderer(seriesRenderer);
-            }
-            defaultRenderer.setLegendTextSize(30);
-            defaultRenderer.setChartTitle("OverTime Work Chart");
-            defaultRenderer.setChartTitleTextSize(20);
-            defaultRenderer.setZoomButtonsVisible(true);
-            defaultRenderer.setBackgroundColor(45454545);
-            Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
-                    distributionSeries, defaultRenderer, "PieChart");
-            startActivity(intent);
+            doOverTimeChart(workedTime, totalTime);
         } else {
-            String[] code = new String[]{"Worked Hours", "Hours Left To Work"};
-            double[] distribution = {workedTime, totalTime};
-            int[] colors = {Color.GREEN, Color.RED};
-            CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
-            for (int i = 0; i < distribution.length; i++) {
-                distributionSeries.add(code[i], distribution[i]);
-            }
-            DefaultRenderer defaultRenderer = new DefaultRenderer();
-            for (int i = 0; i < distribution.length; i++) {
-                SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
-                seriesRenderer.setColor(colors[i]);
-                seriesRenderer.setDisplayChartValues(true);
-                defaultRenderer.addSeriesRenderer(seriesRenderer);
-            }
-            defaultRenderer.setLegendTextSize(30);
-            defaultRenderer.setChartTitle("Work Time Chart");
-            defaultRenderer.setChartTitleTextSize(20);
-            defaultRenderer.setZoomButtonsVisible(true);
-            defaultRenderer.setBackgroundColor(45454545);
-
-            Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
-                    distributionSeries, defaultRenderer, "PieChart");
-            startActivity(intent);
+            doTimeChart(workedTime, totalTime);
         }
+    }
+
+    private void doTimeChart(int workedTime, int totalTime) {
+        String[] code = new String[]{"Worked Hours", "Hours Left To Work"};
+        double[] distribution = {workedTime, totalTime};
+        int[] colors = {Color.GREEN, Color.RED};
+        CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
+        for (int i = 0; i < distribution.length; i++) {
+            distributionSeries.add(code[i], distribution[i]);
+        }
+        DefaultRenderer defaultRenderer = new DefaultRenderer();
+        for (int i = 0; i < distribution.length; i++) {
+            SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
+            seriesRenderer.setColor(colors[i]);
+            seriesRenderer.setDisplayChartValues(true);
+            defaultRenderer.addSeriesRenderer(seriesRenderer);
+        }
+        defaultRenderer.setLegendTextSize(30);
+        defaultRenderer.setChartTitle("Work Time Chart");
+        defaultRenderer.setChartTitleTextSize(20);
+        defaultRenderer.setZoomButtonsVisible(true);
+        defaultRenderer.setBackgroundColor(45454545);
+
+        Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
+                distributionSeries, defaultRenderer, "PieChart");
+        startActivity(intent);
+    }
+
+    private void doOverTimeChart(int workedTime, int totalTime) {
+        String[] code = new String[]{"OverTime Hours", "Hours Left To Work"};
+        double[] distribution = {workedTime - totalTime, totalTime};
+
+        int[] colors = {Color.YELLOW, Color.GREEN};
+
+        CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
+        for (int i = 0; i < distribution.length; i++) {
+            distributionSeries.add(code[i], distribution[i]);
+        }
+        DefaultRenderer defaultRenderer = new DefaultRenderer();
+        for (int i = 0; i < distribution.length; i++) {
+            SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
+            seriesRenderer.setColor(colors[i]);
+            seriesRenderer.setDisplayChartValues(true);
+            defaultRenderer.addSeriesRenderer(seriesRenderer);
+        }
+        defaultRenderer.setLegendTextSize(30);
+        defaultRenderer.setChartTitle("OverTime Work Chart");
+        defaultRenderer.setChartTitleTextSize(20);
+        defaultRenderer.setZoomButtonsVisible(true);
+        defaultRenderer.setBackgroundColor(45454545);
+        Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
+                distributionSeries, defaultRenderer, "PieChart");
+        startActivity(intent);
     }
 }

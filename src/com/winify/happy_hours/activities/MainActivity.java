@@ -2,12 +2,9 @@ package com.winify.happy_hours.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -25,6 +22,7 @@ import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TimerStartStop;
 import com.winify.happy_hours.service.TrackerService;
 import com.winify.happy_hours.service.WifiService;
+import com.winify.happy_hours.utils.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -49,7 +47,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         preferences = new ApplicationPreferences(this);
         prefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
-        if (!isNetworkAvailable()) {
+        if (!Utils.isNetworkAvailable(this)) {
             AlertDialog ad = new AlertDialog.Builder(MainActivity.this).create();
             ad.setCancelable(false); // This blocks the 'BACK' button
             ad.setMessage("Check you're Internet connection,it might be closed");
@@ -226,12 +224,5 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (prefs.getBoolean(Extra.Notification_Status, false)) {
             stopService(new Intent(getBaseContext(), WifiService.class));
         }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

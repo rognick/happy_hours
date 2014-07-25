@@ -19,5 +19,4 @@ package com.winify.happy_hours.listeners;
 import retrofit.Callback;
 
 public abstract class ServiceListener<T> implements Callback<T> {
-
 }
