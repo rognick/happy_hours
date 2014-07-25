@@ -68,8 +68,8 @@ public class LogInActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                if (prefs.getString(Extra.KEY_IP, "Default NickName").equals("") ||
-                        prefs.getString(Extra.KEY_PORT, "Default NickName").equals("")) {
+                if (prefs.getString(Extra.KEY_IP, "").equals("") ||
+                        prefs.getString(Extra.KEY_PORT, "").equals("")) {
 
                     AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
                     ad.setCancelable(false); // This blocks the 'BACK' button

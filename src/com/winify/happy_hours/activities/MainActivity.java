@@ -26,6 +26,13 @@ import com.winify.happy_hours.utils.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.MimeUtil;
+import retrofit.mime.TypedInput;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -37,6 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ProgressBar progressBar;
     private SharedPreferences prefs;
     private TrackerService service;
+    private String errorMsg;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,7 +106,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void success(Response response, Response response2) {
-                            showSuccesMessage();
+                            showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_stop_bg);
                             button.setText("Happy Stop");
                             timerStartStop.setRunThread(true);
@@ -110,13 +118,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
-                            showErrorMessage();
+
+                            if (getErrorMessage(retrofitError).equals("Timer is already running")) {
+                                Token token = new Token(preferences.getKeyToken());
+                                service.stopWorkTime(token, new Callback<Response>() {
+
+                                    @Override
+                                    public void success(Response response, Response response2) {
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError retrofitError) {
+                                        showErrorMessage();
+
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                                showNotificationMessage();
+                            } else {
+                                showErrorMessage();
+                            }
                             progressBar.setVisibility(View.INVISIBLE);
                         }
                     });
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
-
 
                 } else if (button.getText().equals("Happy Stop")) {
                     Token token = new Token(preferences.getKeyToken());
@@ -124,7 +151,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void success(Response response, Response response2) {
-                            showSuccesMessage();
+                            showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_start_bg);
                             button.setText("Happy Start");
                             timerStartStop.setRunThread(false);
@@ -144,12 +171,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void showSuccesMessage() {
+    private String getErrorMessage(RetrofitError retrofitError) {
+        if (retrofitError.getResponse() != null) {
+            TypedInput body = retrofitError.getResponse().getBody();
+            byte[] bytes = new byte[0];
+            try {
+                bytes = streamToBytes(body.in());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String charset = MimeUtil.parseCharset(body.mimeType());
+            // This will be your error message
+            try {
+                errorMsg = new String(bytes, charset);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return errorMsg;
+    }
+
+    private void showSuccessMessage() {
         Toast.makeText(MainActivity.this, "Server OK", Toast.LENGTH_SHORT).show();
     }
 
     private void showErrorMessage() {
         Toast.makeText(MainActivity.this, "Server Fail", Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void showNotificationMessage() {
+        Toast.makeText(MainActivity.this, "Try again to start", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
     }
 
@@ -194,6 +246,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
+
                 preferences.removePreferences(Extra.KEY_TOKEN);
                 Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                 startActivity(intent);
@@ -224,5 +277,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (prefs.getBoolean(Extra.Notification_Status, false)) {
             stopService(new Intent(getBaseContext(), WifiService.class));
         }
+    }
+
+    static byte[] streamToBytes(InputStream stream) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (stream != null) {
+            byte[] buf = new byte[1024];
+            int r;
+            while ((r = stream.read(buf)) != -1) {
+                baos.write(buf, 0, r);
+            }
+        }
+        return baos.toByteArray();
     }
 }
