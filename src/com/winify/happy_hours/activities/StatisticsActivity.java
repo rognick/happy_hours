@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.controller.ServiceGateway;
-import com.winify.happy_hours.controller.TrackerController;
 import com.winify.happy_hours.listeners.ServiceListener;
+import com.winify.happy_hours.models.Time;
+import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.models.User;
+import com.winify.happy_hours.service.TrackerService;
 import org.achartengine.ChartFactory;
 import org.achartengine.model.CategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
@@ -19,22 +21,22 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class StatisticsActivity extends Activity implements ServiceListener, View.OnClickListener {
+public class StatisticsActivity extends Activity implements View.OnClickListener {
     private TextView monthly;
     private TextView weekly;
     private TextView daily;
     private int monthlyMiliSec;
     private int dailyMiliSec;
     private int weeklyMiliSec;
-    private TrackerController trackerController;
+    private TrackerService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.statistics);
         super.onCreate(savedInstanceState);
-
         ServiceGateway serviceGateway = new ServiceGateway(StatisticsActivity.this);
-        trackerController = serviceGateway.getTrackerController(this);
+        service = serviceGateway.getService();
+
         monthly = (TextView) findViewById(R.id.monthly_work);
         Button monthlyBtn = (Button) findViewById(R.id.monthlyBtn);
         monthlyBtn.setOnClickListener(this);
@@ -47,30 +49,28 @@ public class StatisticsActivity extends Activity implements ServiceListener, Vie
         getStatistics();
     }
 
-    @Override
-    public void onSuccess(Response response) {
-    }
-
-    @Override
-    public void onServerFail(RetrofitError error) {
-    }
-
-    @Override
-    public void onUsersList(User user) {
-        dailyMiliSec = Integer.parseInt(user.getDaily());
-        daily.setText(convertTime(user.getDaily()));
-
-        weekly.setText(convertTime(user.getWeekly()));
-        weeklyMiliSec = Integer.parseInt(user.getWeekly());
-
-        monthly.setText(convertTime(user.getMonthly()));
-        monthlyMiliSec = Integer.parseInt(user.getMonthly());
-    }
-
-    private void getStatistics() {
+     private void getStatistics() {
         ApplicationPreferences preferences = new ApplicationPreferences(StatisticsActivity.this);
-        User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
-        trackerController.getWorkedTime(user);
+        Token token = new Token( preferences.getKeyToken());
+        service.getWorkedTime(token, new ServiceListener<Time>() {
+
+            @Override
+            public void success(Time time, Response response) {
+                dailyMiliSec = Integer.parseInt(time.getDaily());
+                daily.setText(convertTime(time.getDaily()));
+
+                weekly.setText(convertTime(time.getWeekly()));
+                weeklyMiliSec = Integer.parseInt(time.getWeekly());
+
+                monthly.setText(convertTime(time.getMonthly()));
+                monthlyMiliSec = Integer.parseInt(time.getMonthly());
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
     }
 
     private String convertTime(String time) {

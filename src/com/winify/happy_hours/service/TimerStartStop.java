@@ -4,19 +4,20 @@ import android.app.Activity;
 import android.widget.EditText;
 import com.winify.happy_hours.activities.ApplicationPreferences;
 import com.winify.happy_hours.controller.ServiceGateway;
-import com.winify.happy_hours.controller.TrackerController;
 import com.winify.happy_hours.listeners.ServiceListener;
+import com.winify.happy_hours.models.Time;
+import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.models.User;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class TimerStartStop extends Thread implements ServiceListener {
+public class TimerStartStop extends Thread {
 
     private EditText timerView;
     private Activity activity;
     private Boolean runThread;
-    private TrackerController trackerController;
     private String serverTime;
+    private TrackerService service;
 
     public TimerStartStop(EditText timerView, Activity activity, Boolean runThread) {
         this.timerView = timerView;
@@ -36,7 +37,7 @@ public class TimerStartStop extends Thread implements ServiceListener {
         try {
             synchronized (this) {
                 ServiceGateway serviceGateway = new ServiceGateway(activity);
-                trackerController = serviceGateway.getTrackerController(this);
+                service = serviceGateway.getService();
                 while (runThread) {
                     getServerTime();
                     activity.runOnUiThread(new Runnable() {
@@ -56,21 +57,18 @@ public class TimerStartStop extends Thread implements ServiceListener {
 
     private void getServerTime() {
         ApplicationPreferences preferences = new ApplicationPreferences(activity);
-        User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
-        trackerController.getServerTime(user);
-    }
+        Token token = new Token(preferences.getKeyToken());
+        service.getServerTime(token, new ServiceListener<Time>() {
+            @Override
+            public void success(Time time, Response response) {
+                serverTime = convertTime(time.getTime());
+            }
 
-    @Override
-    public void onSuccess(Response response) {
-    }
+            @Override
+            public void failure(RetrofitError retrofitError) {
 
-    @Override
-    public void onServerFail(RetrofitError error) {
-    }
-
-    @Override
-    public void onUsersList(User user) {
-        serverTime = convertTime(user.getTime());
+            }
+        });
     }
 
     private String convertTime(String time) {

@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.converter.JacksonConverter;
-import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.service.TrackerService;
 import retrofit.Endpoint;
 import retrofit.Endpoints;
@@ -47,7 +46,5 @@ public class ServiceGateway {
         return service;
     }
 
-    public TrackerController getTrackerController(ServiceListener serviceListener) {
-        return TrackerController.getInstance(context, service, serviceListener);
-    }
+
 }

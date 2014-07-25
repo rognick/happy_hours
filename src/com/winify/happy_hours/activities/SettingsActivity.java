@@ -1,8 +1,5 @@
 package com.winify.happy_hours.activities;
 
-
-
-
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import com.winify.happy_hours.R;

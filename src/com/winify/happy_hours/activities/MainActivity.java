@@ -21,30 +21,31 @@ import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.controller.ServiceGateway;
-import com.winify.happy_hours.controller.TrackerController;
-import com.winify.happy_hours.listeners.ServiceListener;
-import com.winify.happy_hours.models.User;
+import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TimerStartStop;
+import com.winify.happy_hours.service.TrackerService;
 import com.winify.happy_hours.service.WifiService;
+import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MainActivity extends Activity implements ServiceListener, View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     public Thread thread = new Thread();
     public TimerStartStop timerStartStop = null;
     public EditText editText;
-    private TrackerController trackerController;
     private ApplicationPreferences preferences;
     private Button button;
     private ProgressBar progressBar;
     private SharedPreferences prefs;
+    private TrackerService service;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         preferences = new ApplicationPreferences(this);
         prefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -81,7 +82,7 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
             thread.start();
         }
         ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
-        trackerController = serviceGateway.getTrackerController(this);
+        service = serviceGateway.getService();
     }
 
     private void redirectLoginPage() {
@@ -94,48 +95,64 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
         switch (click.getId()) {
             case R.id.buttonHappyStart:
                 if (button.getText().equals("Happy Start")) {
-                    User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
-                    trackerController.startWorkTime(user);
-                    progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                    progressBar.setVisibility(View.VISIBLE);
-                } else if (button.getText().equals("Happy Stop")) {
-                    User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
-                    trackerController.stopWorkTime(user);
+                    Token token = new Token(preferences.getKeyToken());
+                    service.startWorkTime(token, new Callback<Response>() {
+
+                        @Override
+                        public void success(Response response, Response response2) {
+                            showSuccesMessage();
+                            button.setBackgroundResource(R.drawable.button_stop_bg);
+                            button.setText("Happy Stop");
+                            timerStartStop.setRunThread(true);
+                            thread = new Thread(timerStartStop);
+                            thread.start();
+                            preferences.savePreferences(Extra.KEY_TIMER, true);
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+                            showErrorMessage();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
 
+
+                } else if (button.getText().equals("Happy Stop")) {
+                    Token token = new Token(preferences.getKeyToken());
+                    service.stopWorkTime(token, new Callback<Response>() {
+
+                        @Override
+                        public void success(Response response, Response response2) {
+                            showSuccesMessage();
+                            button.setBackgroundResource(R.drawable.button_start_bg);
+                            button.setText("Happy Start");
+                            timerStartStop.setRunThread(false);
+                            preferences.updatePreferences(Extra.KEY_TIMER, false);
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+                            showErrorMessage();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    progressBar.setVisibility(View.VISIBLE);
                 }
                 break;
         }
     }
 
-    @Override
-    public void onSuccess(Response response) {
+    private void showSuccesMessage() {
         Toast.makeText(MainActivity.this, "Server OK", Toast.LENGTH_SHORT).show();
-        progressBar.setVisibility(View.GONE);
-        if (button.getText().equals("Happy Start")) {
-            button.setBackgroundResource(R.drawable.button_stop_bg);
-            button.setText("Happy Stop");
-            timerStartStop.setRunThread(true);
-            thread = new Thread(timerStartStop);
-            thread.start();
-            preferences.savePreferences(Extra.KEY_TIMER, true);
-        } else if (button.getText().equals("Happy Stop")) {
-            button.setBackgroundResource(R.drawable.button_start_bg);
-            button.setText("Happy Start");
-            timerStartStop.setRunThread(false);
-            preferences.updatePreferences(Extra.KEY_TIMER, false);
-        }
     }
 
-    @Override
-    public void onServerFail(RetrofitError error) {
+    private void showErrorMessage() {
         Toast.makeText(MainActivity.this, "Server Fail", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onUsersList(User user) {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -153,19 +170,32 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
             }
             break;
             case R.id.statistic: {
-
                 Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
                 startActivity(intent);
             }
             break;
             case R.id.logout: {
 
-
-                User user = new User("", "", preferences.getKeyToken(), "", "", "", "");
-                trackerController.stopWorkTime(user);
+                Token token = new Token(preferences.getKeyToken());
                 progressBar = (ProgressBar) findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.VISIBLE);
-                trackerController.logOut(user);
+                service.logOut(token, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        if (button.getText().equals("Happy Stop")) {
+                            button.setBackgroundResource(R.drawable.button_start_bg);
+                            button.setText("Happy Start");
+                            timerStartStop.setRunThread(false);
+                            preferences.updatePreferences(Extra.KEY_TIMER, false);
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
                 preferences.removePreferences(Extra.KEY_TOKEN);
                 Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                 startActivity(intent);
@@ -187,13 +217,13 @@ public class MainActivity extends Activity implements ServiceListener, View.OnCl
     }
 
     public void startService() {
-        if (prefs.getBoolean(Extra.Notification_Status,false)) {
+        if (prefs.getBoolean(Extra.Notification_Status, false)) {
             startService(new Intent(getBaseContext(), WifiService.class));
         }
     }
 
     public void stopService() {
-        if (prefs.getBoolean(Extra.Notification_Status,false)) {
+        if (prefs.getBoolean(Extra.Notification_Status, false)) {
             stopService(new Intent(getBaseContext(), WifiService.class));
         }
     }

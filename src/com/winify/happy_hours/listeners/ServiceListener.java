@@ -16,16 +16,8 @@
 
 package com.winify.happy_hours.listeners;
 
-import com.winify.happy_hours.models.User;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Callback;
 
+public abstract class ServiceListener<T> implements Callback<T> {
 
-public interface ServiceListener {
-
-    void onSuccess(Response response);
-
-    void onServerFail(RetrofitError error);
-
-    void onUsersList(User user);
 }
