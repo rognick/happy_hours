@@ -48,9 +48,9 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
         getStatistics();
     }
 
-     private void getStatistics() {
+    private void getStatistics() {
         ApplicationPreferences preferences = new ApplicationPreferences(StatisticsActivity.this);
-        Token token = new Token( preferences.getKeyToken());
+        Token token = new Token(preferences.getKeyToken());
         service.getWorkedTime(token, new ServiceListener<Time>() {
 
             @Override
@@ -73,7 +73,6 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
     }
 
     private String convertTime(String time) {
-
         int milliseconds = Integer.parseInt(time);
         int hour = (milliseconds / (1000 * 60 * 60));
         int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
@@ -83,67 +82,48 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
-            case R.id.dailyBtn: {
+            case R.id.dailyBtn:
                 createPieChart(dailyMiliSec, 28800000);
-            }
-            break;
-            case R.id.weeklyBtn: {
+                break;
+            case R.id.weeklyBtn:
                 createPieChart(weeklyMiliSec, 144000000);
-            }
-            break;
-            case R.id.monthlyBtn: {
-
+                break;
+            case R.id.monthlyBtn:
                 createPieChart(monthlyMiliSec, 576000000);
-            }
-            break;
+                break;
         }
     }
 
     private void createPieChart(int workedTime, int totalTime) {
-
         if (workedTime > totalTime) {
-            doOverTimeChart(workedTime, totalTime);
+            drawOverTimeChart(workedTime, totalTime);
         } else {
-            doTimeChart(workedTime, totalTime);
+            drawTimeChart(workedTime, totalTime);
         }
     }
 
-    private void doTimeChart(int workedTime, int totalTime) {
-        String[] code = new String[]{"Worked Hours", "Hours Left To Work"};
+    private void drawTimeChart(int workedTime, int totalTime) {
+        String chartTitle = "Work Time Chart";
         double[] distribution = {workedTime, totalTime};
+        String[] categories = new String[]{"Worked Hours", "Hours Left To Work"};
         int[] colors = {Color.GREEN, Color.RED};
-        CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
-        for (int i = 0; i < distribution.length; i++) {
-            distributionSeries.add(code[i], distribution[i]);
-        }
-        DefaultRenderer defaultRenderer = new DefaultRenderer();
-        for (int i = 0; i < distribution.length; i++) {
-            SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
-            seriesRenderer.setColor(colors[i]);
-            seriesRenderer.setDisplayChartValues(true);
-            defaultRenderer.addSeriesRenderer(seriesRenderer);
-        }
-        defaultRenderer.setLegendTextSize(30);
-        defaultRenderer.setChartTitle("Work Time Chart");
-        defaultRenderer.setChartTitleTextSize(20);
-        defaultRenderer.setZoomButtonsVisible(true);
-        defaultRenderer.setBackgroundColor(45454545);
 
-        Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
-                distributionSeries, defaultRenderer, "PieChart");
-        startActivity(intent);
+        drawChart(chartTitle, distribution, categories, colors);
     }
 
-    private void doOverTimeChart(int workedTime, int totalTime) {
-        String[] code = new String[]{"OverTime Hours", "Hours Left To Work"};
+    private void drawOverTimeChart(int workedTime, int totalTime) {
+        String chartTitle = "OverTime Work Chart";
         double[] distribution = {workedTime - totalTime, totalTime};
-
+        String[] categories = new String[]{"OverTime Hours", "Hours Left To Work"};
         int[] colors = {Color.YELLOW, Color.GREEN};
 
+        drawChart(chartTitle, distribution, categories, colors);
+    }
+
+    private void drawChart(String chartTitle, double[] distribution, String[] categories, int[] colors) {
         CategorySeries distributionSeries = new CategorySeries("Work Time Chart");
         for (int i = 0; i < distribution.length; i++) {
-            distributionSeries.add(code[i], distribution[i]);
+            distributionSeries.add(categories[i], distribution[i]);
         }
         DefaultRenderer defaultRenderer = new DefaultRenderer();
         for (int i = 0; i < distribution.length; i++) {
@@ -153,7 +133,7 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
             defaultRenderer.addSeriesRenderer(seriesRenderer);
         }
         defaultRenderer.setLegendTextSize(30);
-        defaultRenderer.setChartTitle("OverTime Work Chart");
+        defaultRenderer.setChartTitle(chartTitle);
         defaultRenderer.setChartTitleTextSize(20);
         defaultRenderer.setZoomButtonsVisible(true);
         defaultRenderer.setBackgroundColor(45454545);
