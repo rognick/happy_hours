@@ -18,7 +18,7 @@
         </activity>
         <activity android:name=".activities.LogInActivity"/>
         <activity android:name=".activities.SettingsActivity" android:theme="@android:style/Theme.Black.NoTitleBar"/>
-        <activity android:name=".service.WifiPreferences"/>
+        <activity android:name=".activities.WifiListActivity"/>
         <activity android:name=".activities.StatisticsActivity"/>
         <service android:name=".service.WifiService"/>
         <activity android:name="org.achartengine.GraphicalActivity"/>

@@ -10,7 +10,6 @@ import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.POST;
 
-
 public interface TrackerService {
     // public static String SERVICE_ENDPOINT = "http://192.168.3.93:9000";
     @POST("/logout")

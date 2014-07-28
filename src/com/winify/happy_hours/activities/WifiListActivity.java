@@ -1,4 +1,4 @@
-package com.winify.happy_hours.service;
+package com.winify.happy_hours.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,13 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.activities.ApplicationPreferences;
-import com.winify.happy_hours.activities.SettingsActivity;
 
 import java.util.List;
 
-
-public class WifiPreferences extends Activity {
+public class WifiListActivity extends Activity {
 
     private WifiManager mainWifiObj;
     private WifiScanReceiver wifiReceiver;
@@ -47,10 +44,10 @@ public class WifiPreferences extends Activity {
                 array = preferences.getWifiListPreferred();
                 preferences.removeWifiList();
                 preferences.saveWifiList(array + selectedFromList + ",");
-                Intent intent = new Intent(WifiPreferences.this, SettingsActivity.class);
+                Intent intent = new Intent(WifiListActivity.this, SettingsActivity.class);
                 startActivity(intent);
 
-                WifiPreferences.this.finish();
+                WifiListActivity.this.finish();
 
             }
         });
@@ -75,12 +72,12 @@ public class WifiPreferences extends Activity {
         @SuppressLint("UseValueOf")
         public void onReceive(Context c, Intent intent) {
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-            String[] wifis = new String[wifiScanList.size()];
+            String[] wifiList = new String[wifiScanList.size()];
             for (int i = 0; i < wifiScanList.size(); i++) {
-                wifis[i] = (wifiScanList.get(i)).SSID;
+                wifiList[i] = (wifiScanList.get(i)).SSID;
             }
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
-                    R.layout.item_list, wifis));
+                    R.layout.item_list, wifiList));
         }
     }
 }
