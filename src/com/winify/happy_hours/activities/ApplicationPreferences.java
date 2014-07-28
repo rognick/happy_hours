@@ -1,18 +1,17 @@
 package com.winify.happy_hours.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import com.winify.happy_hours.constants.Extra;
 
 public class ApplicationPreferences {
 
-    private static final String PREFS_NAME = "LoginPrefs";
     private final SharedPreferences.Editor editor;
     private SharedPreferences settings;
 
     public ApplicationPreferences(Context context) {
-        this.settings = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
+        this.settings = PreferenceManager.getDefaultSharedPreferences(context);
         this.editor = settings.edit();
     }
 
@@ -25,7 +24,6 @@ public class ApplicationPreferences {
         editor.putString(Extra.KEY_WIFI_LIST_PREFERRED, wifiList);
         editor.commit();
     }
-
 
     public void setTimer(boolean isTimerSet) {
         editor.putBoolean(Extra.KEY_TIMER, isTimerSet);

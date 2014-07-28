@@ -24,9 +24,9 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
     private TextView monthly;
     private TextView weekly;
     private TextView daily;
-    private int monthlyMiliSec;
-    private int dailyMiliSec;
-    private int weeklyMiliSec;
+    private int monthlyMilliSeconds;
+    private int dailyMilliSeconds;
+    private int weeklyMilliSeconds;
     private TrackerService service;
 
     @Override
@@ -55,14 +55,12 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
 
             @Override
             public void success(Time time, Response response) {
-                dailyMiliSec = Integer.parseInt(time.getDaily());
+                dailyMilliSeconds = Integer.parseInt(time.getDaily());
                 daily.setText(convertTime(time.getDaily()));
-
                 weekly.setText(convertTime(time.getWeekly()));
-                weeklyMiliSec = Integer.parseInt(time.getWeekly());
-
+                weeklyMilliSeconds = Integer.parseInt(time.getWeekly());
                 monthly.setText(convertTime(time.getMonthly()));
-                monthlyMiliSec = Integer.parseInt(time.getMonthly());
+                monthlyMilliSeconds = Integer.parseInt(time.getMonthly());
             }
 
             @Override
@@ -83,13 +81,13 @@ public class StatisticsActivity extends Activity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dailyBtn:
-                createPieChart(dailyMiliSec, 28800000);
+                createPieChart(dailyMilliSeconds, 28800000);
                 break;
             case R.id.weeklyBtn:
-                createPieChart(weeklyMiliSec, 144000000);
+                createPieChart(weeklyMilliSeconds, 144000000);
                 break;
             case R.id.monthlyBtn:
-                createPieChart(monthlyMiliSec, 576000000);
+                createPieChart(monthlyMilliSeconds, 576000000);
                 break;
         }
     }

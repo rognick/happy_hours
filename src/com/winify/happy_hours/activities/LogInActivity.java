@@ -37,6 +37,7 @@ public class LogInActivity extends Activity {
         setContentView(R.layout.user_settings);
         ServiceGateway serviceGateway = new ServiceGateway(LogInActivity.this);
         service = serviceGateway.getService();
+        preferences = new ApplicationPreferences(this);
 
         if (!Utils.isNetworkAvailable(this)) {
             AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
@@ -51,8 +52,6 @@ public class LogInActivity extends Activity {
             });
             ad.show();
         }
-
-        preferences = new ApplicationPreferences(this);
 
         login = (EditText) findViewById(R.id.login);
         password = (EditText) findViewById(R.id.password);
