@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.ApplicationPreferences;
 import com.winify.happy_hours.activities.SettingsActivity;
-import com.winify.happy_hours.constants.Extra;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ import java.util.List;
 public class WifiPreferences extends Activity {
 
     private WifiManager mainWifiObj;
-    private WifiScanReceiver wifiReciever;
+    private WifiScanReceiver wifiReceiver;
     private ListView list;
     private String array;
     private ApplicationPreferences preferences;
@@ -46,8 +45,8 @@ public class WifiPreferences extends Activity {
                         Toast.LENGTH_LONG).show();
 
                 array = preferences.getWifiListPreferred();
-                preferences.removePreferences(Extra.KEY_WIFI_LIST_PREFERRED);
-                preferences.savePreferences(Extra.KEY_WIFI_LIST_PREFERRED, array + selectedFromList + ",");
+                preferences.removeWifiList();
+                preferences.saveWifiList(array + selectedFromList + ",");
                 Intent intent = new Intent(WifiPreferences.this, SettingsActivity.class);
                 startActivity(intent);
 
@@ -57,17 +56,17 @@ public class WifiPreferences extends Activity {
         });
 
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        wifiReciever = new WifiScanReceiver();
+        wifiReceiver = new WifiScanReceiver();
         mainWifiObj.startScan();
     }
 
     protected void onPause() {
-        unregisterReceiver(wifiReciever);
+        unregisterReceiver(wifiReceiver);
         super.onPause();
     }
 
     protected void onResume() {
-        registerReceiver(wifiReciever, new IntentFilter(
+        registerReceiver(wifiReceiver, new IntentFilter(
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         super.onResume();
     }

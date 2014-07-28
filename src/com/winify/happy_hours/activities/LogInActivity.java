@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Token;
@@ -32,7 +29,6 @@ public class LogInActivity extends Activity {
     private EditText password;
     private ApplicationPreferences preferences;
     private ProgressBar progressBar;
-    private SharedPreferences prefs;
     private TrackerService service;
 
     @Override
@@ -61,19 +57,17 @@ public class LogInActivity extends Activity {
         login = (EditText) findViewById(R.id.login);
         password = (EditText) findViewById(R.id.password);
 
-        prefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
         Button b = (Button) findViewById(R.id.logingBtn);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (prefs.getString(Extra.KEY_IP, "").equals("") ||
-                        prefs.getString(Extra.KEY_PORT, "").equals("")) {
+                if (preferences.getIp().equals("") ||
+                        preferences.getPort().equals("")) {
 
                     AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
                     ad.setCancelable(false); // This blocks the 'BACK' button
-                    ad.setMessage("Check youre Ip Address and Port in  settings");
+                    ad.setMessage("Check your Ip Address and Port in  settings");
                     ad.setButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -100,13 +94,13 @@ public class LogInActivity extends Activity {
 
     public void getKeyToken(String login, String password) {
         User user = new User(login, password);
-        preferences.removePreferences(Extra.KEY_TOKEN);
-        Log.d("Tag","GET TOKEN");
+        preferences.removeToken();
+        Log.d("Tag", "GET TOKEN");
         service.getToken(user, new ServiceListener<Token>() {
 
             @Override
             public void success(Token token, Response response) {
-                preferences.savePreferences(Extra.KEY_TOKEN, token.getToken());
+                preferences.saveToken(token.getToken());
                 Toast.makeText(LogInActivity.this, preferences.getKeyToken(), Toast.LENGTH_LONG).show();
                 redirectHomePage();
                 finish();

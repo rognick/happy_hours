@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TimerStartStop;
@@ -36,13 +33,11 @@ import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    public Thread thread = new Thread();
-    public TimerStartStop timerStartStop = null;
-    public EditText editText;
+    private Thread thread = new Thread();
+    private TimerStartStop timerStartStop = null;
     private ApplicationPreferences preferences;
     private Button button;
     private ProgressBar progressBar;
-    private SharedPreferences prefs;
     private TrackerService service;
     private String errorMsg;
 
@@ -53,8 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.main);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         preferences = new ApplicationPreferences(this);
-        prefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+
         if (!Utils.isNetworkAvailable(this)) {
             AlertDialog ad = new AlertDialog.Builder(MainActivity.this).create();
             ad.setCancelable(false); // This blocks the 'BACK' button
@@ -78,10 +72,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         button = (Button) findViewById(R.id.buttonHappyStart);
         button.setOnClickListener(this);
 
-        editText = (EditText) findViewById(R.id.timerView);
+        EditText editText = (EditText) findViewById(R.id.timerView);
         timerStartStop = new TimerStartStop(editText, this, true);
 
-        if (preferences.getKeyTimerStatus()) {
+        if (preferences.isTimerSet()) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText("Happy Stop");
             thread = new Thread(timerStartStop);
@@ -112,7 +106,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             timerStartStop.setRunThread(true);
                             thread = new Thread(timerStartStop);
                             thread.start();
-                            preferences.savePreferences(Extra.KEY_TIMER, true);
+                            preferences.setTimer(true);
                             progressBar.setVisibility(View.INVISIBLE);
                         }
 
@@ -155,7 +149,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             button.setBackgroundResource(R.drawable.button_start_bg);
                             button.setText("Happy Start");
                             timerStartStop.setRunThread(false);
-                            preferences.updatePreferences(Extra.KEY_TIMER, false);
+                            preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
                         }
 
@@ -236,7 +230,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             button.setBackgroundResource(R.drawable.button_start_bg);
                             button.setText("Happy Start");
                             timerStartStop.setRunThread(false);
-                            preferences.updatePreferences(Extra.KEY_TIMER, false);
+                            preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -247,7 +241,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     }
                 });
 
-                preferences.removePreferences(Extra.KEY_TOKEN);
+                preferences.removeToken();
                 Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                 startActivity(intent);
             }
@@ -268,13 +262,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     public void startService() {
-        if (prefs.getBoolean(Extra.Notification_Status, false)) {
+        if (preferences.isNotificationStatusSet()) {
             startService(new Intent(getBaseContext(), WifiService.class));
         }
     }
 
     public void stopService() {
-        if (prefs.getBoolean(Extra.Notification_Status, false)) {
+        if (preferences.isNotificationStatusSet()) {
             stopService(new Intent(getBaseContext(), WifiService.class));
         }
     }

@@ -3,68 +3,33 @@ package com.winify.happy_hours.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.EditText;
-import android.widget.TextView;
 import com.winify.happy_hours.constants.Extra;
 
 public class ApplicationPreferences {
 
-    public static final String PREFS_NAME = "LoginPrefs";
+    private static final String PREFS_NAME = "LoginPrefs";
     private final SharedPreferences.Editor editor;
-    SharedPreferences settings;
+    private SharedPreferences settings;
 
     public ApplicationPreferences(Context context) {
         this.settings = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
         this.editor = settings.edit();
+    }
+
+    public void saveToken(String token) {
+        editor.putString(Extra.KEY_TOKEN, token).commit();
         editor.commit();
     }
 
-    public void savePreferences(String key, EditText item) {
-        editor.putString(key, item.getText().toString());
+    public void saveWifiList(String wifiList) {
+        editor.putString(Extra.KEY_WIFI_LIST_PREFERRED, wifiList);
         editor.commit();
     }
 
-    public void updatePreferences(String key, EditText item) {
-        removePreferences(key);
-        savePreferences(key, item);
-    }
 
-    public String getStringValueFromPreferences(String key) {
-        return settings.getString(key, "");
-    }
-
-    public void savePreferences(String key, String item) {
-
-        editor.putString(key, item);
+    public void setTimer(boolean isTimerSet) {
+        editor.putBoolean(Extra.KEY_TIMER, isTimerSet);
         editor.commit();
-    }
-
-    public void savePreferences(String key, Boolean item) {
-        editor.putBoolean(key, item);
-        editor.commit();
-    }
-
-    public void updatePreferences(String key, Boolean value) {
-        removePreferences(key);
-        savePreferences(key, value);
-    }
-
-    public void removePreferences(String key) {
-        editor.remove(key);
-        editor.commit();
-    }
-
-    public void editPermission(TextView name, Boolean enable, Boolean focus) {
-        name.setFocusableInTouchMode(enable);
-        name.setFocusable(focus);
-    }
-
-    public Boolean getNotificationStatus() {
-        return settings.getBoolean(Extra.Notification_Status, false);
-    }
-
-    public Boolean getKeyTimerStatus() {
-        return settings.getBoolean(Extra.KEY_TIMER, false);
     }
 
     public String getKeyToken() {
@@ -81,6 +46,22 @@ public class ApplicationPreferences {
 
     public String getPort() {
         return settings.getString(Extra.KEY_PORT, "");
+    }
+
+    public boolean isNotificationStatusSet() {
+        return settings.getBoolean(Extra.Notification_Status, false);
+    }
+
+    public boolean isTimerSet() {
+        return settings.getBoolean(Extra.KEY_TIMER, false);
+    }
+
+    public void removeToken() {
+        settings.edit().remove(Extra.KEY_TOKEN).commit();
+    }
+
+    public void removeWifiList() {
+        settings.edit().remove(Extra.KEY_WIFI_LIST_PREFERRED).commit();
     }
 }
 

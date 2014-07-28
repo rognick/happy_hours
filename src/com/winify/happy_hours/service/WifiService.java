@@ -25,7 +25,7 @@ import java.util.List;
 public class WifiService extends Service {
     public ApplicationPreferences preferences;
     public WifiManager mainWifiObj;
-    public WifiScanReceiver wifiReciever;
+    public WifiScanReceiver wifiReceiver;
     public Boolean isRegistered = false;
 
     @Override
@@ -44,9 +44,9 @@ public class WifiService extends Service {
         if ((dayOfWeek != Calendar.SATURDAY) || (dayOfWeek != Calendar.SUNDAY)) {
 
             mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-            wifiReciever = new WifiScanReceiver();
+            wifiReceiver = new WifiScanReceiver();
             mainWifiObj.startScan();
-            registerReceiver(wifiReciever, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+            registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             isRegistered = true;
         }
 
@@ -58,7 +58,7 @@ public class WifiService extends Service {
         super.onDestroy();
 
         if (isRegistered) {
-            unregisterReceiver(wifiReciever);
+            unregisterReceiver(wifiReceiver);
         }
     }
 
@@ -77,7 +77,7 @@ public class WifiService extends Service {
             if (wifiInfo.getSSID().toUpperCase().equals("\"" + Extra.MyNetwork + "\"") ||
                     wifiInfo.getSSID().toUpperCase().equals(Extra.MyNetwork)) {
 
-                if (preferences.getKeyTimerStatus()) {
+                if (preferences.isTimerSet()) {
                     notification("Status", "Timer ON", true);
 
                 } else {
@@ -100,7 +100,7 @@ public class WifiService extends Service {
             }
             PendingIntent pIntent = PendingIntent.getActivity(WifiService.this, 0, intent2, 0);
 
-            Notification noti = new Notification.Builder(WifiService.this)
+            Notification notification = new Notification.Builder(WifiService.this)
                     .setContentTitle(contentTitle)
                     .setContentText(contentText)
                     .setSmallIcon(R.drawable.winify)
@@ -110,11 +110,11 @@ public class WifiService extends Service {
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
             if (!onGoing) {
-                noti.flags |= Notification.FLAG_AUTO_CANCEL;
-                noti.defaults |= Notification.DEFAULT_VIBRATE;
-                noti.defaults |= Notification.DEFAULT_SOUND;
+                notification.flags |= Notification.FLAG_AUTO_CANCEL;
+                notification.defaults |= Notification.DEFAULT_VIBRATE;
+                notification.defaults |= Notification.DEFAULT_SOUND;
             }
-            notificationManager.notify(0, noti);
+            notificationManager.notify(0, notification);
         }
     }
 }
