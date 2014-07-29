@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-
-
-    <item android:id="@+id/statistic" android:title="Statistic"
-          android:showAsAction="collapseActionView"/>
-
-
-    <item android:id="@+id/settings" android:title="Settings"
-          android:showAsAction="collapseActionView"/>
-
-
-    <item android:id="@+id/logout" android:title="Logout"
-          android:showAsAction="collapseActionView"/>
-
+    <item android:id="@+id/statistic" android:title="Statistic"/>
+    <item android:id="@+id/settings" android:title="Settings"/>
+    <item android:id="@+id/logout" android:title="Logout"/>
 </menu>

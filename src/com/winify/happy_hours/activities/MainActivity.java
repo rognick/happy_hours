@@ -19,7 +19,6 @@ import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TimerStartStop;
 import com.winify.happy_hours.service.TrackerService;
 import com.winify.happy_hours.service.WifiService;
-import com.winify.happy_hours.statistics.StatisticsActivity;
 import com.winify.happy_hours.utils.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -63,13 +62,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             });
             ad.show();
         }
-
         if (preferences.getKeyToken().equals("")) {
             Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
             redirectLoginPage();
         }
         stopService();
-
         button = (Button) findViewById(R.id.buttonHappyStart);
         button.setOnClickListener(this);
 

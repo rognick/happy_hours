@@ -1,4 +1,4 @@
-package com.winify.happy_hours.statistics;
+package com.winify.happy_hours.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,33 +22,41 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-
-public class DailyStatistic extends Fragment {
+public class MonthlyStatisticFragment extends Fragment {
     private GraphicalView mChartView;
-    private int dailyMilliSeconds;
+    private int monthlyMilliSeconds;
     private TrackerService service;
+    private int workedDaysTillPresent;
+    private int HoursHadToWork;
+    private LinearLayout chartContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ServiceGateway serviceGateway = new ServiceGateway(this.getActivity());
         service = serviceGateway.getService();
-        getStatistics();
-
-        View rootView = inflater.inflate(R.layout.fragment_daily, container, false);
-        LinearLayout chartContainer = (LinearLayout) rootView.findViewById(
-                R.id.chart_container_daily);
+        View rootView = inflater.inflate(R.layout.fragment_monthly, container, false);
+        chartContainer = (LinearLayout) rootView.findViewById(
+                R.id.chart_container_monthly);
         if (container == null) {
             return null;
         }
+        return rootView;
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getStatistics();
+    }
 
+    private void displayChart() {
         final String[] status = new String[]{"Worked", "Left To work"};
 
-        double[] distribution = {dailyMilliSeconds, 28800000};
+        double[] distribution = {monthlyMilliSeconds, HoursHadToWork - monthlyMilliSeconds};
 
         int[] colors = {Color.GREEN, Color.RED};
 
-        CategorySeries distributionSeries = new CategorySeries(" Daily ");
+        CategorySeries distributionSeries = new CategorySeries(" month");
         for (int i = 0; i < distribution.length; i++) {
 
             distributionSeries.add(status[i], distribution[i]);
@@ -59,47 +67,38 @@ public class DailyStatistic extends Fragment {
             SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
             seriesRenderer.setColor(colors[i]);
             seriesRenderer.setDisplayChartValues(true);
-
-
             defaultRenderer.addSeriesRenderer(seriesRenderer);
         }
 
-        defaultRenderer.setChartTitle("General");
+        defaultRenderer.setChartTitle(" This month worked: " + convertTime(monthlyMilliSeconds));
         defaultRenderer.setChartTitleTextSize(20);
         defaultRenderer.setZoomButtonsVisible(true);
-
+        defaultRenderer.setLabelsTextSize(20);
         mChartView = ChartFactory.getPieChartView(getActivity(),
                 distributionSeries, defaultRenderer);
-
         chartContainer.addView(mChartView);
-
-        return rootView;
     }
-
 
     private void getStatistics() {
         ApplicationPreferences preferences = new ApplicationPreferences(this.getActivity());
         Token token = new Token(preferences.getKeyToken());
         service.getWorkedTime(token, new ServiceListener<Time>() {
-
             @Override
             public void success(Time time, Response response) {
-                dailyMilliSeconds = Integer.parseInt(time.getDaily());
+                monthlyMilliSeconds = Integer.parseInt(time.getMonthly());
+                workedDaysTillPresent = Integer.parseInt(time.getWorkedDays());
+                HoursHadToWork = Integer.parseInt(time.getTimeToWork());
+                displayChart();
             }
-
             @Override
             public void failure(RetrofitError retrofitError) {
-
             }
         });
     }
-    private String convertTime(String time) {
-        int milliseconds = Integer.parseInt(time);
-        int hour = (milliseconds / (1000 * 60 * 60));
-        int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
+
+    private String convertTime(int time) {
+        int hour = (time / (1000 * 60 * 60));
+        int min = ((time - (time / (1000 * 60 * 60))) / (1000 * 60)) % 60;
         return hour + ":" + min;
     }
-
-
-
 }

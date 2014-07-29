@@ -1,4 +1,4 @@
-package com.winify.happy_hours.statistics;
+package com.winify.happy_hours.activities;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import com.winify.happy_hours.R;
+import com.winify.happy_hours.fragments.TabsPagerAdapter;
 
 public class StatisticsActivity extends FragmentActivity implements
         ActionBar.TabListener {
@@ -14,15 +15,13 @@ public class StatisticsActivity extends FragmentActivity implements
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
-    // Tab titles
-    private String[] tabs = { "Daily", "Weekly", "Monthly" };
+    private String[] tabs = {"Daily", "Weekly", "Monthly"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics_main);
 
-        // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -30,8 +29,6 @@ public class StatisticsActivity extends FragmentActivity implements
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Adding Tabs
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
                     .setTabListener(this));
@@ -44,8 +41,6 @@ public class StatisticsActivity extends FragmentActivity implements
 
             @Override
             public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
             }
 
@@ -65,13 +60,9 @@ public class StatisticsActivity extends FragmentActivity implements
 
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        // on tab selected
-        // show respected fragment view
         viewPager.setCurrentItem(tab.getPosition());
     }
-
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
     }
-
 }

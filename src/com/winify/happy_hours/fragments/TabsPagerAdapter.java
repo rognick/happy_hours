@@ -1,4 +1,4 @@
-package com.winify.happy_hours.statistics;
+package com.winify.happy_hours.fragments;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,14 +15,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
         switch (index) {
             case 0:
-                // Top Rated fragment activity
-                return new DailyStatistic();
+                return new DailyStatisticFragment();
             case 1:
-                // Games fragment activity
-                return new WeeklyStatistic();
+                return new WeeklyStatisticFragment();
             case 2:
-                // Movies fragment activity
-                return new MonthlyStatistic();
+                return new MonthlyStatisticFragment();
         }
 
         return null;
