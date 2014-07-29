@@ -22,6 +22,7 @@ import android.preference.PreferenceManager;
 import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.converter.JacksonConverter;
 import com.winify.happy_hours.service.TrackerService;
+import com.winify.happy_hours.statistics.DailyStatistic;
 import retrofit.Endpoint;
 import retrofit.Endpoints;
 import retrofit.RestAdapter;

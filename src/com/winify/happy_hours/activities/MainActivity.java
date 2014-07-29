@@ -19,6 +19,7 @@ import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TimerStartStop;
 import com.winify.happy_hours.service.TrackerService;
 import com.winify.happy_hours.service.WifiService;
+import com.winify.happy_hours.statistics.StatisticsActivity;
 import com.winify.happy_hours.utils.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
