@@ -8,19 +8,17 @@ public class Time implements Serializable {
     private String daily;
     private String monthly;
     private String weekly;
-    private String time;
     private String WorkedDays;
     private String TimeToWork;
 
     public Time() {
     }
 
-    public Time(String daily, String weekly, String monthly, String time,String WorkedDays,String TimeToWork) {
+    public Time(String daily, String weekly, String monthly,String WorkedDays,String TimeToWork) {
 
         this.daily = daily;
         this.monthly = monthly;
         this.weekly = weekly;
-        this.time = time;
         this.WorkedDays=WorkedDays;
         this.TimeToWork=TimeToWork;
     }
@@ -47,14 +45,6 @@ public class Time implements Serializable {
 
     public void setMonthly(String monthly) {
         this.monthly = monthly;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getWorkedDays() {

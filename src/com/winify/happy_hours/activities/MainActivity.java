@@ -129,6 +129,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     }
                                 });
                                 showNotificationMessage();
+                            } else if (getErrorMessage(retrofitError).equals("Error: cant find user with such token")) {
+                                preferences.removeToken();
+                                Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
+                                redirectLoginPage();
+                                finish();
                             } else {
                                 showErrorMessage();
                             }
@@ -154,7 +159,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
-                            showErrorMessage();
+                            if (getErrorMessage(retrofitError).equals("Timer is not running")) {
+                                Token token = new Token(preferences.getKeyToken());
+                                service.startWorkTime(token, new Callback<Response>() {
+
+                                    @Override
+                                    public void success(Response response, Response response2) {
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError retrofitError) {
+                                        showErrorMessage();
+
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                                showNotificationMessage();
+                            } else if (getErrorMessage(retrofitError).equals("Error: cant find user with such token")) {
+                                preferences.removeToken();
+                                Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
+                                redirectLoginPage();
+                                finish();
+                            } else {
+                                showErrorMessage();
+                            }
                             progressBar.setVisibility(View.INVISIBLE);
                         }
                     });
@@ -174,7 +203,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 e.printStackTrace();
             }
             String charset = MimeUtil.parseCharset(body.mimeType());
-            // This will be your error message
             try {
                 errorMsg = new String(bytes, charset);
             } catch (UnsupportedEncodingException e) {
@@ -194,7 +222,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void showNotificationMessage() {
-        Toast.makeText(MainActivity.this, "Try again to start", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Try again to click", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
     }
 
