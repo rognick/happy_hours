@@ -15,11 +15,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
         switch (index) {
             case 0:
-                return new DailyStatisticFragment();
+                return new StatisticFragment(28800000,"today");
             case 1:
-                return new WeeklyStatisticFragment();
+                return new StatisticFragment(201600000,"this week");
             case 2:
-                return new MonthlyStatisticFragment();
+                return new StatisticFragment(576000000,"this month");
         }
 
         return null;
@@ -27,7 +27,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // get item count - equal to number of tabs
         return 3;
     }
 
