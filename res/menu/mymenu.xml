@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/statistic" android:title="Statistic"/>
-    <item android:id="@+id/settings" android:title="Settings"/>
-    <item android:id="@+id/logout" android:title="Logout"/>
+    <item android:id="@+id/statistic"
+          android:showAsAction="ifRoom"
+          android:title="@string/statistics"
+          android:icon="@drawable/ic_action_stats"/>
+
+    <item android:id="@+id/settings"
+          android:showAsAction="ifRoom"
+          android:title="@string/settings"
+          android:icon="@drawable/ic_action_settings"/>
+
+    <item android:id="@+id/logout"
+          android:showAsAction="never"
+          android:title="@string/logout"
+          android:icon="@drawable/ic_action_logout"/>
 </menu>

@@ -2,12 +2,11 @@ package com.winify.happy_hours.service;
 
 import android.app.Activity;
 import android.widget.EditText;
-import com.winify.happy_hours.activities.ApplicationPreferences;
+import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;
 import com.winify.happy_hours.models.Token;
-import com.winify.happy_hours.models.User;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 

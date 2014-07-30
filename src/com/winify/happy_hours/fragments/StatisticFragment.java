@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.activities.ApplicationPreferences;
+import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;

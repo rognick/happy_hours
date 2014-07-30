@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.models.Token;
@@ -45,7 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         preferences = new ApplicationPreferences(this);
 

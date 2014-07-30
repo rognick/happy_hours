@@ -1,4 +1,4 @@
-package com.winify.happy_hours.activities;
+package com.winify.happy_hours;
 
 import android.content.Context;
 import android.content.SharedPreferences;

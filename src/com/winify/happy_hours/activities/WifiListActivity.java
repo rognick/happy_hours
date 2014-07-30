@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class WifiListActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wifi_list);
+        setContentView(R.layout.activity_wifi_list);
 
         preferences = new ApplicationPreferences(this);
         list = (ListView) findViewById(R.id.wifiList);

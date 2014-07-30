@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
@@ -34,7 +35,7 @@ public class LogInActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_settings);
+        setContentView(R.layout.activity_login);
         ServiceGateway serviceGateway = new ServiceGateway(LogInActivity.this);
         service = serviceGateway.getService();
         preferences = new ApplicationPreferences(this);
@@ -110,7 +111,7 @@ public class LogInActivity extends Activity {
                 progressBar.setVisibility(View.GONE);
                 AlertDialog ad = new AlertDialog.Builder(LogInActivity.this).create();
                 ad.setCancelable(false); // This blocks the 'BACK' button
-                ad.setMessage("Please check youre Username and Password or youre connection with Server");
+                ad.setMessage("Please check your Username and Password or your connection with Server");
                 ad.setButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

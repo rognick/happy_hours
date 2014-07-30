@@ -15,7 +15,7 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.provider.Settings;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.activities.ApplicationPreferences;
+import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.activities.MainActivity;
 import com.winify.happy_hours.constants.Extra;
 
