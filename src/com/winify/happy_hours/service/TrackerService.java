@@ -24,9 +24,6 @@ public interface TrackerService {
     @POST("/stop")
     void stopWorkTime(@Body Token token, Callback<Response> callback);
 
-    @POST("/time")
-    void getServerTime(@Body Token token, ServiceListener<Time> cb);
-
     @POST("/statistic")
     void getWorkedTime(@Body Token token, ServiceListener<Time> cb);
 }

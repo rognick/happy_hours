@@ -57,10 +57,10 @@ public class TimerStartStop extends Thread {
     private void getServerTime() {
         ApplicationPreferences preferences = new ApplicationPreferences(activity);
         Token token = new Token(preferences.getKeyToken());
-        service.getServerTime(token, new ServiceListener<Time>() {
+        service.getWorkedTime(token, new ServiceListener<Time>() {
             @Override
             public void success(Time time, Response response) {
-                serverTime = convertTime(time.getTime());
+                serverTime = convertTime(time.getDaily());
             }
 
             @Override
@@ -71,6 +71,7 @@ public class TimerStartStop extends Thread {
     }
 
     private String convertTime(String time) {
+
         int milliseconds = Integer.parseInt(time);
         int hour = (milliseconds / (1000 * 60 * 60)) % 24;
         int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;

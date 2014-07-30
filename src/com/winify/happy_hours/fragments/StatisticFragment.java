@@ -1,5 +1,6 @@
 package com.winify.happy_hours.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.ApplicationPreferences;
+import com.winify.happy_hours.activities.LogInActivity;
+import com.winify.happy_hours.activities.MainActivity;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;
@@ -21,6 +25,13 @@ import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.MimeUtil;
+import retrofit.mime.TypedInput;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 public class StatisticFragment extends Fragment {
     private String range;
@@ -30,6 +41,7 @@ public class StatisticFragment extends Fragment {
     private TrackerService service;
     private LinearLayout chartContainer;
     private int HoursHadToWork;
+    private String errorMsg;
 
     public StatisticFragment(int totalTime, String range) {
         this.totalTime = totalTime;
@@ -142,6 +154,14 @@ public class StatisticFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+                if (getErrorMessage(retrofitError).equals("Error: cant find user with such token")) {
+
+                    Intent intent = new Intent(getActivity(),LogInActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+
+
             }
         });
     }
@@ -158,5 +178,35 @@ public class StatisticFragment extends Fragment {
         int hour = (time / (1000 * 60 * 60));
         int min = ((time - (time / (1000 * 60 * 60))) / (1000 * 60)) % 60;
         return hour + " h :" + min + " m";
+    }
+    private String getErrorMessage(RetrofitError retrofitError) {
+        if (retrofitError.getResponse() != null) {
+            TypedInput body = retrofitError.getResponse().getBody();
+            byte[] bytes = new byte[0];
+            try {
+                bytes = streamToBytes(body.in());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String charset = MimeUtil.parseCharset(body.mimeType());
+            try {
+                errorMsg = new String(bytes, charset);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return errorMsg;
+    }
+
+    static byte[] streamToBytes(InputStream stream) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (stream != null) {
+            byte[] buf = new byte[1024];
+            int r;
+            while ((r = stream.read(buf)) != -1) {
+                baos.write(buf, 0, r);
+            }
+        }
+        return baos.toByteArray();
     }
 }
