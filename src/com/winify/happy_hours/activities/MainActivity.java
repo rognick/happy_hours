@@ -10,17 +10,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.controller.ServiceGateway;
+import com.winify.happy_hours.listeners.ServiceListener;
+import com.winify.happy_hours.models.Time;
 import com.winify.happy_hours.models.Token;
-import com.winify.happy_hours.service.TimerStartStop;
 import com.winify.happy_hours.service.TrackerService;
-import com.winify.happy_hours.service.WifiService;
 import com.winify.happy_hours.utils.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -35,13 +35,12 @@ import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    private Thread thread = new Thread();
-    private TimerStartStop timerStartStop = null;
     private ApplicationPreferences preferences;
     private Button button;
     private ProgressBar progressBar;
     private TrackerService service;
     private String errorMsg;
+    private TextView textView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,18 +66,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
             redirectLoginPage();
         }
-        stopService();
         button = (Button) findViewById(R.id.buttonHappyStart);
         button.setOnClickListener(this);
 
-        EditText editText = (EditText) findViewById(R.id.timerView);
-        timerStartStop = new TimerStartStop(editText, this, true);
+        textView = (TextView) findViewById(R.id.timerView);
 
         if (preferences.isTimerSet()) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText(getResources().getString(R.string.clicked_stop));
-            thread = new Thread(timerStartStop);
-            thread.start();
         }
         ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
         service = serviceGateway.getService();
@@ -102,10 +97,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_stop_bg);
                             button.setText(getResources().getString(R.string.clicked_stop));
-                            timerStartStop.setRunThread(true);
-                            thread = new Thread(timerStartStop);
-                            thread.start();
-                            preferences.setTimer(true);
                             progressBar.setVisibility(View.INVISIBLE);
                         }
 
@@ -113,25 +104,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void failure(RetrofitError retrofitError) {
                             if (retrofitError.getResponse() != null) {
                                 if (getErrorMessage(retrofitError).equals("TimerOn")) {
-                                    Token token = new Token(preferences.getKeyToken());
-                                    service.stopWorkTime(token, new Callback<Response>() {
 
-                                        @Override
-                                        public void success(Response response, Response response2) {
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                        }
-
-                                        @Override
-                                        public void failure(RetrofitError retrofitError) {
-                                            if (retrofitError != null) {
-                                                showErrorToast();
-                                            } else {
-                                                showErrorMessage(getResources().getString(R.string.server_bad_connection));
-                                            }
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                        }
-                                    });
-                                    showNotificationMessage();
+                                    getServerTime();
+                                    button.setBackgroundResource(R.drawable.button_stop_bg);
+                                    button.setText(getResources().getString(R.string.clicked_stop));
+                                    showSuccessMessage();
                                 } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
                                     preferences.removeToken();
                                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
@@ -158,8 +135,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_start_bg);
                             button.setText(getResources().getString(R.string.clicked_start));
-                            timerStartStop.setRunThread(false);
-                            preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
                         }
 
@@ -167,30 +142,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void failure(RetrofitError retrofitError) {
 
                             if (getErrorMessage(retrofitError).equals("TimerOff")) {
-                                Token token = new Token(preferences.getKeyToken());
-                                service.startWorkTime(token, new Callback<Response>() {
-
-                                    @Override
-                                    public void success(Response response, Response response2) {
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    @Override
-                                    public void failure(RetrofitError retrofitError) {
-                                        if (retrofitError != null) {
-                                            showErrorToast();
-                                        } else {
-                                            showErrorMessage(getResources().getString(R.string.server_bad_connection));
-                                        }
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                    }
-                                });
-                                showNotificationMessage();
+                                getServerTime();
+                                button.setBackgroundResource(R.drawable.button_start_bg);
+                                button.setText(getResources().getString(R.string.clicked_start));
+                                showSuccessMessage();
                             } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
                                 preferences.removeToken();
                                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
                                 redirectLoginPage();
-                                finish();
                             } else {
                                 showErrorToast();
                             }
@@ -231,11 +190,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         progressBar.setVisibility(View.GONE);
     }
 
-    private void showNotificationMessage() {
-        Toast.makeText(MainActivity.this, "Try to click again", Toast.LENGTH_SHORT).show();
-        progressBar.setVisibility(View.GONE);
-    }
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater Inflater = getMenuInflater();
         Inflater.inflate(R.menu.mymenu, menu);
@@ -245,6 +199,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.refresh_data: {
+                getServerTime();
+            }
+            break;
+
+
             case R.id.settings: {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
@@ -266,8 +226,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         if (button.getText().equals(getResources().getString(R.string.clicked_stop))) {
                             button.setBackgroundResource(R.drawable.button_start_bg);
                             button.setText(getResources().getString(R.string.clicked_start));
-                            timerStartStop.setRunThread(false);
-                            preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -302,27 +260,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
-    protected void onDestroy() {
-        timerStartStop.setRunThread(false);
-        startService();
-        super.onDestroy();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
     }
 
-    public void startService() {
-        if (preferences.isNotificationStatusSet()) {
-            startService(new Intent(getBaseContext(), WifiService.class));
-        }
-    }
+    private void getServerTime() {
+        Token token = new Token(preferences.getKeyToken());
+        service.getWorkedTime(token, new ServiceListener<Time>() {
+            @Override
+            public void success(Time time, Response response) {
+                textView.setText(convertTime(time.getDaily()));
+            }
 
-    public void stopService() {
-        if (preferences.isNotificationStatusSet()) {
-            stopService(new Intent(getBaseContext(), WifiService.class));
-        }
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                if (retrofitError.getResponse() != null) {
+                    if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
+                        preferences.removeToken();
+                        showErrorMessage("Your session has expired, please logout in login again");
+                    }
+                } else {
+                    showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                }
+            }
+        });
     }
 
     static byte[] streamToBytes(InputStream stream) throws IOException {
@@ -335,5 +296,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
         return baos.toByteArray();
+    }
+
+    private String convertTime(String time) {
+
+        int milliseconds = Integer.parseInt(time);
+        int hour = (milliseconds / (1000 * 60 * 60)) % 24;
+        int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
+        return hour + "h : " + min + "m";
     }
 }

@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Token;

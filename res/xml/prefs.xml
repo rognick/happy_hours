@@ -11,12 +11,4 @@
                 android:summary="Enter your port"
                 android:title="Port"/>
     </PreferenceCategory>
-
-    <PreferenceCategory
-                android:title="Settings">
-        <CheckBoxPreference
-                android:key="notification_status"
-                android:summary="On/Off"
-                android:title="Receive Notifications"/>
-       </PreferenceCategory>
 </PreferenceScreen>
