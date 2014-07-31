@@ -36,7 +36,7 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
                     android:background="@drawable/button_start_bg"
-                    android:text="@string/happy_start"
+                    android:text="@string/clicked_start"
                     android:textSize="40sp"
                     android:id="@+id/buttonHappyStart">
 

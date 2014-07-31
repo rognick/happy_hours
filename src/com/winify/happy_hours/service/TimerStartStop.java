@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
 import com.winify.happy_hours.ApplicationPreferences;
+import com.winify.happy_hours.R;
 import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
@@ -82,7 +83,7 @@ public class TimerStartStop extends Thread {
                         showErrorMessage("Your session has expired, please logout in login again");
                     }
                 } else {
-                    showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                    showErrorMessage(activity.getResources().getString(R.string.server_bad_connection));
                 }
             }
         });

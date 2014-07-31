@@ -54,18 +54,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (!Utils.isNetworkAvailable(this)) {
             AlertDialog ad = new AlertDialog.Builder(MainActivity.this).create();
             ad.setCancelable(false); // This blocks the 'BACK' button
-            ad.setMessage("Check you're Internet connection,it might be closed");
+            ad.setMessage(getResources().getString(R.string.server_bad_connection));
             ad.setButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    System.exit(0);
                 }
             });
             ad.show();
         }
         if (preferences.getKeyToken().equals("")) {
-            Toast.makeText(getApplicationContext(), Constants.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
             redirectLoginPage();
         }
         stopService();
@@ -77,7 +76,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if (preferences.isTimerSet()) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
-            button.setText(Constants.CLICKED_STOP);
+            button.setText(getResources().getString(R.string.clicked_stop));
             thread = new Thread(timerStartStop);
             thread.start();
         }
@@ -94,7 +93,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View click) {
         switch (click.getId()) {
             case R.id.buttonHappyStart:
-                if (button.getText().equals(Constants.CLICKED_START)) {
+                if (button.getText().equals(getResources().getString(R.string.clicked_start))) {
                     Token token = new Token(preferences.getKeyToken());
                     service.startWorkTime(token, new Callback<Response>() {
 
@@ -102,7 +101,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void success(Response response, Response response2) {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_stop_bg);
-                            button.setText(Constants.CLICKED_STOP);
+                            button.setText(getResources().getString(R.string.clicked_stop));
                             timerStartStop.setRunThread(true);
                             thread = new Thread(timerStartStop);
                             thread.start();
@@ -127,7 +126,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                             if (retrofitError != null) {
                                                 showErrorToast();
                                             } else {
-                                                showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                                                showErrorMessage(getResources().getString(R.string.server_bad_connection));
                                             }
                                             progressBar.setVisibility(View.INVISIBLE);
                                         }
@@ -135,14 +134,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     showNotificationMessage();
                                 } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
                                     preferences.removeToken();
-                                    Toast.makeText(getApplicationContext(), Constants.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
                                     redirectLoginPage();
                                     finish();
                                 } else {
                                     showErrorToast();
                                 }
                             } else {
-                                showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                                showErrorMessage(getResources().getString(R.string.server_bad_connection));
                             }
                             progressBar.setVisibility(View.INVISIBLE);
                         }
@@ -150,7 +149,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
 
-                } else if (button.getText().equals(Constants.CLICKED_STOP)) {
+                } else if (button.getText().equals(getResources().getString(R.string.clicked_stop))) {
                     Token token = new Token(preferences.getKeyToken());
                     service.stopWorkTime(token, new Callback<Response>() {
 
@@ -158,7 +157,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void success(Response response, Response response2) {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_start_bg);
-                            button.setText(Constants.CLICKED_START);
+                            button.setText(getResources().getString(R.string.clicked_start));
                             timerStartStop.setRunThread(false);
                             preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
@@ -181,7 +180,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                         if (retrofitError != null) {
                                             showErrorToast();
                                         } else {
-                                            showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                                            showErrorMessage(getResources().getString(R.string.server_bad_connection));
                                         }
                                         progressBar.setVisibility(View.INVISIBLE);
                                     }
@@ -189,7 +188,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 showNotificationMessage();
                             } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
                                 preferences.removeToken();
-                                Toast.makeText(getApplicationContext(), Constants.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
                                 redirectLoginPage();
                                 finish();
                             } else {
@@ -264,9 +263,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 service.logOut(token, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        if (button.getText().equals(Constants.CLICKED_STOP)) {
+                        if (button.getText().equals(getResources().getString(R.string.clicked_stop))) {
                             button.setBackgroundResource(R.drawable.button_start_bg);
-                            button.setText(Constants.CLICKED_START);
+                            button.setText(getResources().getString(R.string.clicked_start));
                             timerStartStop.setRunThread(false);
                             preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);

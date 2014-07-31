@@ -69,11 +69,11 @@ public class StatisticFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (range.equals(Constants.TODAY)) {
+        if (range.equals(getResources().getString(R.string.today))) {
             rangeNumber = 1;
-        } else if (range.equals(Constants.THIS_WEEK)) {
+        } else if (range.equals(getResources().getString(R.string.this_week))) {
             rangeNumber = 2;
-        } else if (range.equals(Constants.THIS_MONTH)) {
+        } else if (range.equals(getResources().getString(R.string.this_month))) {
             rangeNumber = 3;
         }
         getStatistics();
@@ -164,7 +164,7 @@ public class StatisticFragment extends Fragment {
                         startActivity(intent);
                         getActivity().finish();
                     }
-                } else showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                } else showErrorMessage(getResources().getString(R.string.server_bad_connection));
 
             }
         });

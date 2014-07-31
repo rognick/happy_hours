@@ -24,7 +24,7 @@ public class StatisticsActivity extends FragmentActivity implements
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(),StatisticsActivity.this);
 
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);

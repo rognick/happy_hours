@@ -42,7 +42,7 @@ public class LogInActivity extends Activity {
 
         if (!Utils.isNetworkAvailable(this)) {
 
-            showErrorMessage("Check you're Internet connection,it might be closed");
+            showErrorMessage(getResources().getString(R.string.server_bad_connection));
         }
 
         login = (EditText) findViewById(R.id.login);
@@ -81,7 +81,7 @@ public class LogInActivity extends Activity {
             @Override
             public void success(Token token, Response response) {
                 preferences.saveToken(token.getToken());
-                Toast.makeText(LogInActivity.this, Constants.WELCOME_MESSAGE, Toast.LENGTH_LONG).show();
+                Toast.makeText(LogInActivity.this, getResources().getString(R.string.welcome_message), Toast.LENGTH_LONG).show();
                 redirectHomePage();
                 finish();
             }
@@ -91,7 +91,7 @@ public class LogInActivity extends Activity {
                 if (retrofitError.getResponse() != null) {
                     showErrorMessage("Please check your Username and Password");
                 } else
-                    showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                    showErrorMessage(getResources().getString(R.string.server_bad_connection));
                 progressBar.setVisibility(View.GONE);
             }
         });
