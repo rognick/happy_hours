@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
+import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TimerStartStop;
@@ -64,7 +65,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             ad.show();
         }
         if (preferences.getKeyToken().equals("")) {
-            Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), Extra.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
             redirectLoginPage();
         }
         stopService();
@@ -76,7 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if (preferences.isTimerSet()) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
-            button.setText("Happy Stop");
+            button.setText(Extra.CLICKED_STOP);
             thread = new Thread(timerStartStop);
             thread.start();
         }
@@ -93,7 +94,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View click) {
         switch (click.getId()) {
             case R.id.buttonHappyStart:
-                if (button.getText().equals("Happy Start")) {
+                if (button.getText().equals(Extra.CLICKED_START)) {
                     Token token = new Token(preferences.getKeyToken());
                     service.startWorkTime(token, new Callback<Response>() {
 
@@ -101,7 +102,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void success(Response response, Response response2) {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_stop_bg);
-                            button.setText("Happy Stop");
+                            button.setText(Extra.CLICKED_STOP);
                             timerStartStop.setRunThread(true);
                             thread = new Thread(timerStartStop);
                             thread.start();
@@ -112,7 +113,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void failure(RetrofitError retrofitError) {
 
-                            if (getErrorMessage(retrofitError).equals("Timer is already running")) {
+                            if (getErrorMessage(retrofitError).equals("TimerOn")) {
                                 Token token = new Token(preferences.getKeyToken());
                                 service.stopWorkTime(token, new Callback<Response>() {
 
@@ -129,9 +130,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     }
                                 });
                                 showNotificationMessage();
-                            } else if (getErrorMessage(retrofitError).equals("Error: cant find user with such token")) {
+                            } else if (getErrorMessage(retrofitError).equals(Extra.TOKEN_EXPIRE)) {
                                 preferences.removeToken();
-                                Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), Extra.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
                                 redirectLoginPage();
                                 finish();
                             } else {
@@ -143,7 +144,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
 
-                } else if (button.getText().equals("Happy Stop")) {
+                } else if (button.getText().equals(Extra.CLICKED_STOP)) {
                     Token token = new Token(preferences.getKeyToken());
                     service.stopWorkTime(token, new Callback<Response>() {
 
@@ -151,7 +152,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void success(Response response, Response response2) {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_start_bg);
-                            button.setText("Happy Start");
+                            button.setText(Extra.CLICKED_START);
                             timerStartStop.setRunThread(false);
                             preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
@@ -159,7 +160,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
-                            if (getErrorMessage(retrofitError).equals("Timer is not running")) {
+                            if (getErrorMessage(retrofitError).equals("TimerOff")) {
                                 Token token = new Token(preferences.getKeyToken());
                                 service.startWorkTime(token, new Callback<Response>() {
 
@@ -176,9 +177,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     }
                                 });
                                 showNotificationMessage();
-                            } else if (getErrorMessage(retrofitError).equals("Error: cant find user with such token")) {
+                            } else if (getErrorMessage(retrofitError).equals(Extra.TOKEN_EXPIRE)) {
                                 preferences.removeToken();
-                                Toast.makeText(getApplicationContext(), "Token expired", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), Extra.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
                                 redirectLoginPage();
                                 finish();
                             } else {
@@ -213,16 +214,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void showSuccessMessage() {
-        Toast.makeText(MainActivity.this, "Server OK", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Server connection succeed", Toast.LENGTH_SHORT).show();
     }
 
     private void showErrorMessage() {
-        Toast.makeText(MainActivity.this, "Server Fail", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Server connection failed", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
     }
 
     private void showNotificationMessage() {
-        Toast.makeText(MainActivity.this, "Try again to click", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Try to click again", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
     }
 
@@ -253,9 +254,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 service.logOut(token, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        if (button.getText().equals("Happy Stop")) {
+                        if (button.getText().equals(Extra.CLICKED_STOP)) {
                             button.setBackgroundResource(R.drawable.button_start_bg);
-                            button.setText("Happy Start");
+                            button.setText(Extra.CLICKED_START);
                             timerStartStop.setRunThread(false);
                             preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);

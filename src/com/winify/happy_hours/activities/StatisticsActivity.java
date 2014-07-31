@@ -34,9 +34,6 @@ public class StatisticsActivity extends FragmentActivity implements
                     .setTabListener(this));
         }
 
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -62,6 +59,7 @@ public class StatisticsActivity extends FragmentActivity implements
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
         viewPager.setCurrentItem(tab.getPosition());
     }
+
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
     }

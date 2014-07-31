@@ -8,62 +8,56 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity"
                 android:background="@drawable/clock">
-
-        <LinearLayout
-                android:orientation="vertical"
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            >
+        <EditText
+                android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:background="@drawable/edittext_bg"
                 android:padding="10dp"
-                >
+                android:hint="@string/sign_in"
+                android:textColorHint="#cccccc"
+                android:drawableLeft="@drawable/user"
+                android:shadowColor="#808080"
+                android:layout_marginBottom="15dp"
+                android:textColor="#000000"
+                android:textCursorDrawable="@null"
+                />
+        <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:hint="@string/password"
+                android:textColorHint="#cccccc"
+                android:password="true"
+                android:drawableLeft="@drawable/password"
+                android:shadowColor="#808080"
+                android:layout_marginBottom="15dp"
+                android:textColor="#000000"
+                android:textCursorDrawable="@null"
 
-
-            <EditText
-                    android:id="@+id/login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_bg"
-                    android:padding="10dp"
-                    android:hint="Login"
-                    android:textColorHint="#cccccc"
-                    android:drawableLeft="@drawable/user"
-                    android:shadowColor="#808080"
-                    android:layout_marginBottom="15dp"
-                    android:textColor="#000000"
-                    android:textCursorDrawable="@null"
-                    />
-
-            <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_bg"
-                    android:layout_marginTop="-2dp"
-                    android:padding="10dp"
-                    android:hint="Password"
-                    android:textColorHint="#cccccc"
-                    android:password="true"
-                    android:drawableLeft="@drawable/password"
-                    android:shadowColor="#808080"
-                    android:layout_marginBottom="15dp"
-                    android:textColor="#000000"
-                    android:textCursorDrawable="@null"
-
-                    />
-            <Button
-                    android:id="@+id/logingBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_margin="4dp"
-                    android:text="Sign In"
-                    style="@style/DefaultButtonText"
-                    android:background="@drawable/button_default_bg"
-                    android:layout_marginBottom="15dp"
-                    />
-
-
-        </LinearLayout>
+                />
+        <Button
+                android:id="@+id/logingBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_margin="4dp"
+                android:text="@string/sign_in"
+                style="@style/DefaultButtonText"
+                android:background="@drawable/button_default_bg"
+                android:layout_marginBottom="15dp"
+                />
+    </LinearLayout>
     <ProgressBar
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -73,7 +67,5 @@
             android:layout_centerHorizontal="true"
             android:visibility="invisible"
             android:id="@+id/progressBar"/>
-
-
 </RelativeLayout>
 

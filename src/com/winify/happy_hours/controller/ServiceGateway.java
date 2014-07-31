@@ -45,6 +45,4 @@ public class ServiceGateway {
     public TrackerService getService() {
         return service;
     }
-
-
 }

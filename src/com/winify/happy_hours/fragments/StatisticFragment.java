@@ -8,11 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-import com.winify.happy_hours.R;
 import com.winify.happy_hours.ApplicationPreferences;
+import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.LogInActivity;
-import com.winify.happy_hours.activities.MainActivity;
+import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;
@@ -54,6 +53,7 @@ public class StatisticFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setRetainInstance(true);
         ServiceGateway serviceGateway = new ServiceGateway(this.getActivity());
         service = serviceGateway.getService();
         View rootView = inflater.inflate(R.layout.fragment_daily, container, false);
@@ -67,11 +67,11 @@ public class StatisticFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (range.equals("today")) {
+        if (range.equals(Extra.TODAY)) {
             rangeNumber = 1;
-        } else if (range.equals("this week")) {
+        } else if (range.equals(Extra.THIS_WEEK)) {
             rangeNumber = 2;
-        } else if (range.equals("this month")) {
+        } else if (range.equals(Extra.THIS_MONTH)) {
             rangeNumber = 3;
         }
         getStatistics();
@@ -154,14 +154,11 @@ public class StatisticFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if (getErrorMessage(retrofitError).equals("Error: cant find user with such token")) {
-
-                    Intent intent = new Intent(getActivity(),LogInActivity.class);
+                if (getErrorMessage(retrofitError).equals(Extra.TOKEN_EXPIRE)) {
+                    Intent intent = new Intent(getActivity(), LogInActivity.class);
                     startActivity(intent);
                     getActivity().finish();
                 }
-
-
             }
         });
     }
@@ -177,8 +174,9 @@ public class StatisticFragment extends Fragment {
     private String convertTime(int time) {
         int hour = (time / (1000 * 60 * 60));
         int min = ((time - (time / (1000 * 60 * 60))) / (1000 * 60)) % 60;
-        return hour + " h :" + min + " m";
+        return hour + "h : " + min + "m";
     }
+
     private String getErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
             TypedInput body = retrofitError.getResponse().getBody();

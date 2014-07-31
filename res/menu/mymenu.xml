@@ -12,6 +12,5 @@
 
     <item android:id="@+id/logout"
           android:showAsAction="never"
-          android:title="@string/logout"
-          android:icon="@drawable/ic_action_logout"/>
+          android:title="@string/logout"/>
 </menu>

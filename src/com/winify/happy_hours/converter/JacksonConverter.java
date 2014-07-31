@@ -33,11 +33,7 @@ import java.lang.reflect.Type;
 
 import static org.apache.http.protocol.HTTP.UTF_8;
 
-/**
- * A {@link retrofit.converter.Converter} which uses Jackson for reading and writing entities.
- *
- * @author Kai Waldron (kaiwaldron@gmail.com)
- */
+
 public class JacksonConverter implements Converter {
     private static final String MIME_TYPE = "application/json; charset=UTF-8";
     private final ObjectMapper objectMapper;

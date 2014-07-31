@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
+import com.winify.happy_hours.constants.Extra;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Token;
@@ -96,14 +97,12 @@ public class LogInActivity extends Activity {
             @Override
             public void failure(RetrofitError retrofitError) {
 
-                if (getErrorMessage(retrofitError).equals("Incorrect username or password")) {
+                if (getErrorMessage(retrofitError).equals(Extra.BAD_CREDENTIALS_MESSAGE)) {
                     showErrorMessage("Please check your Username and Password");
                 } else {
                     showErrorMessage("Please check your connection with Server");
                 }
                 progressBar.setVisibility(View.GONE);
-
-
             }
         });
     }
