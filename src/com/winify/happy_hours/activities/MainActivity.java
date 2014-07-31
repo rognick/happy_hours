@@ -49,6 +49,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         preferences = new ApplicationPreferences(this);
+
+        if (preferences.getKeyToken().equals("")) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
+            redirectLoginPage();
+        }
+        button = (Button) findViewById(R.id.buttonHappyStart);
+        button.setOnClickListener(this);
+
+        textView = (TextView) findViewById(R.id.timerView);
+        ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
+        service = serviceGateway.getService();
+        if (preferences.isTimerSet()) {
+            button.setBackgroundResource(R.drawable.button_stop_bg);
+            button.setText(getResources().getString(R.string.clicked_stop));
+        }
         if (!Utils.isNetworkAvailable(this)) {
             AlertDialog ad = new AlertDialog.Builder(MainActivity.this).create();
             ad.setCancelable(false); // This blocks the 'BACK' button
@@ -60,23 +75,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             });
             ad.show();
-        }
-        if (preferences.getKeyToken().equals("")) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
-            redirectLoginPage();
-        }
-        button = (Button) findViewById(R.id.buttonHappyStart);
-        button.setOnClickListener(this);
-
-        textView = (TextView) findViewById(R.id.timerView);
-
-        if (preferences.isTimerSet()) {
-            button.setBackgroundResource(R.drawable.button_stop_bg);
-            button.setText(getResources().getString(R.string.clicked_stop));
-        }
-        ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
-        service = serviceGateway.getService();
-        getWorkedTime();
+        }else{  getWorkedTime();}
     }
 
     private void redirectLoginPage() {
@@ -106,7 +105,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void failure(RetrofitError retrofitError) {
                             if (retrofitError.getResponse() != null) {
                                 if (getErrorMessage(retrofitError).equals("TimerOn")) {
-
                                     button.setBackgroundResource(R.drawable.button_stop_bg);
                                     button.setText(getResources().getString(R.string.clicked_stop));
                                     preferences.setTimer(true);
@@ -143,7 +141,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
-
                             if (getErrorMessage(retrofitError).equals("TimerOff")) {
                                 button.setBackgroundResource(R.drawable.button_start_bg);
                                 button.setText(getResources().getString(R.string.clicked_start));
@@ -206,8 +203,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 getWorkedTime();
             }
             break;
-
-
             case R.id.settings: {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
@@ -240,7 +235,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
-
                 preferences.removeToken();
                 Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                 startActivity(intent);
@@ -302,7 +296,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private String convertTime(String time) {
-
         int milliseconds = Integer.parseInt(time);
         int hour = (milliseconds / (1000 * 60 * 60)) % 24;
         int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
