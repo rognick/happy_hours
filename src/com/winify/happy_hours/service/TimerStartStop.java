@@ -5,7 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
 import com.winify.happy_hours.ApplicationPreferences;
-import com.winify.happy_hours.constants.Extra;
+import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;
@@ -76,12 +76,14 @@ public class TimerStartStop extends Thread {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
-                if (getErrorMessage(retrofitError).equals(Extra.TOKEN_EXPIRE)) {
-                    preferences.removeToken();
-                    showErrorMessage("Your session has expired, please logout in login again");
+                if (retrofitError.getResponse() != null) {
+                    if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
+                        preferences.removeToken();
+                        showErrorMessage("Your session has expired, please logout in login again");
+                    }
+                } else {
+                    showErrorMessage(Constants.SERVER_BAD_CONNECTION);
                 }
-
             }
         });
     }
@@ -124,7 +126,6 @@ public class TimerStartStop extends Thread {
         }
         return baos.toByteArray();
     }
-
     private void showErrorMessage(String error) {
         AlertDialog ad = new AlertDialog.Builder(activity).create();
         ad.setCancelable(false); // This blocks the 'BACK' button

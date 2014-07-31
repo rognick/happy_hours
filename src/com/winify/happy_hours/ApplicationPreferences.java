@@ -3,7 +3,7 @@ package com.winify.happy_hours;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.winify.happy_hours.constants.Extra;
+import com.winify.happy_hours.constants.Constants;
 
 public class ApplicationPreferences {
 
@@ -16,50 +16,50 @@ public class ApplicationPreferences {
     }
 
     public void saveToken(String token) {
-        editor.putString(Extra.KEY_TOKEN, token).commit();
+        editor.putString(Constants.KEY_TOKEN, token).commit();
         editor.commit();
     }
 
     public void saveWifiList(String wifiList) {
-        editor.putString(Extra.KEY_WIFI_LIST_PREFERRED, wifiList);
+        editor.putString(Constants.KEY_WIFI_LIST_PREFERRED, wifiList);
         editor.commit();
     }
 
     public void setTimer(boolean isTimerSet) {
-        editor.putBoolean(Extra.KEY_TIMER, isTimerSet);
+        editor.putBoolean(Constants.KEY_TIMER, isTimerSet);
         editor.commit();
     }
 
     public String getKeyToken() {
-        return settings.getString(Extra.KEY_TOKEN, "");
+        return settings.getString(Constants.KEY_TOKEN, "");
     }
 
     public String getWifiListPreferred() {
-        return settings.getString(Extra.KEY_WIFI_LIST_PREFERRED, "");
+        return settings.getString(Constants.KEY_WIFI_LIST_PREFERRED, "");
     }
 
     public String getIp() {
-        return settings.getString(Extra.KEY_IP, "");
+        return settings.getString(Constants.KEY_IP, "");
     }
 
     public String getPort() {
-        return settings.getString(Extra.KEY_PORT, "");
+        return settings.getString(Constants.KEY_PORT, "");
     }
 
     public boolean isNotificationStatusSet() {
-        return settings.getBoolean(Extra.Notification_Status, false);
+        return settings.getBoolean(Constants.Notification_Status, false);
     }
 
     public boolean isTimerSet() {
-        return settings.getBoolean(Extra.KEY_TIMER, false);
+        return settings.getBoolean(Constants.KEY_TIMER, false);
     }
 
     public void removeToken() {
-        settings.edit().remove(Extra.KEY_TOKEN).commit();
+        settings.edit().remove(Constants.KEY_TOKEN).commit();
     }
 
     public void removeWifiList() {
-        settings.edit().remove(Extra.KEY_WIFI_LIST_PREFERRED).commit();
+        settings.edit().remove(Constants.KEY_WIFI_LIST_PREFERRED).commit();
     }
 }
 

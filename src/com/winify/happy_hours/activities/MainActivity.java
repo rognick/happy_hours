@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.constants.Extra;
+import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TimerStartStop;
@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             ad.show();
         }
         if (preferences.getKeyToken().equals("")) {
-            Toast.makeText(getApplicationContext(), Extra.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), Constants.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
             redirectLoginPage();
         }
         stopService();
@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if (preferences.isTimerSet()) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
-            button.setText(Extra.CLICKED_STOP);
+            button.setText(Constants.CLICKED_STOP);
             thread = new Thread(timerStartStop);
             thread.start();
         }
@@ -94,7 +94,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View click) {
         switch (click.getId()) {
             case R.id.buttonHappyStart:
-                if (button.getText().equals(Extra.CLICKED_START)) {
+                if (button.getText().equals(Constants.CLICKED_START)) {
                     Token token = new Token(preferences.getKeyToken());
                     service.startWorkTime(token, new Callback<Response>() {
 
@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void success(Response response, Response response2) {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_stop_bg);
-                            button.setText(Extra.CLICKED_STOP);
+                            button.setText(Constants.CLICKED_STOP);
                             timerStartStop.setRunThread(true);
                             thread = new Thread(timerStartStop);
                             thread.start();
@@ -112,31 +112,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
+                            if (retrofitError.getResponse() != null) {
+                                if (getErrorMessage(retrofitError).equals("TimerOn")) {
+                                    Token token = new Token(preferences.getKeyToken());
+                                    service.stopWorkTime(token, new Callback<Response>() {
 
-                            if (getErrorMessage(retrofitError).equals("TimerOn")) {
-                                Token token = new Token(preferences.getKeyToken());
-                                service.stopWorkTime(token, new Callback<Response>() {
+                                        @Override
+                                        public void success(Response response, Response response2) {
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                        }
 
-                                    @Override
-                                    public void success(Response response, Response response2) {
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    @Override
-                                    public void failure(RetrofitError retrofitError) {
-                                        showErrorMessage();
-
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                    }
-                                });
-                                showNotificationMessage();
-                            } else if (getErrorMessage(retrofitError).equals(Extra.TOKEN_EXPIRE)) {
-                                preferences.removeToken();
-                                Toast.makeText(getApplicationContext(), Extra.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
-                                redirectLoginPage();
-                                finish();
+                                        @Override
+                                        public void failure(RetrofitError retrofitError) {
+                                            if (retrofitError != null) {
+                                                showErrorToast();
+                                            } else {
+                                                showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                                            }
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
+                                    showNotificationMessage();
+                                } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
+                                    preferences.removeToken();
+                                    Toast.makeText(getApplicationContext(), Constants.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
+                                    redirectLoginPage();
+                                    finish();
+                                } else {
+                                    showErrorToast();
+                                }
                             } else {
-                                showErrorMessage();
+                                showErrorMessage(Constants.SERVER_BAD_CONNECTION);
                             }
                             progressBar.setVisibility(View.INVISIBLE);
                         }
@@ -144,7 +150,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
 
-                } else if (button.getText().equals(Extra.CLICKED_STOP)) {
+                } else if (button.getText().equals(Constants.CLICKED_STOP)) {
                     Token token = new Token(preferences.getKeyToken());
                     service.stopWorkTime(token, new Callback<Response>() {
 
@@ -152,7 +158,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void success(Response response, Response response2) {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_start_bg);
-                            button.setText(Extra.CLICKED_START);
+                            button.setText(Constants.CLICKED_START);
                             timerStartStop.setRunThread(false);
                             preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
@@ -160,6 +166,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
+
                             if (getErrorMessage(retrofitError).equals("TimerOff")) {
                                 Token token = new Token(preferences.getKeyToken());
                                 service.startWorkTime(token, new Callback<Response>() {
@@ -171,19 +178,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                     @Override
                                     public void failure(RetrofitError retrofitError) {
-                                        showErrorMessage();
-
+                                        if (retrofitError != null) {
+                                            showErrorToast();
+                                        } else {
+                                            showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+                                        }
                                         progressBar.setVisibility(View.INVISIBLE);
                                     }
                                 });
                                 showNotificationMessage();
-                            } else if (getErrorMessage(retrofitError).equals(Extra.TOKEN_EXPIRE)) {
+                            } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
                                 preferences.removeToken();
-                                Toast.makeText(getApplicationContext(), Extra.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), Constants.BAD_TOKEN_MESSAGE, Toast.LENGTH_LONG).show();
                                 redirectLoginPage();
                                 finish();
                             } else {
-                                showErrorMessage();
+                                showErrorToast();
                             }
                             progressBar.setVisibility(View.INVISIBLE);
                         }
@@ -217,7 +227,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Toast.makeText(MainActivity.this, "Server connection succeed", Toast.LENGTH_SHORT).show();
     }
 
-    private void showErrorMessage() {
+    private void showErrorToast() {
         Toast.makeText(MainActivity.this, "Server connection failed", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
     }
@@ -254,9 +264,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 service.logOut(token, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        if (button.getText().equals(Extra.CLICKED_STOP)) {
+                        if (button.getText().equals(Constants.CLICKED_STOP)) {
                             button.setBackgroundResource(R.drawable.button_start_bg);
-                            button.setText(Extra.CLICKED_START);
+                            button.setText(Constants.CLICKED_START);
                             timerStartStop.setRunThread(false);
                             preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
@@ -265,6 +275,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     @Override
                     public void failure(RetrofitError retrofitError) {
+
+
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -275,6 +287,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showErrorMessage(String error) {
+        AlertDialog ad = new AlertDialog.Builder(this).create();
+        ad.setCancelable(false); // This blocks the 'BACK' button
+        ad.setMessage(error);
+        ad.setButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ad.show();
     }
 
     @Override

@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
-import com.winify.happy_hours.constants.Extra;
+import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Token;
@@ -24,13 +24,6 @@ import com.winify.happy_hours.service.TrackerService;
 import com.winify.happy_hours.utils.Utils;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.mime.MimeUtil;
-import retrofit.mime.TypedInput;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 public class LogInActivity extends Activity {
     private EditText login;
@@ -38,7 +31,6 @@ public class LogInActivity extends Activity {
     private ApplicationPreferences preferences;
     private ProgressBar progressBar;
     private TrackerService service;
-    private String errorMsg;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,19 +81,17 @@ public class LogInActivity extends Activity {
             @Override
             public void success(Token token, Response response) {
                 preferences.saveToken(token.getToken());
-                Toast.makeText(LogInActivity.this, preferences.getKeyToken(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LogInActivity.this, Constants.WELCOME_MESSAGE, Toast.LENGTH_LONG).show();
                 redirectHomePage();
                 finish();
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
-                if (getErrorMessage(retrofitError).equals(Extra.BAD_CREDENTIALS_MESSAGE)) {
+                if (retrofitError.getResponse() != null) {
                     showErrorMessage("Please check your Username and Password");
-                } else {
-                    showErrorMessage("Please check your connection with Server");
-                }
+                } else
+                    showErrorMessage(Constants.SERVER_BAD_CONNECTION);
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -136,37 +126,6 @@ public class LogInActivity extends Activity {
             break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private String getErrorMessage(RetrofitError retrofitError) {
-        if (retrofitError.getResponse() != null) {
-            TypedInput body = retrofitError.getResponse().getBody();
-            byte[] bytes = new byte[0];
-            try {
-                bytes = streamToBytes(body.in());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String charset = MimeUtil.parseCharset(body.mimeType());
-            try {
-                errorMsg = new String(bytes, charset);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        return errorMsg;
-    }
-
-    static byte[] streamToBytes(InputStream stream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (stream != null) {
-            byte[] buf = new byte[1024];
-            int r;
-            while ((r = stream.read(buf)) != -1) {
-                baos.write(buf, 0, r);
-            }
-        }
-        return baos.toByteArray();
     }
 }
 

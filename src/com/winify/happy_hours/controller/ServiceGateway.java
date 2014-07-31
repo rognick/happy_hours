@@ -19,7 +19,7 @@ package com.winify.happy_hours.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.winify.happy_hours.constants.Extra;
+import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.converter.JacksonConverter;
 import com.winify.happy_hours.service.TrackerService;
 import retrofit.Endpoint;
@@ -34,7 +34,7 @@ public class ServiceGateway {
         this.context = context;
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
-        Endpoint endpoint = Endpoints.newFixedEndpoint("http://" + prefs.getString(Extra.KEY_IP, "") + ":" + prefs.getString(Extra.KEY_PORT, ""));
+        Endpoint endpoint = Endpoints.newFixedEndpoint("http://" + prefs.getString(Constants.KEY_IP, "") + ":" + prefs.getString(Constants.KEY_PORT, ""));
         RestAdapter.Builder builder = new RestAdapter.Builder();
         builder.setEndpoint(endpoint);
         builder.setConverter(new JacksonConverter());

@@ -1,5 +1,7 @@
 package com.winify.happy_hours.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,7 +13,7 @@ import android.widget.LinearLayout;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.LogInActivity;
-import com.winify.happy_hours.constants.Extra;
+import com.winify.happy_hours.constants.Constants;
 import com.winify.happy_hours.controller.ServiceGateway;
 import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;
@@ -67,11 +69,11 @@ public class StatisticFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (range.equals(Extra.TODAY)) {
+        if (range.equals(Constants.TODAY)) {
             rangeNumber = 1;
-        } else if (range.equals(Extra.THIS_WEEK)) {
+        } else if (range.equals(Constants.THIS_WEEK)) {
             rangeNumber = 2;
-        } else if (range.equals(Extra.THIS_MONTH)) {
+        } else if (range.equals(Constants.THIS_MONTH)) {
             rangeNumber = 3;
         }
         getStatistics();
@@ -154,11 +156,16 @@ public class StatisticFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                if (getErrorMessage(retrofitError).equals(Extra.TOKEN_EXPIRE)) {
-                    Intent intent = new Intent(getActivity(), LogInActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
+
+                if (retrofitError.getResponse() != null) {
+
+                    if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
+                        Intent intent = new Intent(getActivity(), LogInActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                } else showErrorMessage(Constants.SERVER_BAD_CONNECTION);
+
             }
         });
     }
@@ -169,6 +176,19 @@ public class StatisticFragment extends Fragment {
         } else {
             drawTimeChart();
         }
+    }
+
+    private void showErrorMessage(String error) {
+        AlertDialog ad = new AlertDialog.Builder(getActivity()).create();
+        ad.setCancelable(false); // This blocks the 'BACK' button
+        ad.setMessage(error);
+        ad.setButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ad.show();
     }
 
     private String convertTime(int time) {

@@ -17,7 +17,7 @@ import android.provider.Settings;
 import com.winify.happy_hours.ApplicationPreferences;
 import com.winify.happy_hours.R;
 import com.winify.happy_hours.activities.MainActivity;
-import com.winify.happy_hours.constants.Extra;
+import com.winify.happy_hours.constants.Constants;
 
 import java.util.Calendar;
 import java.util.List;
@@ -74,8 +74,8 @@ public class WifiService extends Service {
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
             WifiInfo wifiInfo = mainWifiObj.getConnectionInfo();
 
-            if (wifiInfo.getSSID().toUpperCase().equals("\"" + Extra.MyNetwork + "\"") ||
-                    wifiInfo.getSSID().toUpperCase().equals(Extra.MyNetwork)) {
+            if (wifiInfo.getSSID().toUpperCase().equals("\"" + Constants.MyNetwork + "\"") ||
+                    wifiInfo.getSSID().toUpperCase().equals(Constants.MyNetwork)) {
 
                 if (preferences.isTimerSet()) {
                     notification("Status", "Timer ON", true);
@@ -85,7 +85,7 @@ public class WifiService extends Service {
                 }
             } else {
                 for (int i = 0; i < wifiScanList.size(); i++) {
-                    if (wifiScanList.get(i).SSID.toUpperCase().equals(Extra.MyNetwork)) {
+                    if (wifiScanList.get(i).SSID.toUpperCase().equals(Constants.MyNetwork)) {
                         notification("Network", wifiScanList.get(i).SSID, false);
                     }
                 }
