@@ -49,7 +49,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         preferences = new ApplicationPreferences(this);
-
         if (!Utils.isNetworkAvailable(this)) {
             AlertDialog ad = new AlertDialog.Builder(MainActivity.this).create();
             ad.setCancelable(false); // This blocks the 'BACK' button
@@ -77,6 +76,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
         service = serviceGateway.getService();
+        getWorkedTime();
     }
 
     private void redirectLoginPage() {
@@ -97,7 +97,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_stop_bg);
                             button.setText(getResources().getString(R.string.clicked_stop));
+                            preferences.setTimer(true);
                             progressBar.setVisibility(View.INVISIBLE);
+
                         }
 
                         @Override
@@ -105,9 +107,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             if (retrofitError.getResponse() != null) {
                                 if (getErrorMessage(retrofitError).equals("TimerOn")) {
 
-                                    getServerTime();
                                     button.setBackgroundResource(R.drawable.button_stop_bg);
                                     button.setText(getResources().getString(R.string.clicked_stop));
+                                    preferences.setTimer(true);
                                     showSuccessMessage();
                                 } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
                                     preferences.removeToken();
@@ -135,6 +137,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             showSuccessMessage();
                             button.setBackgroundResource(R.drawable.button_start_bg);
                             button.setText(getResources().getString(R.string.clicked_start));
+                            preferences.setTimer(false);
                             progressBar.setVisibility(View.INVISIBLE);
                         }
 
@@ -142,9 +145,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         public void failure(RetrofitError retrofitError) {
 
                             if (getErrorMessage(retrofitError).equals("TimerOff")) {
-                                getServerTime();
                                 button.setBackgroundResource(R.drawable.button_start_bg);
                                 button.setText(getResources().getString(R.string.clicked_start));
+                                preferences.setTimer(false);
                                 showSuccessMessage();
                             } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
                                 preferences.removeToken();
@@ -200,7 +203,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_data: {
-                getServerTime();
+                getWorkedTime();
             }
             break;
 
@@ -264,7 +267,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onStop();
     }
 
-    private void getServerTime() {
+    private void getWorkedTime() {
         Token token = new Token(preferences.getKeyToken());
         service.getWorkedTime(token, new ServiceListener<Time>() {
             @Override

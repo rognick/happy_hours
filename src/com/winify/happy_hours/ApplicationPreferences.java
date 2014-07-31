@@ -20,10 +20,6 @@ public class ApplicationPreferences {
         editor.commit();
     }
 
-    public void saveWifiList(String wifiList) {
-        editor.putString(Constants.KEY_WIFI_LIST_PREFERRED, wifiList);
-        editor.commit();
-    }
 
     public void setTimer(boolean isTimerSet) {
         editor.putBoolean(Constants.KEY_TIMER, isTimerSet);
@@ -34,9 +30,6 @@ public class ApplicationPreferences {
         return settings.getString(Constants.KEY_TOKEN, "");
     }
 
-    public String getWifiListPreferred() {
-        return settings.getString(Constants.KEY_WIFI_LIST_PREFERRED, "");
-    }
 
     public String getIp() {
         return settings.getString(Constants.KEY_IP, "");
@@ -46,9 +39,6 @@ public class ApplicationPreferences {
         return settings.getString(Constants.KEY_PORT, "");
     }
 
-    public boolean isNotificationStatusSet() {
-        return settings.getBoolean(Constants.Notification_Status, false);
-    }
 
     public boolean isTimerSet() {
         return settings.getBoolean(Constants.KEY_TIMER, false);
@@ -58,9 +48,6 @@ public class ApplicationPreferences {
         settings.edit().remove(Constants.KEY_TOKEN).commit();
     }
 
-    public void removeWifiList() {
-        settings.edit().remove(Constants.KEY_WIFI_LIST_PREFERRED).commit();
-    }
 }
 
 
