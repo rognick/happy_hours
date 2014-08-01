@@ -25,13 +25,6 @@ import com.winify.happy_hours.utils.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.mime.MimeUtil;
-import retrofit.mime.TypedInput;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -49,26 +42,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         preferences = new ApplicationPreferences(this);
-
-        if (preferences.getKeyToken().equals("")) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
-            redirectLoginPage();
-        }
         button = (Button) findViewById(R.id.buttonHappyStart);
         button.setOnClickListener(this);
-
         textView = (TextView) findViewById(R.id.timerView);
         ServiceGateway serviceGateway = new ServiceGateway(MainActivity.this);
         service = serviceGateway.getService();
+        if (preferences.getKeyToken().equals("")) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
+            redirectLoginPage();
+        } else {
+            getWorkedTime();
+        }
+
         if (preferences.isTimerSet()) {
             button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText(getResources().getString(R.string.clicked_stop));
         }
-        if (!Utils.isNetworkAvailable(this)) {
-            showErrorMessage(getResources().getString(R.string.bad_network_connection));
-        } else {
-            getWorkedTime();
-        }
+
     }
 
     private void redirectLoginPage() {
@@ -81,112 +71,97 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch (click.getId()) {
             case R.id.buttonHappyStart:
                 if (button.getText().equals(getResources().getString(R.string.clicked_start))) {
-                    Token token = new Token(preferences.getKeyToken());
-                    service.startWorkTime(token, new Callback<Response>() {
-
-                        @Override
-                        public void success(Response response, Response response2) {
-                            showSuccessMessage();
-                            button.setBackgroundResource(R.drawable.button_stop_bg);
-                            button.setText(getResources().getString(R.string.clicked_stop));
-                            preferences.setTimer(true);
-                            progressBar.setVisibility(View.INVISIBLE);
-
-                        }
-
-                        @Override
-                        public void failure(RetrofitError retrofitError) {
-                            if (retrofitError.getResponse() != null) {
-                                if (getErrorMessage(retrofitError).equals("TimerOn")) {
-                                    button.setBackgroundResource(R.drawable.button_stop_bg);
-                                    button.setText(getResources().getString(R.string.clicked_stop));
-                                    preferences.setTimer(true);
-                                    showSuccessMessage();
-                                } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
-                                    preferences.removeToken();
-                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
-                                    redirectLoginPage();
-                                    finish();
-                                } else {
-                                    showErrorToast();
-                                }
-                            } else {
-                                if (!Utils.isNetworkAvailable(MainActivity.this)) {
-                                    showErrorMessage(getResources().getString(R.string.bad_network_connection));
-                                } else {
-
-                                    showErrorMessage(getResources().getString(R.string.server_bad_connection));
-                                }
-                            }
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                    progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                    progressBar.setVisibility(View.VISIBLE);
-
+                    HappyStartWork();
                 } else if (button.getText().equals(getResources().getString(R.string.clicked_stop))) {
-                    Token token = new Token(preferences.getKeyToken());
-                    service.stopWorkTime(token, new Callback<Response>() {
-
-                        @Override
-                        public void success(Response response, Response response2) {
-                            showSuccessMessage();
-                            button.setBackgroundResource(R.drawable.button_start_bg);
-                            button.setText(getResources().getString(R.string.clicked_start));
-                            preferences.setTimer(false);
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void failure(RetrofitError retrofitError) {
-                            if (retrofitError.getResponse() != null) {
-                                if (getErrorMessage(retrofitError).equals("TimerOff")) {
-                                    button.setBackgroundResource(R.drawable.button_start_bg);
-                                    button.setText(getResources().getString(R.string.clicked_start));
-                                    preferences.setTimer(false);
-                                    showSuccessMessage();
-                                } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
-                                    preferences.removeToken();
-                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
-                                    redirectLoginPage();
-                                } else {
-                                    showErrorToast();
-                                }
-                            } else {
-                                if (!Utils.isNetworkAvailable(MainActivity.this)) {
-                                    showErrorMessage(getResources().getString(R.string.bad_network_connection));
-                                } else {
-
-                                    showErrorMessage(getResources().getString(R.string.server_bad_connection));
-                                }
-                            }
-
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                    progressBar.setVisibility(View.VISIBLE);
+                    HappyStopWork();
                 }
                 break;
         }
     }
 
-    private String getErrorMessage(RetrofitError retrofitError) {
-        if (retrofitError.getResponse() != null) {
-            TypedInput body = retrofitError.getResponse().getBody();
-            byte[] bytes = new byte[0];
-            try {
-                bytes = streamToBytes(body.in());
-            } catch (IOException e) {
-                e.printStackTrace();
+    private void HappyStopWork() {
+        Token token = new Token(preferences.getKeyToken());
+        service.stopWorkTime(token, new Callback<Response>() {
+
+            @Override
+            public void success(Response response, Response response2) {
+                showSuccessMessage();
+                button.setBackgroundResource(R.drawable.button_start_bg);
+                button.setText(getResources().getString(R.string.clicked_start));
+                preferences.setTimer(false);
+                progressBar.setVisibility(View.INVISIBLE);
             }
-            String charset = MimeUtil.parseCharset(body.mimeType());
-            try {
-                errorMsg = new String(bytes, charset);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                if (retrofitError.getResponse() != null) {
+                    if (Utils.getErrorMessage(retrofitError, errorMsg).equals("TimerOff")) {
+                        button.setBackgroundResource(R.drawable.button_start_bg);
+                        button.setText(getResources().getString(R.string.clicked_start));
+                        preferences.setTimer(false);
+                        showSuccessMessage();
+                    } else if (Utils.getErrorMessage(retrofitError, errorMsg).equals(Constants.TOKEN_EXPIRE)) {
+                        preferences.removeToken();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
+                        redirectLoginPage();
+                    } else {
+                        showErrorToast();
+                    }
+                } else {
+                    if (!Utils.isNetworkAvailable(MainActivity.this)) {
+                        showErrorMessage(getResources().getString(R.string.bad_network_connection));
+                    } else {
+
+                        showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                    }
+                }
+                progressBar.setVisibility(View.INVISIBLE);
             }
-        }
-        return errorMsg;
+        });
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void HappyStartWork() {
+        Token token = new Token(preferences.getKeyToken());
+        service.startWorkTime(token, new Callback<Response>() {
+
+            @Override
+            public void success(Response response, Response response2) {
+                showSuccessMessage();
+                button.setBackgroundResource(R.drawable.button_stop_bg);
+                button.setText(getResources().getString(R.string.clicked_stop));
+                preferences.setTimer(true);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                if (retrofitError.getResponse() != null) {
+                    if (Utils.getErrorMessage(retrofitError, errorMsg).equals("TimerOn")) {
+                        button.setBackgroundResource(R.drawable.button_stop_bg);
+                        button.setText(getResources().getString(R.string.clicked_stop));
+                        preferences.setTimer(true);
+                        showSuccessMessage();
+                    } else if (Utils.getErrorMessage(retrofitError, errorMsg).equals(Constants.TOKEN_EXPIRE)) {
+                        preferences.removeToken();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
+                        redirectLoginPage();
+                        finish();
+                    } else {
+                        showErrorToast();
+                    }
+                } else {
+                    if (!Utils.isNetworkAvailable(MainActivity.this)) {
+                        showErrorMessage(getResources().getString(R.string.bad_network_connection));
+                    } else {
+
+                        showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                    }
+                }
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void showSuccessMessage() {
@@ -208,6 +183,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_data: {
+                progressBar.setVisibility(View.VISIBLE);
                 getWorkedTime();
             }
             break;
@@ -224,7 +200,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.logout: {
 
                 Token token = new Token(preferences.getKeyToken());
-                progressBar = (ProgressBar) findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.VISIBLE);
                 service.logOut(token, new Callback<Response>() {
                     @Override
@@ -275,12 +250,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void success(Time time, Response response) {
                 textView.setText(convertTime(time.getDaily()));
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
                 if (retrofitError.getResponse() != null) {
-                    if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
+                    if (Utils.getErrorMessage(retrofitError, errorMsg).equals(Constants.TOKEN_EXPIRE)) {
                         preferences.removeToken();
                         showErrorMessage("Your session has expired, please logout in login again");
                     }
@@ -292,20 +268,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         showErrorMessage(getResources().getString(R.string.server_bad_connection));
                     }
                 }
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
-    }
-
-    static byte[] streamToBytes(InputStream stream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (stream != null) {
-            byte[] buf = new byte[1024];
-            int r;
-            while ((r = stream.read(buf)) != -1) {
-                baos.write(buf, 0, r);
-            }
-        }
-        return baos.toByteArray();
     }
 
     private String convertTime(String time) {
@@ -314,6 +279,4 @@ public class MainActivity extends Activity implements View.OnClickListener {
         int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
         return hour + "h : " + min + "m";
     }
-
-
 }

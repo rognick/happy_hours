@@ -11,7 +11,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     public TabsPagerAdapter(FragmentManager fm, Context c) {
         super(fm);
-        context=c;
+        context = c;
     }
 
     @Override
@@ -25,7 +25,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return new StatisticFragment(576000000, context.getResources().getString(R.string.this_month));
         }
-
         return null;
     }
 

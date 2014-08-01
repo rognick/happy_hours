@@ -18,7 +18,7 @@
     <string name="today">today</string>
     <string name="this_week">this week</string>
     <string name="this_month">this month</string>
-    <string name="server_bad_connection">Please check youre connection with Server</string>
-    <string name="bad_network_connection">Please check youre network connection</string>
+    <string name="server_bad_connection">Please check your connection with Server</string>
+    <string name="bad_network_connection">Please check your network connection</string>
     <string name="empty_login_password">Fill login or password field</string>
 </resources>

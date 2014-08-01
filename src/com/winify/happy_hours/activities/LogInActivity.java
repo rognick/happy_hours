@@ -40,7 +40,6 @@ public class LogInActivity extends Activity {
         preferences = new ApplicationPreferences(this);
 
         if (!Utils.isNetworkAvailable(this)) {
-
             showErrorMessage(getResources().getString(R.string.bad_network_connection));
         }
 
@@ -60,8 +59,7 @@ public class LogInActivity extends Activity {
                         getKeyToken(login.getText().toString(), password.getText().toString());
                         progressBar = (ProgressBar) findViewById(R.id.progressBar);
                         progressBar.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         showErrorMessage(getResources().getString(R.string.empty_login_password));
                     }
                 }
@@ -92,8 +90,7 @@ public class LogInActivity extends Activity {
             public void failure(RetrofitError retrofitError) {
                 if (retrofitError.getResponse() != null) {
                     showErrorMessage("Please check your Username and Password");
-                } else
-                if (!Utils.isNetworkAvailable(LogInActivity.this)) {
+                } else if (!Utils.isNetworkAvailable(LogInActivity.this)) {
                     showErrorMessage(getResources().getString(R.string.bad_network_connection));
                 } else {
 

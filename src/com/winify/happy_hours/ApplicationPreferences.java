@@ -20,7 +20,6 @@ public class ApplicationPreferences {
         editor.commit();
     }
 
-
     public void setTimer(boolean isTimerSet) {
         editor.putBoolean(Constants.KEY_TIMER, isTimerSet);
         editor.commit();
@@ -47,7 +46,6 @@ public class ApplicationPreferences {
     public void removeToken() {
         settings.edit().remove(Constants.KEY_TOKEN).commit();
     }
-
 }
 
 

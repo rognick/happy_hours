@@ -13,7 +13,6 @@ public class StatisticsActivity extends FragmentActivity implements
         ActionBar.TabListener {
 
     private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     private String[] tabs = {"Daily", "Weekly", "Monthly"};
 
@@ -24,29 +23,20 @@ public class StatisticsActivity extends FragmentActivity implements
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(),StatisticsActivity.this);
+        TabsPagerAdapter adapter = new TabsPagerAdapter(getSupportFragmentManager(), StatisticsActivity.this);
 
-        viewPager.setAdapter(mAdapter);
+        viewPager.setAdapter(adapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
                     .setTabListener(this));
         }
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
             }
         });
     }

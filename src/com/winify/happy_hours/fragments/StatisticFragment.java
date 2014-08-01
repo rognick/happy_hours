@@ -27,13 +27,6 @@ import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.mime.MimeUtil;
-import retrofit.mime.TypedInput;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 public class StatisticFragment extends Fragment {
     private String range;
@@ -159,24 +152,18 @@ public class StatisticFragment extends Fragment {
             public void failure(RetrofitError retrofitError) {
 
                 if (retrofitError.getResponse() != null) {
-
-                    if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
+                    if (Utils.getErrorMessage(retrofitError, errorMsg).equals(Constants.TOKEN_EXPIRE)) {
                         Intent intent = new Intent(getActivity(), LogInActivity.class);
                         startActivity(intent);
                         getActivity().finish();
                     }
                 } else {
-
                     if (!Utils.isNetworkAvailable(getActivity())) {
                         showErrorMessage(getResources().getString(R.string.bad_network_connection));
                     } else {
-
                         showErrorMessage(getResources().getString(R.string.server_bad_connection));
                     }
-
-
                 }
-
             }
         });
     }
@@ -206,36 +193,5 @@ public class StatisticFragment extends Fragment {
         int hour = (time / (1000 * 60 * 60));
         int min = ((time - (time / (1000 * 60 * 60))) / (1000 * 60)) % 60;
         return hour + "h : " + min + "m";
-    }
-
-    private String getErrorMessage(RetrofitError retrofitError) {
-        if (retrofitError.getResponse() != null) {
-            TypedInput body = retrofitError.getResponse().getBody();
-            byte[] bytes = new byte[0];
-            try {
-                bytes = streamToBytes(body.in());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String charset = MimeUtil.parseCharset(body.mimeType());
-            try {
-                errorMsg = new String(bytes, charset);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        return errorMsg;
-    }
-
-    static byte[] streamToBytes(InputStream stream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (stream != null) {
-            byte[] buf = new byte[1024];
-            int r;
-            while ((r = stream.read(buf)) != -1) {
-                baos.write(buf, 0, r);
-            }
-        }
-        return baos.toByteArray();
     }
 }
