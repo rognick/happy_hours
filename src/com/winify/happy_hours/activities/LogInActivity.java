@@ -41,7 +41,7 @@ public class LogInActivity extends Activity {
 
         if (!Utils.isNetworkAvailable(this)) {
 
-            showErrorMessage(getResources().getString(R.string.server_bad_connection));
+            showErrorMessage(getResources().getString(R.string.bad_network_connection));
         }
 
         login = (EditText) findViewById(R.id.login);
@@ -60,6 +60,9 @@ public class LogInActivity extends Activity {
                         getKeyToken(login.getText().toString(), password.getText().toString());
                         progressBar = (ProgressBar) findViewById(R.id.progressBar);
                         progressBar.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        showErrorMessage(getResources().getString(R.string.empty_login_password));
                     }
                 }
             }
@@ -90,7 +93,12 @@ public class LogInActivity extends Activity {
                 if (retrofitError.getResponse() != null) {
                     showErrorMessage("Please check your Username and Password");
                 } else
+                if (!Utils.isNetworkAvailable(LogInActivity.this)) {
+                    showErrorMessage(getResources().getString(R.string.bad_network_connection));
+                } else {
+
                     showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                }
                 progressBar.setVisibility(View.GONE);
             }
         });

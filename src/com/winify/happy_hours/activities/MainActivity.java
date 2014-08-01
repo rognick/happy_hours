@@ -65,17 +65,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             button.setText(getResources().getString(R.string.clicked_stop));
         }
         if (!Utils.isNetworkAvailable(this)) {
-            AlertDialog ad = new AlertDialog.Builder(MainActivity.this).create();
-            ad.setCancelable(false); // This blocks the 'BACK' button
-            ad.setMessage(getResources().getString(R.string.server_bad_connection));
-            ad.setButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            ad.show();
-        }else{  getWorkedTime();}
+            showErrorMessage(getResources().getString(R.string.bad_network_connection));
+        } else {
+            getWorkedTime();
+        }
     }
 
     private void redirectLoginPage() {
@@ -118,7 +111,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     showErrorToast();
                                 }
                             } else {
-                                showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                                if (!Utils.isNetworkAvailable(MainActivity.this)) {
+                                    showErrorMessage(getResources().getString(R.string.bad_network_connection));
+                                } else {
+
+                                    showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                                }
                             }
                             progressBar.setVisibility(View.INVISIBLE);
                         }
@@ -141,18 +139,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         @Override
                         public void failure(RetrofitError retrofitError) {
-                            if (getErrorMessage(retrofitError).equals("TimerOff")) {
-                                button.setBackgroundResource(R.drawable.button_start_bg);
-                                button.setText(getResources().getString(R.string.clicked_start));
-                                preferences.setTimer(false);
-                                showSuccessMessage();
-                            } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
-                                preferences.removeToken();
-                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
-                                redirectLoginPage();
+                            if (retrofitError.getResponse() != null) {
+                                if (getErrorMessage(retrofitError).equals("TimerOff")) {
+                                    button.setBackgroundResource(R.drawable.button_start_bg);
+                                    button.setText(getResources().getString(R.string.clicked_start));
+                                    preferences.setTimer(false);
+                                    showSuccessMessage();
+                                } else if (getErrorMessage(retrofitError).equals(Constants.TOKEN_EXPIRE)) {
+                                    preferences.removeToken();
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
+                                    redirectLoginPage();
+                                } else {
+                                    showErrorToast();
+                                }
                             } else {
-                                showErrorToast();
+                                if (!Utils.isNetworkAvailable(MainActivity.this)) {
+                                    showErrorMessage(getResources().getString(R.string.bad_network_connection));
+                                } else {
+
+                                    showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                                }
                             }
+
                             progressBar.setVisibility(View.INVISIBLE);
                         }
                     });
@@ -277,7 +285,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         showErrorMessage("Your session has expired, please logout in login again");
                     }
                 } else {
-                    showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                    if (!Utils.isNetworkAvailable(MainActivity.this)) {
+                        showErrorMessage(getResources().getString(R.string.bad_network_connection));
+                    } else {
+
+                        showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                    }
                 }
             }
         });
@@ -301,4 +314,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
         return hour + "h : " + min + "m";
     }
+
+
 }

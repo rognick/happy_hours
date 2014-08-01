@@ -19,6 +19,7 @@ import com.winify.happy_hours.listeners.ServiceListener;
 import com.winify.happy_hours.models.Time;
 import com.winify.happy_hours.models.Token;
 import com.winify.happy_hours.service.TrackerService;
+import com.winify.happy_hours.utils.Utils;
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.model.CategorySeries;
@@ -164,7 +165,17 @@ public class StatisticFragment extends Fragment {
                         startActivity(intent);
                         getActivity().finish();
                     }
-                } else showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                } else {
+
+                    if (!Utils.isNetworkAvailable(getActivity())) {
+                        showErrorMessage(getResources().getString(R.string.bad_network_connection));
+                    } else {
+
+                        showErrorMessage(getResources().getString(R.string.server_bad_connection));
+                    }
+
+
+                }
 
             }
         });
