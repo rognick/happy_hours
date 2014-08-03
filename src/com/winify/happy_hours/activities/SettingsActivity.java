@@ -5,7 +5,6 @@ import android.preference.PreferenceActivity;
 import com.winify.happy_hours.R;
 
 public class SettingsActivity extends PreferenceActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

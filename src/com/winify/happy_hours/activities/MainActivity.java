@@ -58,7 +58,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             button.setBackgroundResource(R.drawable.button_stop_bg);
             button.setText(getResources().getString(R.string.clicked_stop));
         }
-
     }
 
     private void redirectLoginPage() {

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +26,7 @@ import com.winify.happy_hours.utils.Utils;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class LogInActivity extends Activity {
+public class LogInActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private EditText login;
     private EditText password;
     private ApplicationPreferences preferences;
@@ -131,5 +133,22 @@ public class LogInActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-}
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences settings;
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        settings.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        recreate();
+    }
+}
