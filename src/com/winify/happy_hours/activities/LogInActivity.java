@@ -115,6 +115,7 @@ public class LogInActivity extends Activity implements SharedPreferences.OnShare
         });
         ad.show();
     }
+
     private void showErrorIpMessage(String error) {
         AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setCancelable(false); // This blocks the 'BACK' button
@@ -122,7 +123,7 @@ public class LogInActivity extends Activity implements SharedPreferences.OnShare
         ad.setButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent (LogInActivity.this,SettingsActivity.class);
+                Intent intent = new Intent(LogInActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 dialog.dismiss();
             }
