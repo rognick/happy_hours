@@ -84,7 +84,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void success(Response response, Response response2) {
-                showSuccessMessage();
                 button.setBackgroundResource(R.drawable.button_start_bg);
                 button.setText(getResources().getString(R.string.clicked_start));
                 preferences.setTimer(false);
@@ -98,7 +97,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         button.setBackgroundResource(R.drawable.button_start_bg);
                         button.setText(getResources().getString(R.string.clicked_start));
                         preferences.setTimer(false);
-                        showSuccessMessage();
                     } else if (Utils.getErrorMessage(retrofitError, errorMsg).equals(Constants.TOKEN_EXPIRE)) {
                         preferences.removeToken();
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
@@ -126,7 +124,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void success(Response response, Response response2) {
-                showSuccessMessage();
                 button.setBackgroundResource(R.drawable.button_stop_bg);
                 button.setText(getResources().getString(R.string.clicked_stop));
                 preferences.setTimer(true);
@@ -140,7 +137,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         button.setBackgroundResource(R.drawable.button_stop_bg);
                         button.setText(getResources().getString(R.string.clicked_stop));
                         preferences.setTimer(true);
-                        showSuccessMessage();
                     } else if (Utils.getErrorMessage(retrofitError, errorMsg).equals(Constants.TOKEN_EXPIRE)) {
                         preferences.removeToken();
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.bad_token_message), Toast.LENGTH_LONG).show();
@@ -161,10 +157,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         });
         progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void showSuccessMessage() {
-        Toast.makeText(MainActivity.this, "Server connection succeed", Toast.LENGTH_SHORT).show();
     }
 
     private void showErrorToast() {

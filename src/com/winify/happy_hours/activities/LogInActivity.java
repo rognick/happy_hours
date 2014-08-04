@@ -55,7 +55,7 @@ public class LogInActivity extends Activity implements SharedPreferences.OnShare
 
                 if (preferences.getIp().equals("") ||
                         preferences.getPort().equals("")) {
-                    showErrorMessage("Check your Ip Address and Port in  settings");
+                    showErrorIpMessage("Check your Ip Address and Port in  settings");
                 } else {
                     if (login.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
                         getKeyToken(login.getText().toString(), password.getText().toString());
@@ -110,6 +110,20 @@ public class LogInActivity extends Activity implements SharedPreferences.OnShare
         ad.setButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ad.show();
+    }
+    private void showErrorIpMessage(String error) {
+        AlertDialog ad = new AlertDialog.Builder(this).create();
+        ad.setCancelable(false); // This blocks the 'BACK' button
+        ad.setMessage(error);
+        ad.setButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent (LogInActivity.this,SettingsActivity.class);
+                startActivity(intent);
                 dialog.dismiss();
             }
         });
