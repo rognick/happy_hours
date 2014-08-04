@@ -190,8 +190,8 @@ public class StatisticFragment extends Fragment {
     }
 
     private String convertTime(int time) {
-        int hour = (time / (1000 * 60 * 60));
-        int min = ((time - (time / (1000 * 60 * 60))) / (1000 * 60)) % 60;
-        return hour + "h : " + min + "m";
+        int minutes = ((time / (1000 * 60)) % 60);
+        int hours = ((time / (1000 * 60 * 60)));
+        return hours + "h : " + minutes + "m";
     }
 }

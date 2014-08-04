@@ -274,8 +274,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private String convertTime(String time) {
         int milliseconds = Integer.parseInt(time);
-        int hour = (milliseconds / (1000 * 60 * 60)) % 24;
-        int min = ((milliseconds - (milliseconds / (1000 * 60 * 60))) / (1000 * 60)) % 60;
-        return hour + "h : " + min + "m";
+        int minutes = ((milliseconds / (1000 * 60)) % 60);
+        int hours = ((milliseconds / (1000 * 60 * 60)));
+        return hours + "h : " + minutes + "m";
     }
 }
