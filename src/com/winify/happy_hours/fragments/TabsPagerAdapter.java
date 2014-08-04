@@ -21,7 +21,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new StatisticFragment(28800000, context.getResources().getString(R.string.today));
             case 1:
-                return new StatisticFragment(201600000, context.getResources().getString(R.string.this_week));
+                return new StatisticFragment(144000000, context.getResources().getString(R.string.this_week));
             case 2:
                 return new StatisticFragment(576000000, context.getResources().getString(R.string.this_month));
         }
@@ -32,5 +32,4 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return 3;
     }
-
 }

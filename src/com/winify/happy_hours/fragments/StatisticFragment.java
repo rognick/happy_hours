@@ -74,7 +74,7 @@ public class StatisticFragment extends Fragment {
     }
 
     private void drawTimeChart() {
-        final String[] status = new String[]{"Worked", "Left To work"};
+        final String[] status = new String[]{"Worked " + convertTime(timeWorked), "Left To work " + convertTime(totalTime - timeWorked)};
         double[] distribution = {timeWorked, totalTime - timeWorked};
         int[] colors = {Color.GREEN, Color.RED};
         CategorySeries distributionSeries = new CategorySeries(" day ");
@@ -99,7 +99,7 @@ public class StatisticFragment extends Fragment {
     }
 
     private void drawOverTimeChart() {
-        final String[] status = new String[]{"Worked OverTime", "Left To work"};
+        final String[] status = new String[]{"Worked OverTime " + convertTime(timeWorked - totalTime), "Left To work " + convertTime(totalTime - (timeWorked - totalTime))};
         double[] distribution = {timeWorked - totalTime, totalTime - (timeWorked - totalTime)};
         int[] colors = {Color.YELLOW, Color.GREEN};
         CategorySeries distributionSeries = new CategorySeries(range);
