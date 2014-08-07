@@ -21,4 +21,6 @@
     <string name="server_bad_connection">Please check your connection with Server</string>
     <string name="bad_network_connection">Please check your network connection</string>
     <string name="empty_login_password">Fill login or password field</string>
+    <string name="buttontxt">Click Me!</string>
+    <string name="widget1txt">0 h : 0 m</string>
 </resources>
